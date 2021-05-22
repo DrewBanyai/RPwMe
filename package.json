@@ -1,10 +1,10 @@
 {
-  "name": "electron-multiple-windows-demo",
-  "description": "An example electron app showing how to manage multiple windows.",
-  "version": "1.0.0-alpha",
-  "author": "Nate Goldman <nate@ngoldman.me> (http://ngoldman.me/)",
+  "name": "rpwme",
+  "description": "RPwMe is a Twitch Chat integrated roleplay system for streamers and viewers to play together",
+  "version": "0.0.1-alpha",
+  "author": "DrewBanyai <drewbanyai@gmail.com> (https://github.com/DrewBanyai)",
   "bugs": {
-    "url": "https://github.com/ngoldman/electron-multiple-windows-demo/issues"
+    "url": "https://github.com/DrewBanyai/RPwMe/issues"
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
@@ -19,20 +19,20 @@
     "electron-prebuilt": "^0.36.9",
     "standard": "^6.0.7"
   },
-  "homepage": "https://github.com/ngoldman/electron-multiple-windows-demo#readme",
+  "homepage": "https://github.com/DrewBanyai/RPwMe#readme",
   "keywords": [
-    "electron",
-    "many",
-    "multiple",
-    "tutorial",
-    "windows"
+    "rpwme",
+    "roleplay",
+    "twitch",
+    "rpg",
+    "twitchplays"
   ],
-  "license": "ISC",
+  "license": "See license at LICENSE.md",
   "main": "index.js",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ngoldman/electron-multiple-windows-demo.git"
+    "url": "git+https://github.com/DrewBanyai/RPwMe"
   },
   "scripts": {
     "start": "electron-forge start",
