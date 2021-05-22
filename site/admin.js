@@ -15,28 +15,27 @@
 */
 
 const ipcRenderer = require('electron').ipcRenderer
+const style = require('../main/style')
 
-setupSendTestButtonClick()
+setupAdminPage()
 
+function setupAdminPage () {
+  //  Set up the test button to send a message to the GAME window
+  setupSendTestButtonClick()
 
+  //  Change the main div's background to the style setting
+  var mainDiv = document.querySelector('#AdminPage')
+  if (mainDiv) mainDiv.style.backgroundColor = style.BACKGROUND_COLOR.ADMIN
+}
 
 function setupSendTestButtonClick () {
   var sendButton = document.querySelector('#send-test')
-  if (sendButton) sendButton.onclick = sendMessageTestToMain
+  if (sendButton) sendButton.onclick = () => { ipcRenderer.send('send-test', null) }
 }
 
-function sendMessageTestToMain (type) {
-  ipcRenderer.send('send-test', type)
-}
-
-ipcRenderer.on('window-id-send', function (event, ...args) {
-  const id = args[0]
+ipcRenderer.on('window-id-send', (event, ...args) => {
+  const windowID = args[0]
+  
   var idLabel = document.querySelector('#win-id')
-  if (idLabel) idLabel.innerHTML = id
-})
-
-ipcRenderer.on('hello', function (event, ...args) {
-  const message = args[0]
-  var idLabel = document.querySelector('#win-id')
-  if (idLabel) idLabel.innerHTML = message
+  if (idLabel) idLabel.innerHTML = windowID
 })

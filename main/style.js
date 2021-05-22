@@ -1,4 +1,4 @@
-<!--
+/*
   Copyright 2021 Drew Banyai
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,15 +12,11 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
--->
+*/
 
-<!DOCTYPE html>
-<html>
-  <body style="margin: 0px; display: flex; width: 1280px; height: 720px">
-    <div id="AdminPage" style="width: 100%; height: 100%; background-color: rgb(255, 0, 255)">
-      <h1><span id="win-id">Admin</span></h1>
-      <button id="send-test">Send a test message to the Game window</button>
-    </div>
-  </body>
-  <script>require('./admin.js')</script>
-</html>
+module.exports = {
+  BACKGROUND_COLOR: {
+      ADMIN: "rgb(30, 30, 30)",
+      GAME: "rgb(30, 30, 30)",
+  }
+}
