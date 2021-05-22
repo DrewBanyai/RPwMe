@@ -22,9 +22,9 @@ const config = require('./config')
 var windowMap = {}
 
 function createWindows () {
-  var windowWidth = 1280 + (config.DEBUG ? 600 : 0);
-  createWindow("ADMIN", `${config.APP_NAME} - Admin Window`, windowWidth, 720, config.DEBUG, false);
-  createWindow("GAME", `${config.APP_NAME} - Game Window`, windowWidth, 720, config.DEBUG, false);
+  var windowWidth = config.WINDOW_WIDTH + (config.DEBUG ? 600 : 0);
+  createWindow("ADMIN", `${config.APP_NAME} - Admin Window`, windowWidth, config.WINDOW_HEIGHT, config.DEBUG, false);
+  createWindow("GAME", `${config.APP_NAME} - Game Window`, windowWidth, config.WINDOW_HEIGHT, config.DEBUG, false);
 }
 
 function createWindow(windowID, title, width, height, devTools, menu) {
@@ -33,8 +33,12 @@ function createWindow(windowID, title, width, height, devTools, menu) {
     title: title,
     width: width,
     height: height,
-    acceptFirstMouse: true
+    useContentSize: true,
+    resizable: false,
+    autoHideMenuBar: true,
+    acceptFirstMouse: true,
   })
+  newWindow.setContentSize(width, height)
   windowMap[windowID] = newWindow
 
   //  Hide the default Electron BrowserWindow menu bar
@@ -48,7 +52,7 @@ function createWindow(windowID, title, width, height, devTools, menu) {
 
   //  Once the window contents load, send a message that will get accepted by the Admin menu
   newWindow.webContents.on('did-finish-load', function () {
-    newWindow.webContents.send('window-id-send', "Admin")
+    newWindow.webContents.send('window-id-send', windowID)
   })
 
   //  If the window ever closes, run destroy() to remove links to it
@@ -68,9 +72,9 @@ function destroy (windowID) {
 ipcMain.on('send-test', sendTestTriggered)
 
 function sendTestTriggered () {
-  //  Find the ADMIN window and send a test message
-  if (!Object.getOwnPropertyDescriptor(windowMap, "ADMIN")) { return }
-  const win = windowMap["ADMIN"]
+  //  Find the GAME window and send a test message
+  if (!Object.getOwnPropertyDescriptor(windowMap, "GAME")) { return }
+  const win = windowMap["GAME"]
   win.webContents.send('hello', 'This is an IPC send test!')
 }
 

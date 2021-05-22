@@ -18,9 +18,11 @@ const path = require('path')
 
 module.exports = {
   APP_NAME: 'RPwME',
+  WINDOW_WIDTH: 1280,
+  WINDOW_HEIGHT: 720,
   INDEX: {
     ADMIN: 'file://' + path.resolve(__dirname, '..', 'site', 'admin.html'),
     GAME: 'file://' + path.resolve(__dirname, '..', 'site', 'game.html'),
   },
-  DEBUG: true
+  DEBUG: false
 }
