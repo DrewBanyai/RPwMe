@@ -14,7 +14,7 @@
   limitations under the License.
 */
 
-const ipcRenderer = require('electron').ipcRenderer
+const gameMessages = require('./messaging/gameMessages')
 const style = require('../main/style')
 
 setupGamePage()
@@ -24,15 +24,3 @@ function setupGamePage () {
   var mainDiv = document.querySelector('#GamePage')
   if (mainDiv) mainDiv.style.backgroundColor = style.BACKGROUND_COLOR.ADMIN
 }
-
-ipcRenderer.on('window-id-send', function (event, ...args) {
-  const id = args[0]
-  var idLabel = document.querySelector('#win-id')
-  if (idLabel) idLabel.innerHTML = id
-})
-
-ipcRenderer.on('hello', function (event, ...args) {
-  const message = args[0]
-  var idLabel = document.querySelector('#win-id')
-  if (idLabel) idLabel.innerHTML = message
-})

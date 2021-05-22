@@ -14,7 +14,7 @@
   limitations under the License.
 */
 
-const ipcRenderer = require('electron').ipcRenderer
+const adminMessages = require('./messaging/adminMessages')
 const style = require('../main/style')
 
 setupAdminPage()
@@ -30,12 +30,5 @@ function setupAdminPage () {
 
 function setupSendTestButtonClick () {
   var sendButton = document.querySelector('#send-test')
-  if (sendButton) sendButton.onclick = () => { ipcRenderer.send('send-test', null) }
+  if (sendButton) sendButton.onclick = () => { adminMessages.sendTestMessage() }
 }
-
-ipcRenderer.on('window-id-send', (event, ...args) => {
-  const windowID = args[0]
-  
-  var idLabel = document.querySelector('#win-id')
-  if (idLabel) idLabel.innerHTML = windowID
-})
