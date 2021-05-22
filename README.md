@@ -29,8 +29,6 @@ npm start
 git clone https://github.com/DrewBanyai/RPwMe.git
 cd RPwMe
 npm install
-npm install --save-dev @electron-forge/cli
-npx electron-forge import
 npm run make
 ```
 
