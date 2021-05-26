@@ -22,11 +22,11 @@ function setupSendTestCallback() {
     ipcMain.on('send-test', sendTestTriggered)
 }
 
-function sendTestTriggered () {
+function sendTestTriggered (event, arg) {
     //  Find the GAME window and send a test message
     if (!Object.getOwnPropertyDescriptor(windows.windowMap, "GAME")) { return }
     const win = windows.windowMap["GAME"]
-    win.webContents.send('hello', 'This is an IPC send test!')
+    win.webContents.send('change-window-id', arg)
 }
 
 //  Module Exports

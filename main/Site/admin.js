@@ -20,29 +20,27 @@ const SETTINGS = require('./settings')
 const CONFIG = require('../config')
 const TwitchControl = require('./Twitch/TwitchControl').TwitchControl
 
-function LoadSiteContent() {
-	//loadAdminDisplay();
-
-  //  Set up the test button to send a message to the GAME window
-    setupSendTestButtonClick()
-
-  //  Change the main div's background to the style setting
-    document.body.style.backgroundColor = STYLE.WINDOW_BACKGROUND_COLOR.ADMIN
-}
 
 window.addEventListener('DOMContentLoaded', () => {
     LoadSiteContent();
     InitTwitchBot();
 })
 
-function InitTwitchBot() {
-  let username = (SETTINGS && SETTINGS.TWITCH_DATA && SETTINGS.TWITCH_DATA.USERNAME) ? SETTINGS.TWITCH_DATA.USERNAME : null
-  let token = (SETTINGS && SETTINGS.TWITCH_DATA && SETTINGS.TWITCH_DATA.TOKEN) ? SETTINGS.TWITCH_DATA.TOKEN : null;
-  let channel = (SETTINGS && SETTINGS.TWITCH_DATA && SETTINGS.TWITCH_DATA.CHANNEL) ? SETTINGS.TWITCH_DATA.CHANNEL : null;
-  TwitchControl.InitializeTwitchControl(username, token, channel, CONFIG.DEBUG);
+function LoadSiteContent() {
+    //  Change the main div's background to the style setting
+    document.body.style.backgroundColor = STYLE.WINDOW_BACKGROUND_COLOR.ADMIN
 }
 
-function setupSendTestButtonClick () {
-    var sendButton = document.querySelector('#send-test')
-    if (sendButton) sendButton.onclick = () => { adminMessages.sendTestMessage() }
+function InitTwitchBot() {
+    let username = (SETTINGS && SETTINGS.TWITCH_DATA && SETTINGS.TWITCH_DATA.USERNAME) ? SETTINGS.TWITCH_DATA.USERNAME : null
+    let token = (SETTINGS && SETTINGS.TWITCH_DATA && SETTINGS.TWITCH_DATA.TOKEN) ? SETTINGS.TWITCH_DATA.TOKEN : null;
+    let channel = (SETTINGS && SETTINGS.TWITCH_DATA && SETTINGS.TWITCH_DATA.CHANNEL) ? SETTINGS.TWITCH_DATA.CHANNEL : null;
+    TwitchControl.InitializeTwitchControl(username, token, channel, CONFIG.DEBUG);
+
+    //  Example of how to use the AddCommandCallback system and then process command portions
+    TwitchControl.AddCommandCallback("!hello", (commandParts) => {
+        let commandMessage = (commandParts.length > 1) ? commandParts.slice(1).join(" ") : "Hello there!";
+        adminMessages.sendTestMessage(commandMessage);
+        TwitchControl.SendChatMessage("!hello message received and processed.");
+    });
 }

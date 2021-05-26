@@ -19,8 +19,8 @@ const ipcRenderer = require('electron').ipcRenderer
 //////////////////////////////
 //  Send Messages
 //////////////////////////////
-function sendTestMessage() {
-    ipcRenderer.send('send-test', null)
+function sendTestMessage(message) {
+    ipcRenderer.send('send-test', message)
 }
 
 //////////////////////////////

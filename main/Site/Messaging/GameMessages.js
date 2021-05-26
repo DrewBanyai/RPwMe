@@ -42,7 +42,7 @@ function receiveTestMessage(event, ...args) {
 //  Callback Definitions
 //////////////////////////////
 ipcRenderer.on('window-id-send', receiveWindowID)
-ipcRenderer.on('hello', receiveTestMessage)
+ipcRenderer.on('change-window-id', receiveTestMessage)
 
 //  Module Exports
 module.exports = { }

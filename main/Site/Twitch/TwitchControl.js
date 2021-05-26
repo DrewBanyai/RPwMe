@@ -20,11 +20,43 @@ const tmi = require('tmi.js')
 
 let TwitchControl = {
     //  Variables
+    ConnectionData: {
+        Username: null,
+        Channel: null,
+        Token: null
+    },
     Client: null,
-    MessageCallbacks: null,
+    CommandCallbacks: {},
 
-    //  Functions
-    CreateConnectionOptions: (twitchUsername, twitchToken, twitchChannel, debug) => {
+    //  External Functions
+    InitializeTwitchControl: (username, token, channel, debug) => {
+        //  Save off our connection options, then create client with them
+        TwitchControl.ConnectionData = { Username: username, Channel: channel, Token: token };
+        const options = TwitchControl.createConnectionOptions(username, token, channel, debug);
+        TwitchControl.Client = new tmi.client(options);
+    
+        //  Register our event handlers (defined below)
+        TwitchControl.Client.on('connected', TwitchControl.onConnectedHandler);
+        TwitchControl.Client.on('message', TwitchControl.onMessageHandler);
+        TwitchControl.Client.on('mods', TwitchControl.onModsReceived);
+    
+        //  Connect to Twitch
+        TwitchControl.Client.connect();
+    },
+    AddCommandCallback: (eventID, callback) => {
+        TwitchControl.CommandCallbacks[eventID] = callback;
+    },
+    SendChatMessage: (message) => {
+        if (TwitchControl.ConnectionData.Channel === null) { console.warn("Attempting to send a message while not connected!"); return; }
+        TwitchControl.Client.say(TwitchControl.ConnectionData.Channel, message)
+    },
+    SendChatAction: (message) => {
+        if (TwitchControl.ConnectionData.Channel === null) { console.warn("Attempting to send an action while not connected!"); return; }
+        TwitchControl.Client.action(TwitchControl.ConnectionData.Channel, message)
+    },
+
+    //  Internal Functions
+    createConnectionOptions: (twitchUsername, twitchToken, twitchChannel, debug) => {
         return {
             identity: {
                 username: twitchUsername,
@@ -39,34 +71,34 @@ let TwitchControl = {
         };
     },
     onConnectedHandler: (address, port) => {
-        //Client.action(channel, 'Hello Lonermoan, lame bot here');
-    },
-    onChatHandler: (target, context, msg, self) => {
-        if (self) { return; } // Ignore messages from the bot
-    
-        // Remove whitespace from chat message
-        const commandName = msg.trim();
+        //TwitchControl.Client.action(channel, 'Hello Lonermoan, lame bot here');
     },
     onMessageHandler: (channel, userstate, message, self) => {
-        if (self) return;
-        //if (userstate.username === BOT_USERNAME) return;
-        if (message.toLowerCase() === '!hello') {
-            Client.say(channel, `@${userstate.username}, hello!`);
+        if (self) { return; }                   //  Ignore messages from the bot 
+        if (message.length <= 0) { return; }    //  Ignore empty messages (if they're even possible?)
+
+        //  Check that the message-type tag exists and is one of the three expected types (action, chat, whisper), otherwise ignore it
+        if (!("message-type" in userstate) || (!["action", "chat", "whisper"].includes(userstate["message-type"]))) {
+            console.warn("Message received with unknown userstate message-type tag:", userstate);
+            return;
+        }
+
+        //  If the message is an attempt at a command, look for that command in our message callbacks
+        if (message[0] === "!") {
+            let messageParts = message.split(" ");
+            messageParts[0] = messageParts[0].toLowerCase();
+
+            if (TwitchControl.CommandCallbacks.hasOwnProperty(messageParts[0])) {
+                TwitchControl.CommandCallbacks[messageParts[0]](messageParts);
+                return;
+            }
         }
     },
-    InitializeTwitchControl: (username, token, channel, debug) => {
-        //  Create a client with our options
-        const options = TwitchControl.CreateConnectionOptions(username, token, channel, debug);
-        console.log(options);
-        Client = new tmi.client(options);
-    
-        //  Register our event handlers (defined below)
-        Client.on('connected', TwitchControl.onConnectedHandler);
-        Client.on('chat', TwitchControl.onChatHandler);
-        Client.on('message', TwitchControl.onMessageHandler);
-    
-        //  Connect to Twitch
-        Client.connect();
+    onModsReceived: (channel, mods) => {
+        console.log("MODS:", mods);
+    },
+    onVIPsReceived: (channel, vips) => {
+        console.log("VIPs:", vips);
     }
 }
 
