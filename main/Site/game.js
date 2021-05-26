@@ -14,21 +14,13 @@
     limitations under the License.
 */
 
-const electron = require('electron')
-const App = electron.app
+const gameMessages = require('./Messaging/GameMessages')
+const STYLE = require('./style')
 
-const windows = require('./main/windows')
-const core = require('./main/Site/Messaging/CoreMessaging')
+function LoadSiteContent () {
+  document.body.style.backgroundColor = STYLE.WINDOW_BACKGROUND_COLOR.GAME
+}
 
-App.whenReady().then(() => {
-    windows.initialize()
-    core.setupSendTestCallback();
-    
-    App.on('activate', () => {
-        if (Object.keys(windowMap).length === 0) windows.initialize()
-    })
-})
-
-App.on('window-all-closed', function () {
-    if (process.platform !== 'darwin') App.quit()
+window.addEventListener('DOMContentLoaded', () => {
+  LoadSiteContent();
 })

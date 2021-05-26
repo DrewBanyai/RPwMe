@@ -14,21 +14,9 @@
     limitations under the License.
 */
 
-const electron = require('electron')
-const App = electron.app
-
-const windows = require('./main/windows')
-const core = require('./main/Site/Messaging/CoreMessaging')
-
-App.whenReady().then(() => {
-    windows.initialize()
-    core.setupSendTestCallback();
-    
-    App.on('activate', () => {
-        if (Object.keys(windowMap).length === 0) windows.initialize()
-    })
-})
-
-App.on('window-all-closed', function () {
-    if (process.platform !== 'darwin') App.quit()
-})
+module.exports = {
+  WINDOW_BACKGROUND_COLOR: {
+    ADMIN: "rgb(30, 30, 30)",
+    GAME: "rgb(30, 30, 30)",
+  }
+}

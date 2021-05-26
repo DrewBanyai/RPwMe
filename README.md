@@ -29,7 +29,7 @@ npm start
 git clone https://github.com/DrewBanyai/RPwMe.git
 cd RPwMe
 npm install
-npm run make
+npm run publish
 ```
 
 ## Thanks
@@ -37,7 +37,8 @@ npm run make
 This demo utilizes information found in many areas, but I want to note a few specifically:
 * [`electron-quick-start`](https://github.com/atom/electron-quick-start)
 * [`electron multiple-windows example`](https://github.com/akabekobeko/examples-electron/tree/master/multiple-windows)
-* [`twitch-js`](https://github.com/twitch-js/twitch-js)
+* [`tmi.js`](https://https://tmijs.com/)
+* [`Code-a-Twitch-bot-using-NodeJS`](https://github.com/The-Assembly/Code-a-Twitch-bot-using-NodeJS)
 
 ## License
 

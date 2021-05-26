@@ -14,21 +14,20 @@
     limitations under the License.
 */
 
-const electron = require('electron')
-const App = electron.app
+const ipcMain = require('electron').ipcMain
+const windows = require('../../windows')
 
-const windows = require('./main/windows')
-const core = require('./main/Site/Messaging/CoreMessaging')
+//  IPC messaging functions
+function setupSendTestCallback() {
+    ipcMain.on('send-test', sendTestTriggered)
+}
 
-App.whenReady().then(() => {
-    windows.initialize()
-    core.setupSendTestCallback();
-    
-    App.on('activate', () => {
-        if (Object.keys(windowMap).length === 0) windows.initialize()
-    })
-})
+function sendTestTriggered () {
+    //  Find the GAME window and send a test message
+    if (!Object.getOwnPropertyDescriptor(windows.windowMap, "GAME")) { return }
+    const win = windows.windowMap["GAME"]
+    win.webContents.send('hello', 'This is an IPC send test!')
+}
 
-App.on('window-all-closed', function () {
-    if (process.platform !== 'darwin') App.quit()
-})
+//  Module Exports
+module.exports = { setupSendTestCallback }
