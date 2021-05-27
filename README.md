@@ -39,6 +39,7 @@ This demo utilizes information found in many areas, but I want to note a few spe
 * [`electron multiple-windows example`](https://github.com/akabekobeko/examples-electron/tree/master/multiple-windows)
 * [`tmi.js`](https://https://tmijs.com/)
 * [`Code-a-Twitch-bot-using-NodeJS`](https://github.com/The-Assembly/Code-a-Twitch-bot-using-NodeJS)
+* ['fontawesome-free`](https://www.npmjs.com/package/@fortawesome/fontawesome-free)
 
 ## License
 

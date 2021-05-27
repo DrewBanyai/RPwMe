@@ -15,10 +15,10 @@
 */
 
 const adminMessages = require('./Messaging/AdminMessages')
-const STYLE = require('./style')
 const SETTINGS = require('./settings')
 const CONFIG = require('../config')
 const TwitchControl = require('./Twitch/TwitchControl').TwitchControl
+const AdminDisplay = require('./SiteParts/AdminDisplay').AdminDisplay
 
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -27,8 +27,9 @@ window.addEventListener('DOMContentLoaded', () => {
 })
 
 function LoadSiteContent() {
-    //  Change the main div's background to the style setting
-    document.body.style.backgroundColor = STYLE.WINDOW_BACKGROUND_COLOR.ADMIN
+    //  Create the AdminDisplay and drop it into the AdminPage div
+    var adminPage = document.querySelector('#AdminPage')
+    if (adminPage) adminPage.appendChild(AdminDisplay.create());
 }
 
 function InitTwitchBot() {
