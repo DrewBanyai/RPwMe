@@ -17,6 +17,7 @@
 const CONFIG = require('../../config')
 const STYLE = require('../style')
 const Container = require('../Components/ArcadiaJS').Container
+const { GenerateWorldMenu } = require('../SiteParts/GenerateWorldMenu')
 const pxFromInt = require('../HelperFunctions/pxFromInt').pxFromInt
 
 "use strict"
@@ -42,8 +43,8 @@ let AdminArea_World = {
     },
 
     createGenerateWorldMenu(container) {
-        //container.elements.generateWorldMenu = GenerateWorldMenu.create({});
-        //container.appendChild(container.elements.generateWorldMenu);
+        container.elements.generateWorldMenu = GenerateWorldMenu.create({});
+        container.appendChild(container.elements.generateWorldMenu);
     },
 
     createInfoBoxWorldMenu(container) {
