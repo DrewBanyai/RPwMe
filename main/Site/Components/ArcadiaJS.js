@@ -16,10 +16,7 @@
 
 "use strict"
 
-let Container = {
-    options: null,
-    content: null,
-
+const Container = {
     create: (options) => {
         let containerType = (options && options.style && options.style.containerType) ? options.style.containerType : "div";
         let container = document.createElement(containerType);
@@ -38,7 +35,7 @@ let Container = {
     }
 };
 
-let Fontawesome = {
+const Fontawesome = {
     create: (options) => {
         let container = Container.create({
             id: (options && options.id) ? options.id : "Fontawesome",
@@ -58,7 +55,7 @@ let Fontawesome = {
     },
 };
 
-let Label = {
+const Label = {
 	create: (options) => {
         if (!options.id) options.id = "Label";
 		let container = Container.create(options);
@@ -78,5 +75,97 @@ let Label = {
 	setColor(container, color) { container.style.color = color; },
 };
 
+const TextInput = {
+    create: (options) => {
+        if (!options.id) options.id = "TextInput";
+        if (!options.style) options.style = {};
+        options.style.containerType = "input";
+        let container = Container.create(options);
+
+        container.callbacks = { return: null };
+        let inputType = (options && options.type) ? options.type : "text";
+        container.setAttribute("type", inputType);
+        container.addEventListener("keyup", (e) => { if ((e.code === 13) && (this.callbacks.return)) { this.callbacks.return(); } })
+
+        container.style.backgroundColor = "white";
+        container.style.color = "black";
+
+        return container;
+    },
+
+    getValue: (container) => { return container.value; },
+    setValue(container, value) { container.value = value; }
+};
+
+
+const BasicButton = {
+	create: (options) => {
+        if (!options.id) options.id = "BasicButton";
+        
+		//  Create the main button, a rounded box
+        let container = Container.create({
+            id: options.id,
+			style: {
+				width: "200px",
+				height: "26px",
+				borderRadius: "6px",
+				display: "flex",
+                border: "1px solid rgb(240, 240, 240)",
+			}
+        });
+        Container.applyOptions(container, options);
+        container.elements = { bgColor: null, textLabel: null };
+
+
+        let bgColorNormal = "rgb(15, 157, 88)";
+        let bgColorHighlight = "rgb(11, 115, 65)";
+        let bgColorSelected = "rgb(7, 75, 44)";
+
+        //  Create the background color (to avoid border changing button size)
+		container.elements.bgColor = Container.create({
+			style: {
+				width: "100%",
+				height: "100%",
+				lineHeight: "26px",
+				borderRadius: "6px",
+				display: "flex",
+                backgroundColor: bgColorNormal,
+			}
+		});
+		container.appendChild(container.elements.bgColor);
+
+		//  Create a centered label on the button
+		container.elements.textLabel = Label.create({
+			attributes: { value: "" },
+			style: {
+				fontFamily: "'Titillium Web', sans-serif",
+				margin: "auto",
+				cursor: "default",
+				userSelect: "none",
+				textAlign: "center",
+                color: "rgb(220, 220, 220)"
+			},
+		});
+		container.elements.bgColor.appendChild(container.elements.textLabel);
+		container.elements.textLabel.setValue(container.value);
+
+		//  Set mouse reactions
+		container.onmouseover = () => { if (!container.disabled) { container.elements.bgColor.style.backgroundColor = bgColorHighlight; } }
+		container.onmouseout = () => { if (!container.disabled) { container.elements.bgColor.style.backgroundColor = bgColorNormal; } }
+		container.onmousedown = () => { if (!container.disabled) { container.elements.bgColor.style.backgroundColor = bgColorSelected; } }
+		container.onmouseup = () => { if (!container.disabled) { container.elements.bgColor.style.backgroundColor = bgColorHighlight; } }
+
+        return container;
+	},
+	
+	setValue: (container, text) => { container.elements.textLabel.setValue(text); },
+	setFont: (container, font) => { container.elements.textLabel.setFont(font); },
+	setFontSize: (container, size) => { container.elements.textLabel.setFontSize(size); },
+	
+	setOnClick: (container, callback) => { container.onclick = () => { if (container.disabled) { return; } callback(); }; },
+	
+	setEnabled: (container, enabled) => { container.disabled = (!enabled); }
+}
+
 //  Module Exports
-module.exports = { Container, Fontawesome, Label }
+module.exports = { Container, Fontawesome, Label, TextInput , BasicButton }
