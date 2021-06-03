@@ -16,9 +16,7 @@
 
 const tmi = require('tmi.js')
 
-"use strict"
-
-let TwitchControl = {
+var TwitchControl = {
     //  Variables
     ConnectionData: {
         Username: null,
@@ -39,6 +37,7 @@ let TwitchControl = {
         TwitchControl.Client.on('connected', TwitchControl.onConnectedHandler);
         TwitchControl.Client.on('message', TwitchControl.onMessageHandler);
         TwitchControl.Client.on('mods', TwitchControl.onModsReceived);
+        TwitchControl.Client.on('vips', TwitchControl.onVIPsReceived);
     
         //  Connect to Twitch
         TwitchControl.Client.connect();
@@ -71,7 +70,7 @@ let TwitchControl = {
         };
     },
     onConnectedHandler: (address, port) => {
-        //TwitchControl.Client.action(channel, 'Hello Lonermoan, lame bot here');
+        TwitchControl.Client.action(TwitchControl.ConnectionData.Channel, 'Bot initialized and connected!');
     },
     onMessageHandler: (channel, userstate, message, self) => {
         if (self) { return; }                   //  Ignore messages from the bot 
