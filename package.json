@@ -45,9 +45,10 @@
     }
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.3",
     "electron-squirrel-startup": "^1.0.0",
-    "tmi.js": "^1.8.3",
-    "@fortawesome/fontawesome-free": "^5.15.3"
+    "seedrandom": "^3.0.5",
+    "tmi.js": "^1.8.3"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.57",
