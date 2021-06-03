@@ -14,8 +14,6 @@
     limitations under the License.
 */
 
-"use strict"
-
 const Container = {
     create: (options) => {
         let containerType = (options && options.style && options.style.containerType) ? options.style.containerType : "div";
@@ -53,6 +51,20 @@ const Fontawesome = {
         
         return container;
     },
+};
+
+const Image = {
+	create: (options) => {
+        let container = document.createElement("img");
+		container.setValue = (text) => Image.setValue(container, text);
+
+        Container.applyOptions(container, options);
+		Image.setValue(container, container.value);
+
+        return container;
+	},
+	getValue: (container) => { return container.src; },
+    setValue: (container, value) => { container.src = value; }
 };
 
 const Label = {
@@ -168,4 +180,4 @@ const BasicButton = {
 }
 
 //  Module Exports
-module.exports = { Container, Fontawesome, Label, TextInput , BasicButton }
+module.exports = { Container, Fontawesome, Image, Label, TextInput , BasicButton }

@@ -16,9 +16,9 @@
 
 const CONFIG = require('../../config')
 const STYLE = require('../style')
-const Container = require('../Components/ArcadiaJS').Container
-const EventDispatch = require('../Controllers/EventDispatch').EventDispatch
-const pxFromInt = require('../HelperFunctions/pxFromInt').pxFromInt
+const { Container } = require('../Components/ArcadiaJS')
+const { EventDispatch } = require('../Controllers/EventDispatch')
+const { pxFromInt } = require('../HelperFunctions/pxFromInt')
 
 const AdminWindowTopButtons = require('./AdminWindowTopButtons').AdminWindowTopButtons
 const AdminArea_World = require('./AdminArea_World').AdminArea_World
