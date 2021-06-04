@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+var { Random } = require('../HelperFunctions/Random')
+
 const CITY_DATA = {
     GUILD_TYPES: [
         "Adventurer",
@@ -122,11 +124,11 @@ const GetRandomBusinessOfType = (typeName) => {
     let filteredBusinessTypes = CITY_DATA.BUSINESSES.filter((entry) => entry.SaleTypes.includes(typeName));
     if (filteredBusinessTypes.length === 0) { return -1; }
 
-    let business = filteredBusinessTypes[Math.floor(Math.random() * filteredBusinessTypes.length)];
+    let business = filteredBusinessTypes[Math.floor(Random() * filteredBusinessTypes.length)];
     
     //  Specialized details - Guild Services
     if (business.SaleTypes.includes("Guild Services")) {
-        business.GuildAssociation = CITY_DATA.GUILD_TYPES[Math.floor(Math.random() * CITY_DATA.GUILD_TYPES.length)];
+        business.GuildAssociation = CITY_DATA.GUILD_TYPES[Math.floor(Random() * CITY_DATA.GUILD_TYPES.length)];
         //  TODO: Generate more data
         //  - If it is a racial guild, select a race
         //  - If it is a slavers or criminal guild, determine how overt they are

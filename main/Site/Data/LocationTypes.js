@@ -15,7 +15,7 @@
 */
 
 var { GetLocationName } = require('../HelperFunctions/HelperFuncs')
-var { RandIntBetween } = require('../HelperFunctions/Random')
+var { RandIntBetween, Random } = require('../HelperFunctions/Random')
 var { GenerateBusinesses } = require('../HelperFunctions/HelperFuncs')
 
 const LocationTypes = [
@@ -245,13 +245,13 @@ const LocationTypes = [
 
 const GetRandomCityType = () => {
     let cityLocationTypes = LocationTypes.filter((entry) => { return entry.Classification === "City"; });
-    return cityLocationTypes[Math.floor(Math.random() * cityLocationTypes.length)];
+    return cityLocationTypes[Math.floor(Random() * cityLocationTypes.length)];
 };
 
 
 const GetRandomLandmarkType = () => {
     let landmarkLocationTypes = LocationTypes.filter((entry) => { return entry.Classification === "Landmark"; });
-    return landmarkLocationTypes[Math.floor(Math.random() * landmarkLocationTypes.length)];
+    return landmarkLocationTypes[Math.floor(Random() * landmarkLocationTypes.length)];
 };
 
 //  Module Exports

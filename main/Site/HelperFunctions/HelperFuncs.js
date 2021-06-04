@@ -16,12 +16,13 @@
 
 var { LOCATION_NAMES } = require('../Data/LocationNames')
 var { CITY_DATA, GetRandomBusinessOfType } = require('../Data/CityData')
+var { Random } = require('../HelperFunctions/Random')
 
 let usedLocationNames = [];
 const GetLocationName = (locationType, unused = true) => {
     if (usedLocationNames.length >= LOCATION_NAMES[locationType].length) { unused = false; }
-    let locationName = LOCATION_NAMES[locationType][Math.floor(Math.random() * LOCATION_NAMES[locationType].length)];
-    if (unused) { while (usedLocationNames.includes(locationName)) { locationName = LOCATION_NAMES[locationType][Math.floor(Math.random() * LOCATION_NAMES[locationType].length)]; } }
+    let locationName = LOCATION_NAMES[locationType][Math.floor(Random() * LOCATION_NAMES[locationType].length)];
+    if (unused) { while (usedLocationNames.includes(locationName)) { locationName = LOCATION_NAMES[locationType][Math.floor(Random() * LOCATION_NAMES[locationType].length)]; } }
     usedLocationNames.push(locationName);
     return locationName;
 }
@@ -30,8 +31,8 @@ const GetLocationName = (locationType, unused = true) => {
 let usedPositions = [];
 const GetLocationPosition = (mapData, locationType, unused = true) => {
     if (usedPositions.length >= mapData.Positions[locationType].length) { unused = false; }
-    let positionIndex = Math.floor(Math.random() * mapData.Positions[locationType].length);
-    if (unused) { while (usedPositions.includes(positionIndex)) { positionIndex = Math.floor(Math.random() * mapData.Positions[locationType].length); } }
+    let positionIndex = Math.floor(Random() * mapData.Positions[locationType].length);
+    if (unused) { while (usedPositions.includes(positionIndex)) { positionIndex = Math.floor(Random() * mapData.Positions[locationType].length); } }
     usedPositions.push(positionIndex);
     return mapData.Positions[locationType][positionIndex];
 }

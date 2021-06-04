@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-var { SeedRandom, RandIntBetween } = require('../HelperFunctions/Random')
+var { SeedRandom, RandIntBetween, Random } = require('../HelperFunctions/Random')
 var { GetLocationPosition } = require('../HelperFunctions/HelperFuncs')
 var { GetRandomCityType, GetRandomLandmarkType } = require('../Data/LocationTypes')
 const { Container } = require('../Components/ArcadiaJS')
@@ -36,14 +36,14 @@ const WorldController = {
 
     GenerateRandomWorld: (container, worldSeed) => {
         //  Seed the world generation
-        container.rng = SeedRandom(worldSeed);
+        SeedRandom(worldSeed);
         usedPositions = [];
         usedLocationNames = [];
         WORLD_OBJECTS = {};
 
         //  Choose a random map identifier
         const mapList = Object.keys(LOCATION_DATA);
-        container.mapIdentifier = mapList[Math.floor(container.rng() * mapList.length)];
+        container.mapIdentifier = mapList[Math.floor(Random() * mapList.length)];
 
         //  Generate all cities and landmarks that will populate the map
         let cityArray = WorldController.generateCityArray(LOCATION_DATA[container.mapIdentifier]);
@@ -52,7 +52,7 @@ const WorldController = {
         //  Save off the map objects into an array for later use
         cityArray.forEach((city) => { container.mapObjects.cities.push(city); })
         landmarkArray.forEach((landmark) => { container.mapObjects.landmarks.push(landmark); })
-        console.log(container.mapObjects);
+        console.log("World Objects:", container.mapObjects);
 
         //  Create the visual represenation of this map
         container.elements.mapImage = InteractiveMap.create({ mapSelection: container.mapIdentifier, cities: cityArray, landmarks: landmarkArray });
