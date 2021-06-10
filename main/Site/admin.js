@@ -17,8 +17,9 @@
 const adminMessages = require('./Messaging/AdminMessages')
 const SETTINGS = require('./settings')
 const CONFIG = require('../config')
-const TwitchControl = require('./Twitch/TwitchControl').TwitchControl
-const AdminDisplay = require('./SiteParts/AdminDisplay').AdminDisplay
+var { TwitchControl } = require('./Twitch/TwitchControl')
+var { AdminDisplay } = require('./SiteParts/AdminDisplay')
+var { CampaignController } = require('./Data/CampaignController')
 
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -37,6 +38,7 @@ function InitTwitchBot() {
     let token = (SETTINGS && SETTINGS.TWITCH_DATA && SETTINGS.TWITCH_DATA.TOKEN) ? SETTINGS.TWITCH_DATA.TOKEN : null;
     let channel = (SETTINGS && SETTINGS.TWITCH_DATA && SETTINGS.TWITCH_DATA.CHANNEL) ? SETTINGS.TWITCH_DATA.CHANNEL : null;
     TwitchControl.InitializeTwitchControl(username, token, channel, CONFIG.DEBUG);
+    CampaignController.SetCampaignGameMaster(TwitchControl.ConnectionData.Channel.toLowerCase());
 
     //  Example of how to use the AddCommandCallback system and then process command portions
     TwitchControl.AddCommandCallback("!hello", (commandParts) => {

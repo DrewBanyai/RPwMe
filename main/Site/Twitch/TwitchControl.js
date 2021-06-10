@@ -88,7 +88,7 @@ var TwitchControl = {
             messageParts[0] = messageParts[0].toLowerCase();
 
             if (TwitchControl.CommandCallbacks.hasOwnProperty(messageParts[0])) {
-                TwitchControl.CommandCallbacks[messageParts[0]](messageParts);
+                TwitchControl.CommandCallbacks[messageParts[0]](userstate, message);
                 return;
             }
         }
