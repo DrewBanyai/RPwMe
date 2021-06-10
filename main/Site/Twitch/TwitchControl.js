@@ -25,6 +25,7 @@ var TwitchControl = {
     },
     Client: null,
     CommandCallbacks: {},
+    ChatCallbacks: [],
 
     //  External Functions
     InitializeTwitchControl: (username, token, channel, debug) => {
@@ -44,6 +45,10 @@ var TwitchControl = {
     },
     AddCommandCallback: (eventID, callback) => {
         TwitchControl.CommandCallbacks[eventID] = callback;
+    },
+    AddChatCallback: (callback) => {
+        if (TwitchControl.ChatCallbacks.includes(callback)) { return; }
+        TwitchControl.ChatCallbacks.push(callback);
     },
     SendChatMessage: (message) => {
         if (TwitchControl.ConnectionData.Channel === null) { console.warn("Attempting to send a message while not connected!"); return; }
@@ -92,6 +97,9 @@ var TwitchControl = {
                 return;
             }
         }
+
+        //  Loop through all chat callbacks, calling the function with the chat details
+        TwitchControl.ChatCallbacks.forEach((callback) => callback(userstate, message));
     },
     onModsReceived: (channel, mods) => {
         console.log("MODS:", mods);

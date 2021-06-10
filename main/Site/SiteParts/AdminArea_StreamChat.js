@@ -44,9 +44,7 @@ let AdminArea_StreamChat = {
 
         AdminArea_StreamChat.CreateChatBox(container);
 
-        TwitchControl.AddCommandCallback("!test", (userstate, message) => {
-            AdminArea_StreamChat.AddChatLine(container, userstate, message);
-        });
+        TwitchControl.AddChatCallback((userstate, message) => { AdminArea_StreamChat.AddChatLine(container, userstate, message); });
 
         return container;
     },
