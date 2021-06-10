@@ -16,7 +16,7 @@
 
 const STYLE = require('../style')
 const { Container, Image } = require('../Components/ArcadiaJS')
-var { WORLD_OBJECTS } = require('../Data/WorldObjects')
+var { CampaignController } = require('../Data/CampaignController')
 var { MapObject } = require('../Components/MapObject')
 
 const InteractiveMap = {
@@ -78,10 +78,10 @@ const InteractiveMap = {
         container.properties.mapHeight = container.elements.mapImage.clientHeight;
         container.removeChild(container.elements.mapImage);
 
-        container.options.cities.forEach(city => {
+        container.options.cities.forEach(locationData => {
             let objPosition = {
-                X: parseInt(city.Position.X / container.properties.mapWidth * container.properties.size.X) + "px",
-                Y: parseInt(city.Position.Y / container.properties.mapHeight * container.properties.size.Y) + "px"
+                X: parseInt(locationData.Position.X / container.properties.mapWidth * container.properties.size.X) + "px",
+                Y: parseInt(locationData.Position.Y / container.properties.mapHeight * container.properties.size.Y) + "px"
             };
             let objectID = InteractiveMap.generateNewObjectID(container);
 
@@ -89,19 +89,20 @@ const InteractiveMap = {
                 id: "MapObject",
                 objectID: objectID,
                 objectType: "City",
-                objectName: city.Name,
-                icon: city.Icon,
+                objectName: locationData.Name,
+                icon: locationData.Icon,
                 objSize: container.properties.objectSize,
                 objPosition: objPosition, 
             });
-            WORLD_OBJECTS[objectID] = city;
+        
+            CampaignController.AddCampaignCity(objectID, locationData)
             container.elements.mapObjectContainer.appendChild(mapObject);
         });
 
-        container.options.landmarks.forEach(landmark => {
+        container.options.landmarks.forEach(locationData => {
             let objPosition = {
-                X: parseInt(landmark.Position.X / container.properties.mapWidth * container.properties.size.X) + "px",
-                Y: parseInt(landmark.Position.Y / container.properties.mapHeight * container.properties.size.Y) + "px"
+                X: parseInt(locationData.Position.X / container.properties.mapWidth * container.properties.size.X) + "px",
+                Y: parseInt(locationData.Position.Y / container.properties.mapHeight * container.properties.size.Y) + "px"
             };
             let objectID = InteractiveMap.generateNewObjectID(container);
 
@@ -109,12 +110,12 @@ const InteractiveMap = {
                 id: "MapObject",
                 objectID: objectID,
                 objectType: "Landmark",
-                objectName: landmark.Name,
-                icon: landmark.Icon,
+                objectName: locationData.Name,
+                icon: locationData.Icon,
                 objSize: container.properties.objectSize,
                 objPosition: objPosition,
             });
-            WORLD_OBJECTS[objectID] = landmark;
+            CampaignController.AddCampaignLandmark(objectID, locationData);
             container.elements.mapObjectContainer.appendChild(mapObject);
         });
     }

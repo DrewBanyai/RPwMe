@@ -19,7 +19,7 @@ var { GetLocationPosition } = require('../HelperFunctions/HelperFuncs')
 var { GetRandomCityType, GetRandomLandmarkType } = require('../Data/LocationTypes')
 const { Container } = require('../Components/ArcadiaJS')
 const { LOCATION_DATA } = require('../Data/LocationData')
-var { WORLD_OBJECTS } = require('../Data/WorldObjects')
+var { CampaignController } = require('../Data/CampaignController')
 const { InteractiveMap } = require('../Components/InteractiveMap')
 
 const WorldController = {
@@ -39,7 +39,7 @@ const WorldController = {
         SeedRandom(worldSeed);
         usedPositions = [];
         usedLocationNames = [];
-        WORLD_OBJECTS = {};
+        CampaignController.ResetCampaignData();
 
         //  Choose a random map identifier
         const mapList = Object.keys(LOCATION_DATA);
@@ -50,9 +50,10 @@ const WorldController = {
         let landmarkArray = WorldController.generateLandmarkArray(LOCATION_DATA[container.mapIdentifier]);
 
         //  Save off the map objects into an array for later use
-        cityArray.forEach((city) => { container.mapObjects.cities.push(city); })
-        landmarkArray.forEach((landmark) => { container.mapObjects.landmarks.push(landmark); })
-        console.log("World Objects:", container.mapObjects);
+        cityArray.forEach((city) => { container.mapObjects.cities.push(city); });
+        landmarkArray.forEach((landmark) => { container.mapObjects.landmarks.push(landmark); });
+        CampaignController.SetCampaignStatus("Waiting For Campaign Start");
+        CampaignController.PrintCampaignData();
 
         //  Create the visual represenation of this map
         container.elements.mapImage = InteractiveMap.create({ mapSelection: container.mapIdentifier, cities: cityArray, landmarks: landmarkArray });
