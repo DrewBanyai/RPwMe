@@ -79,6 +79,19 @@ const CampaignController = {
     
         CAMPAIGN_DATA.Players = CAMPAIGN_DATA.Players.filter(entry => (entry == playerUsername));
     },
+    GetPlayerExists(playerUsername) {
+        if (!CAMPAIGN_DATA) { console.error("CAMPAIGN_DATA is null or invalid!"); return; }
+        if (!CAMPAIGN_DATA.hasOwnProperty("Players")) { console.error("CAMPAIGN_DATA has no Players data!"); return; }
+        if (!playerUsername || (typeof playerUsername !== 'string')) { console.error("Attempting to check if player exists with invalid data."); return; }
+
+        return CAMPAIGN_DATA.Players.includes(playerUsername);
+    },
+    GetCampaignGameMaster() {
+        if (!CAMPAIGN_DATA) { console.error("CAMPAIGN_DATA is null or invalid!"); return null; }
+        if (!CAMPAIGN_DATA.hasOwnProperty("GameMaster")) { console.error("CAMPAIGN_DATA has no GameMaster data!"); return null; }
+        
+        return CAMPAIGN_DATA.GameMaster;
+    },
     SetCampaignGameMaster (gmUsername) {
         if (!CAMPAIGN_DATA) { console.error("CAMPAIGN_DATA is null or invalid!"); return; }
         if (!CAMPAIGN_DATA.hasOwnProperty("GameMaster")) { console.error("CAMPAIGN_DATA has no GameMaster data!"); return; }
