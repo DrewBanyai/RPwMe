@@ -40,7 +40,7 @@ let AdminWindowTopButtons = {
             id: "AdminButtonStrip",
             style: {
                 width: pxFromInt(CONFIG.WINDOW_WIDTH),
-                backgroundColor: STYLE.ADMIN_WINDOW_BACKGROUND_COLOR,
+                backgroundColor: STYLE.ADMIN_WINDOW_BUTTONS_BACKGROUND_COLOR,
                 display: "flex",
             }
         });
