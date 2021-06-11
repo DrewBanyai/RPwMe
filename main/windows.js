@@ -17,15 +17,15 @@
 const electron = require('electron')
 const BrowserWindow = electron.BrowserWindow
 
-const config = require('./config')
+const CONFIG = require('./config')
 const path = require('path')
 
 var windowMap = {}
 
 function initialize () {
-    var windowWidth = config.WINDOW_WIDTH + (config.DEBUG ? 600 : 0);
-    createWindow("ADMIN", `${config.APP_NAME} - Admin Window`, windowWidth, config.WINDOW_HEIGHT, config.DEBUG, false);
-    createWindow("GAME", `${config.APP_NAME} - Game Window`, windowWidth, config.WINDOW_HEIGHT, config.DEBUG, false);
+    var windowWidth = CONFIG.WINDOW_WIDTH + (CONFIG.DEBUG ? 600 : 0);
+    createWindow("ADMIN", `${CONFIG.APP_NAME} - Admin Window`, windowWidth, CONFIG.WINDOW_HEIGHT, CONFIG.DEBUG, false);
+    createWindow("GAME", `${CONFIG.APP_NAME} - Game Window`, windowWidth, CONFIG.WINDOW_HEIGHT, CONFIG.DEBUG, false);
 }
 
 function createWindow(windowID, title, width, height, devTools, menu) {
@@ -37,7 +37,7 @@ function createWindow(windowID, title, width, height, devTools, menu) {
         autoHideMenuBar: true,
         acceptFirstMouse: true,
         webPreferences: {
-            preload: path.join(__dirname , config.PRELOAD[windowID])
+            preload: path.join(__dirname , CONFIG.PRELOAD[windowID])
         }
     })
     newWindow.setContentSize(width, height)
@@ -47,10 +47,10 @@ function createWindow(windowID, title, width, height, devTools, menu) {
     if (!menu) newWindow.setMenuBarVisibility(false);
 
     //  If the program is in debug mode, show the dev tools menu
-    if (config.DEBUG) newWindow.webContents.openDevTools()
+    if (CONFIG.DEBUG) newWindow.webContents.openDevTools()
 
     //  Load in the HTML file for this window
-    newWindow.loadFile(config.INDEX[windowID])
+    newWindow.loadFile(CONFIG.INDEX[windowID])
 
     //  Once the window contents load, send a message that will get accepted by the Admin menu
     newWindow.webContents.on('did-finish-load', function () {
