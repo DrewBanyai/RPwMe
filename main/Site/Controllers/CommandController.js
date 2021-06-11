@@ -73,21 +73,22 @@ const CommandControl = {
         return { id: commandID, args: commandParts };
     },
     CheckIsCommandValid: (commandString, userType) => {
-        if (!commandString) { return false; }
-        if (!userType) { return false; }
+        if (!commandString) { return { valid: false, reason: "Command string is empty" }; }
+        if (!userType) { return { valid: false, reason: "User Type is empty" }; }
     
         let commandParsed = CommandControl.GetCommandStringParsed(commandString);
         let commandData = CommandControl.GetCommandData(commandParsed.id);
-        if (!commandData) { return false; }
-        if (!CommandControl.COMMAND_USER_TYPES.includes(userType)) { return false; }
-        if (!commandData.who[userType]) { return false; }
-        if ((commandParsed.args.length < commandData.args.min) || (commandParsed.args.length > commandData.args.max)) { return false; }
+        if (!commandData) { return { valid: false, reason: "Command Data not found" }; }
+        if (!CommandControl.COMMAND_USER_TYPES.includes(userType)) { return { valid: false, reason: "User Type not found" }; }
+        if (!commandData.who[userType]) { return { valid: false, reason: "User Type is not allowed" }; }
+        if ((commandParsed.args.length < commandData.args.min) || (commandParsed.args.length > commandData.args.max)) { return { valid: false, reason: "Incorrect number of arguments" }; }
     
-        return true;
+        return { valid: true, reason: "" };
     },
     CommandRequest: (commandString, userType) => {
-        if (!CommandControl.CheckIsCommandValid(commandString, userType)) { 
-            if (CONFIG.DEBUG) console.log("Command not valid:", '"' + commandString + '"', "(User Type: " + userType + ")");
+        let commandValid = CommandControl.CheckIsCommandValid(commandString, userType)
+        if (!commandValid || !commandValid.valid) { 
+            if (CONFIG.DEBUG) console.log("Command not valid: ", '"' + commandValid.reason + '"');
             return false;
         }
 
