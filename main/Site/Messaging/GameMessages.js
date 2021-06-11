@@ -16,33 +16,37 @@
 
 const ipcRenderer = require('electron').ipcRenderer
 
-//////////////////////////////
-//  Send Messages
-//////////////////////////////
+const gameMessages = {
+    //////////////////////////////
+    //  Send Messages
+    //////////////////////////////
 
+    //////////////////////////////
+    //  Receive Messages
+    //////////////////////////////
+    receiveWindowID(event, ...args) {
+        const windowID = args[0]
 
-//////////////////////////////
-//  Receive Messages
-//////////////////////////////
-function receiveWindowID(event, ...args) {
-    const windowID = args[0]
+        var idLabel = document.querySelector('#ProgramLogo')
+        if (idLabel) idLabel.innerHTML = windowID
+    },
 
-    var idLabel = document.querySelector('#win-id')
-    if (idLabel) idLabel.innerHTML = windowID
+    receiveTestMessage(event, ...args) {
+        const message = args[0]
+    
+        var idLabel = document.querySelector('#ProgramLogo')
+        if (idLabel) idLabel.innerHTML = message
+    },
+
+    Initialize() {
+        ipcRenderer.on('window-id-send', gameMessages.receiveWindowID)
+        ipcRenderer.on('change-window-id', gameMessages.receiveTestMessage)
+    }
+
+    //////////////////////////////
+    //  Callback Definitions
+    //////////////////////////////
 }
-
-function receiveTestMessage(event, ...args) {
-    const message = args[0]
-
-    var idLabel = document.querySelector('#win-id')
-    if (idLabel) idLabel.innerHTML = message
-}
-
-//////////////////////////////
-//  Callback Definitions
-//////////////////////////////
-ipcRenderer.on('window-id-send', receiveWindowID)
-ipcRenderer.on('change-window-id', receiveTestMessage)
 
 //  Module Exports
-module.exports = { }
+module.exports = { gameMessages }

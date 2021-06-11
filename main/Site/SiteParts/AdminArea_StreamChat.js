@@ -46,6 +46,8 @@ let AdminArea_StreamChat = {
 
         TwitchControl.AddChatCallback((userstate, message) => { AdminArea_StreamChat.AddChatLine(container, userstate, message); });
 
+        container.onShow = () => AdminArea_StreamChat.ResizeTopSpacer(container, false);
+
         return container;
     },
 
@@ -149,7 +151,7 @@ let AdminArea_StreamChat = {
         //  Create the chat line entry node and insert it, then return the top spacer to default size (we'll resize it again after)
         let chatEntry = AdminArea_StreamChat.CreateChatLine(userstate.username, message);
         container.elements.chatBoxEntries.appendChild(chatEntry);
-        container.elements.chatTopSpacer.style.height = pxFromInt(AdminArea_StreamChat.chatBufferSize.t);
+        AdminArea_StreamChat.ResizeTopSpacer(container, true);
 
         //  If our chat entries are taking more than the space allotted for the chat box, destroy the earliest message entry box
         while (AdminArea_StreamChat.GetChatHeight(container) > container.elements.chatBox.offsetHeight) {
@@ -157,8 +159,14 @@ let AdminArea_StreamChat = {
         }
 
         //  Resize the top spacer to take up as much height as is remaining, to push all chat to the bottom
-        let chatSizeRemainder = (container.elements.chatBox.offsetHeight - AdminArea_StreamChat.GetChatHeight(container))
-        container.elements.chatTopSpacer.style.height = pxFromInt(AdminArea_StreamChat.chatBufferSize.t + chatSizeRemainder);
+        AdminArea_StreamChat.ResizeTopSpacer(container, false);
+    },
+    ResizeTopSpacer(container, pre) {
+        if (pre) container.elements.chatTopSpacer.style.height = pxFromInt(AdminArea_StreamChat.chatBufferSize.t);
+        else {
+            let chatSizeRemainder = (container.elements.chatBox.offsetHeight - AdminArea_StreamChat.GetChatHeight(container))
+            container.elements.chatTopSpacer.style.height = pxFromInt(AdminArea_StreamChat.chatBufferSize.t + chatSizeRemainder);
+        }
     },
     GetChatHeight(container) {
         let chatHeight = 0;

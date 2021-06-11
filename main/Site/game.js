@@ -14,13 +14,16 @@
     limitations under the License.
 */
 
-const gameMessages = require('./Messaging/GameMessages')
-const STYLE = require('./style')
-
-function LoadSiteContent () {
-  document.body.style.backgroundColor = STYLE.WINDOW_BACKGROUND_COLOR.GAME
-}
+const { gameMessages } = require('./Messaging/GameMessages')
+var { GameDisplay } = require('./SiteParts/GameDisplay')
 
 window.addEventListener('DOMContentLoaded', () => {
+  gameMessages.Initialize();
   LoadSiteContent();
 })
+
+function LoadSiteContent () {
+  //  Create the AdminDisplay and drop it into the AdminPage div
+  var gamePage = document.querySelector('#GamePage')
+  if (gamePage) gamePage.appendChild(GameDisplay.create());
+}

@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-const adminMessages = require('./Messaging/AdminMessages')
+const { adminMessages } = require('./Messaging/AdminMessages')
 const SETTINGS = require('./settings')
 const CONFIG = require('../config')
 var { TwitchControl } = require('./Twitch/TwitchControl')
@@ -24,6 +24,7 @@ var { CommandControl } = require('./Controllers/CommandController')
 
 
 window.addEventListener('DOMContentLoaded', () => {
+    adminMessages.Initialize();
     LoadSiteContent();
     InitTwitchBot();
 })
@@ -40,6 +41,8 @@ function InitTwitchBot() {
     let token = (SETTINGS && SETTINGS.TWITCH_DATA && SETTINGS.TWITCH_DATA.TOKEN) ? SETTINGS.TWITCH_DATA.TOKEN : null;
     let channel = (SETTINGS && SETTINGS.TWITCH_DATA && SETTINGS.TWITCH_DATA.CHANNEL) ? SETTINGS.TWITCH_DATA.CHANNEL : null;
     TwitchControl.InitializeTwitchControl(username, token, channel, CONFIG.DEBUG);
+    
+    //  Set up the game master's ID in the Campaign Controller
     CampaignController.SetCampaignGameMaster(TwitchControl.ConnectionData.Channel.toLowerCase());
 
     //  Set up gm, player, and viewer commands
@@ -47,7 +50,8 @@ function InitTwitchBot() {
 
     //  Example of how to use the AddCommandCallback system and then process command portions (remove once 0.0.1 is ready)
     TwitchControl.AddCommandCallback("!hello", (userstate, message) => {
-        let responseString = (message.length > 1) ? message.slice(1).join(" ") : "Hello there!";
+        let messageParts = message.split(" ");
+        let responseString = (messageParts.length > 1) ? messageParts.slice(1).join(" ") : "Hello there!";
         adminMessages.sendTestMessage(responseString);
         TwitchControl.SendChatMessage("!hello message received and processed.");
     });

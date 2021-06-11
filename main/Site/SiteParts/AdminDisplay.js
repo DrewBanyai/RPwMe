@@ -17,26 +17,24 @@
 const CONFIG = require('../../config')
 const STYLE = require('../style')
 const { Container } = require('../Components/ArcadiaJS')
-const { EventDispatch } = require('../Controllers/EventDispatch')
 const { pxFromInt } = require('../HelperFunctions/pxFromInt')
+const { EventDispatch } = require('../Controllers/EventDispatch')
 
-const AdminWindowTopButtons = require('./AdminWindowTopButtons').AdminWindowTopButtons
-const AdminArea_World = require('./AdminArea_World').AdminArea_World
-const AdminArea_Area = require('./AdminArea_Area').AdminArea_Area
-const AdminArea_Location = require('./AdminArea_Location').AdminArea_Location
-const AdminArea_Players = require('./AdminArea_Players').AdminArea_Players
-const AdminArea_NPCs = require('./AdminArea_NPCs').AdminArea_NPCs
-const AdminArea_Journal = require('./AdminArea_Journal').AdminArea_Journal
-const AdminArea_Requests = require('./AdminArea_Requests').AdminArea_Requests
-const AdminArea_StreamChat = require('./AdminArea_StreamChat').AdminArea_StreamChat
-const AdminArea_Settings = require('./AdminArea_Settings').AdminArea_Settings
-
-"use strict"
+const { AdminWindowTopButtons } = require('./AdminWindowTopButtons')
+const { AdminArea_World } = require('./AdminArea_World')
+const { AdminArea_Area } = require('./AdminArea_Area')
+const { AdminArea_Location } = require('./AdminArea_Location')
+const { AdminArea_Players } = require('./AdminArea_Players')
+const { AdminArea_NPCs } = require('./AdminArea_NPCs')
+const { AdminArea_Journal } = require('./AdminArea_Journal')
+const { AdminArea_Requests } = require('./AdminArea_Requests')
+const { AdminArea_StreamChat } = require('./AdminArea_StreamChat')
+const { AdminArea_Settings } = require('./AdminArea_Settings')
 
 let AdminDisplay = {
     create: () => {
         let container = Container.create({
-            id:"AdminDisplay",
+            id: "AdminDisplay",
             style: {
                 width: pxFromInt(CONFIG.WINDOW_WIDTH),
                 height: pxFromInt(CONFIG.WINDOW_HEIGHT),
@@ -45,15 +43,15 @@ let AdminDisplay = {
         });
 
         //  Create the elements list for later use
-        container.elements = { adminTopButtons: null, adminMainArea: null, adminMenus: {} };
+        container.elements = { adminTopButtons: null, mainArea: null, menuScreens: {} };
         container.requestCount = 0;
         
-        //  Create the locations for the top button strip and the individual sub-menus of the Admin menu
+        //  Create the locations for the top button strip and the individual sub-menus of the display
         AdminDisplay.createAdminTopButtons(container);
-        AdminDisplay.createAdminMainArea(container);
+        AdminDisplay.createMainArea(container);
 
         //  Fill in the main admin areas as well as the buttons in the top button strip
-        AdminDisplay.addAdminMainAreaEntries(container);
+        AdminDisplay.addMainAreaEntries(container);
         AdminDisplay.addAdminButtonStripEntries(container, container.elements.adminTopButtons);
 
         return container;
@@ -64,15 +62,15 @@ let AdminDisplay = {
         container.appendChild(container.elements.adminTopButtons);
     },
 
-    createAdminMainArea: (container) => {
-        container.elements.adminMainArea = Container.create({ id: "AdminMenuMainArea" });
-        container.appendChild(container.elements.adminMainArea);
+    createMainArea: (container) => {
+        container.elements.mainArea = Container.create({ id: "AdminMenuMainArea" });
+        container.appendChild(container.elements.mainArea);
     },
 
-    addAdminMainAreaEntries: (container) => {
+    addMainAreaEntries: (container) => {
         let addMainEntry = (areaType, areaStruct) => {
-            container.elements.adminMainArea.appendChild(areaStruct);
-            container.elements.adminMenus[areaType] = areaStruct;
+            container.elements.mainArea.appendChild(areaStruct);
+            container.elements.menuScreens[areaType] = areaStruct;
         };
 
         addMainEntry("World", AdminArea_World.create());
@@ -88,7 +86,7 @@ let AdminDisplay = {
 
     addAdminButtonStripEntries: (container, buttonStrip) => {
         let makeButton = (className, buttonType) => {
-            return { iconClass: className, fontSize: "36px", name: buttonType, callback: () => { AdminDisplay.showAdminArea(container, buttonType); } };
+            return { iconClass: className, fontSize: "36px", name: buttonType, callback: () => { AdminDisplay.showMenuScreen(container, buttonType); } };
         };
 
         AdminWindowTopButtons.setButtonsList(container.elements.adminTopButtons, [
@@ -104,12 +102,14 @@ let AdminDisplay = {
         ]);
     },
 
-    showAdminArea: (container, menuID) => {
-        let areaKeys = Object.keys(container.elements.adminMenus);
-        areaKeys.forEach((key) => { container.elements.adminMenus[key].style.display = "none"; });
+    showMenuScreen: (container, menuID) => {
+        let menuScreens = container.elements.menuScreens;
+        let areaKeys = Object.keys(menuScreens);
+        areaKeys.forEach((key) => { menuScreens[key].style.display = "none"; });
 
-        if (!container.elements.adminMenus.hasOwnProperty(menuID)) { console.warn("Attempting to show nonexistent menu '" + menuID + "'"); return; }
-        container.elements.adminMenus[menuID].style.display = STYLE.ADMIN_WINDOW_MENU_DISPLAY_TYPE;
+        if (!menuScreens.hasOwnProperty(menuID)) { console.warn("Attempting to show nonexistent menu '" + menuID + "'"); return; }
+        menuScreens[menuID].style.display = STYLE.ADMIN_WINDOW_MENU_DISPLAY_TYPE;
+        if (menuScreens[menuID].onShow) menuScreens[menuID].onShow();
     },
 
     setupPlayerRequestMenu: (container) => {
@@ -125,16 +125,16 @@ let AdminDisplay = {
                     EventDispatch.SendEvent("Request Removed", { requestID: requestID });
                 },
             });
-            container.adminMenus["Requests"].appendChild(requestUI.content);
+            container.menuScreens["Requests"].appendChild(requestUI.content);
         });
 
         EventDispatch.AddEventHandler("Request Removed", (eventType, eventData) => { AdminDisplay.removePlayerRequest(container, eventData.requestID); });
     },
 
     removePlayerRequest: (container, requestID) => {
-        for (let i = 0; i < container.elements.adminMenus["Requests"].children.length; ++i) {
-            if (container.elements.adminMenus["Requests"].children[i].getRequestID() === requestID) {
-                container.elements.adminMenus["Requests"].removeChild(container.elements.adminMenus["Requests"].children[i]);
+        for (let i = 0; i < container.elements.menuScreens["Requests"].children.length; ++i) {
+            if (container.elements.menuScreens["Requests"].children[i].getRequestID() === requestID) {
+                container.elements.menuScreens["Requests"].removeChild(container.elements.menuScreens["Requests"].children[i]);
                 return;
             }
         }

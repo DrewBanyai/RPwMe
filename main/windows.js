@@ -53,9 +53,9 @@ function createWindow(windowID, title, width, height, devTools, menu) {
     newWindow.loadFile(CONFIG.INDEX[windowID])
 
     //  Once the window contents load, send a message that will get accepted by the Admin menu
-    newWindow.webContents.on('did-finish-load', function () {
-        newWindow.webContents.send('window-id-send', windowID)
-    })
+    //newWindow.webContents.on('did-finish-load', function () {
+        //newWindow.webContents.send('window-id-send', windowID)
+    //})
 
     //  If the window ever closes, run destroy() to remove links to it
     newWindow.on('closed', function () {
