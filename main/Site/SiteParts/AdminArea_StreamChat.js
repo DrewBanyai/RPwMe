@@ -141,7 +141,7 @@ let AdminArea_StreamChat = {
         });
         chatEntryBox.appendChild(chatEntryText);
 
-        chatEntryText.innerHTML = `<div style="color: ${entryNameColor}">${chatUsername}:  </div><div style="color: ${entryStringColor}">${chatString}</div>`;
+        chatEntryText.innerHTML = `<div style="color: ${entryNameColor}">${chatUsername}:&nbsp;&nbsp;</div><div style="color: ${entryStringColor}">${chatString}</div>`;
 
         return chatEntry;
     },

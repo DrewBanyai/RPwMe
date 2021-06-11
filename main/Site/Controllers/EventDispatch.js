@@ -14,8 +14,6 @@
     limitations under the License.
 */
 
-"use strict"
-
 let EventDispatch = {
     dispatchEventTypeList: [],
     dispatchEventHandlers: {},

@@ -20,6 +20,7 @@ const CONFIG = require('../config')
 var { TwitchControl } = require('./Twitch/TwitchControl')
 var { AdminDisplay } = require('./SiteParts/AdminDisplay')
 var { CampaignController } = require('./Data/CampaignController')
+var { CommandControl } = require('./Controllers/CommandController')
 
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -34,16 +35,20 @@ function LoadSiteContent() {
 }
 
 function InitTwitchBot() {
+    //  Get the username, token, and channel from the settings data, and attempt to initialize TwitchControl
     let username = (SETTINGS && SETTINGS.TWITCH_DATA && SETTINGS.TWITCH_DATA.USERNAME) ? SETTINGS.TWITCH_DATA.USERNAME : null
     let token = (SETTINGS && SETTINGS.TWITCH_DATA && SETTINGS.TWITCH_DATA.TOKEN) ? SETTINGS.TWITCH_DATA.TOKEN : null;
     let channel = (SETTINGS && SETTINGS.TWITCH_DATA && SETTINGS.TWITCH_DATA.CHANNEL) ? SETTINGS.TWITCH_DATA.CHANNEL : null;
     TwitchControl.InitializeTwitchControl(username, token, channel, CONFIG.DEBUG);
     CampaignController.SetCampaignGameMaster(TwitchControl.ConnectionData.Channel.toLowerCase());
 
-    //  Example of how to use the AddCommandCallback system and then process command portions
-    TwitchControl.AddCommandCallback("!hello", (commandParts) => {
-        let commandMessage = (commandParts.length > 1) ? commandParts.slice(1).join(" ") : "Hello there!";
-        adminMessages.sendTestMessage(commandMessage);
+    //  Set up gm, player, and viewer commands
+    CommandControl.InitCommandControl();
+
+    //  Example of how to use the AddCommandCallback system and then process command portions (remove once 0.0.1 is ready)
+    TwitchControl.AddCommandCallback("!hello", (userstate, message) => {
+        let responseString = (message.length > 1) ? message.slice(1).join(" ") : "Hello there!";
+        adminMessages.sendTestMessage(responseString);
         TwitchControl.SendChatMessage("!hello message received and processed.");
     });
 }
