@@ -16,7 +16,7 @@
 
 const LOCATION_DATA = {
     "01": {
-        MapImage: "Images/Locations/Level_0/01.png",
+        MapImageFile: "Images/Locations/Level_0/01.png",
         CityCounts: { Min: 4, Max: 8 },
         LandmarkCounts: { Min: 10, Max: 20 },
         Positions: {
@@ -72,7 +72,7 @@ const LOCATION_DATA = {
         }
     },
     "02": {
-        MapImage: "Images/Locations/Level_0/02.png",
+        MapImageFile: "Images/Locations/Level_0/02.png",
         CityCounts: { Min: 8, Max: 12 },
         LandmarkCounts: { Min: 8, Max: 13 },
         Positions: {
@@ -114,7 +114,7 @@ const LOCATION_DATA = {
         }
     },
     "03": {
-        MapImage: "Images/Locations/Level_0/03.png",
+        MapImageFile: "Images/Locations/Level_0/03.png",
         CityCounts: { Min: 4, Max: 7 },
         LandmarkCounts: { Min: 5, Max: 8 },
         Positions: {
@@ -148,7 +148,7 @@ const LOCATION_DATA = {
         }
     },
     "04": {
-        MapImage: "Images/Locations/Level_0/04.png",
+        MapImageFile: "Images/Locations/Level_0/04.png",
         CityCounts: { Min: 6, Max: 8 },
         LandmarkCounts: { Min: 9, Max: 14 },
         Positions: {

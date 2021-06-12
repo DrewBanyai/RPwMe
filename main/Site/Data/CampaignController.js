@@ -21,6 +21,8 @@ const CAMPAIGN_STATUS_LIST = [
     "Waiting For Campaign Start"
 ];
 
+let CampaignObjectCount = 0;
+
 const CampaignController = {
     GetCampaignStatus() {
         if (!CAMPAIGN_DATA) { console.error("CAMPAIGN_DATA is null or invalid!"); return null; }
@@ -45,10 +47,18 @@ const CampaignController = {
                 Landmarks: {}
             },
         };
+        
+        CampaignController.ResetObjectIDs();
     
         CampaignController.SetCampaignStatus("Generating Campaign Data");
     },
-    PrintCampaignData () {
+    GenerateNewObjectID() {
+        return CampaignObjectCount++;
+    },
+    ResetObjectIDs() {
+        CampaignObjectCount = 0;
+    },
+    PrintCampaignData() {
         console.log("Campaign Data:", CAMPAIGN_DATA);
     },
     AddCampaignCity(id, locationData) {

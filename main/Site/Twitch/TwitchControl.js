@@ -75,7 +75,7 @@ var TwitchControl = {
         };
     },
     onConnectedHandler: (address, port) => {
-        TwitchControl.Client.action(TwitchControl.ConnectionData.Channel, 'Bot initialized and connected!');
+        TwitchControl.Client.action(TwitchControl.ConnectionData.Channel, 'RPwMe initialized!');
     },
     onMessageHandler: (channel, userstate, message, self) => {
         if (self) { return; }                   //  Ignore messages from the bot 

@@ -17,10 +17,10 @@
 const CONFIG = require('../../config')
 const STYLE = require('../style')
 const Container = require('../Components/ArcadiaJS').Container
-const { GenerateWorldMenu } = require('../SiteParts/GenerateWorldMenu')
+const { WorldController } = require('../Controllers/WorldController')
+const { InteractiveMap } = require('../Components/InteractiveMap')
+const { EventDispatch } = require('../Controllers/EventDispatch')
 const pxFromInt = require('../HelperFunctions/pxFromInt').pxFromInt
-
-"use strict"
 
 let AdminArea_World = {
     create() {
@@ -34,20 +34,42 @@ let AdminArea_World = {
             }
         });
 
-        container.elements = { generateWorldMenu: null, infoBoxWorld: null };
+        container.elements = { worldContainer: null, worldDisplay: null, infoBoxWorld: null };
 
-        AdminArea_World.createGenerateWorldMenu(container);
-        AdminArea_World.createInfoBoxWorldMenu(container);
+        AdminArea_World.createWorldDisplay(container, Date.now());
+        AdminArea_World.createWorldInfoBox(container);
+
+        EventDispatch.AddEventHandler("Map Create", (eventType, eventData) => { AdminArea_World.createWorldDisplay(container, eventData.seed); });
+
+        container.onShow = () => AdminArea_World.reloadMapDisplay(container);
 
         return container;
     },
 
-    createGenerateWorldMenu(container) {
-        container.elements.generateWorldMenu = GenerateWorldMenu.create({});
-        container.appendChild(container.elements.generateWorldMenu);
+    reloadMapDisplay(container) {
+        setTimeout(() => { InteractiveMap.LoadMapObjects(container.elements.worldDisplay.elements.interactiveMap); }, 10); //  TODO: Swap this out with a DOM content loaded callback?
     },
 
-    createInfoBoxWorldMenu(container) {
+    createWorldDisplay(container, seed) {
+        if (container.elements.worldDisplay !== null) {
+            container.elements.worldContainer.innerHTML = "";
+            container.elements.worldDisplay = null;
+        }
+
+        let paddingLeft = pxFromInt(STYLE.INTERACTIVE_MAP_PADDING_LEFT);
+        let paddingRight = pxFromInt(STYLE.INTERACTIVE_MAP_PADDING_RIGHT);
+
+        if (!container.elements.worldContainer) {
+            container.elements.worldContainer = Container.create({ id: "World Container", style: { padding: "2px " + paddingLeft + " 2px " + paddingRight, }, });
+            container.appendChild(container.elements.worldContainer);
+        }
+
+        container.elements.worldDisplay = WorldController.create(seed);
+        container.elements.worldContainer.innerHTML = "";
+        container.elements.worldContainer.appendChild(container.elements.worldDisplay.elements.interactiveMap);
+    },
+
+    createWorldInfoBox(container) {
         //container.elements.infoBoxWorld = new InfoBox_World({});
         //container.elements.infoBoxWorld.setVisible(false);
         //container.appendChild(container.elements.infoBoxWorld);

@@ -19,6 +19,7 @@ var { CITY_DATA, GetRandomBusinessOfType } = require('../Data/CityData')
 var { Random } = require('../HelperFunctions/Random')
 
 let usedLocationNames = [];
+const ClearUsedLocationNames = () => { usedLocationNames = []; }
 const GetLocationName = (locationType, unused = true) => {
     if (usedLocationNames.length >= LOCATION_NAMES[locationType].length) { unused = false; }
     let locationName = LOCATION_NAMES[locationType][Math.floor(Random() * LOCATION_NAMES[locationType].length)];
@@ -29,6 +30,7 @@ const GetLocationName = (locationType, unused = true) => {
 
 
 let usedPositions = [];
+const ClearUsedPositions = () => { usedPositions = []; }
 const GetLocationPosition = (mapData, locationType, unused = true) => {
     if (usedPositions.length >= mapData.Positions[locationType].length) { unused = false; }
     let positionIndex = Math.floor(Random() * mapData.Positions[locationType].length);
@@ -51,4 +53,4 @@ const GenerateBusinesses = (businessTypes) => {
 }
 
 //  Module Exports
-module.exports = { GetLocationName, GetLocationPosition, GenerateBusinesses }
+module.exports = { ClearUsedLocationNames, GetLocationName, ClearUsedPositions, GetLocationPosition, GenerateBusinesses }

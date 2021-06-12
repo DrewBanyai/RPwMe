@@ -16,36 +16,31 @@
 
 const CONFIG = require('../../config')
 const STYLE = require('../style')
-const Container = require('../Components/ArcadiaJS').Container
-const pxFromInt = require('../HelperFunctions/pxFromInt').pxFromInt
-const { GenerateWorldMenu } = require('../SiteParts/GenerateWorldMenu')
+const { Container, Label } = require('../Components/ArcadiaJS')
+const { pxFromInt } = require('../HelperFunctions/pxFromInt')
+const { HandwrittenNote } = require('../Components/HandwrittenNote')
 
-"use strict"
-
-let AdminArea_Settings = {
+let GameArea_PlayerJoin = {
     create() {
         let container = Container.create({
-            id: "AdminArea_Settings",
+            id: "GameArea_PlayerJoin",
             style: {
                 width: pxFromInt(CONFIG.WINDOW_WIDTH),
-                height: pxFromInt(CONFIG.WINDOW_HEIGHT - 1 - STYLE.ADMIN_WINDOW_BUTTON_HEIGHT),
-                backgroundColor: STYLE.ADMIN_WINDOW_AREA_COLOR,
-                display: STYLE.ADMIN_WINDOW_MENU_DISPLAY_TYPE,
+                height: pxFromInt(CONFIG.WINDOW_HEIGHT),
+                backgroundColor: STYLE.GAME_WINDOW_AREA_COLOR,
+                display: STYLE.GAME_WINDOW_MENU_DISPLAY_TYPE,
+                justifyContent: "center",
+                overflow: "hidden",
             }
         });
 
-        container.elements = { generateWorldMenu: null };
+        container.elements = { playerJoinCard1: null, playerJoinCard2: null, playerJoinCard3: null, }
 
-        AdminArea_Settings.createGenerateWorldMenu(container);
+        //GameArea_PlayerJoin.createPlayerJoinCard(0, )
 
         return container;
-    },
-
-    createGenerateWorldMenu(container) {
-        container.elements.generateWorldMenu = GenerateWorldMenu.create({});
-        container.appendChild(container.elements.generateWorldMenu);
     },
 };
 
 //  Module Exports
-module.exports = { AdminArea_Settings }
+module.exports = { GameArea_PlayerJoin }

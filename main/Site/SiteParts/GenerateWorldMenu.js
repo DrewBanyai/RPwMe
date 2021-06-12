@@ -18,26 +18,22 @@ const CONFIG = require('../../config')
 const STYLE = require('../style')
 const pxFromInt = require('../HelperFunctions/pxFromInt').pxFromInt
 const { Container, Label, TextInput, BasicButton } = require('../Components/ArcadiaJS')
-const { WorldController } = require('../Controllers/WorldController')
-const { InteractiveMap } = require('../Components/InteractiveMap')
+const { EventDispatch } = require('../Controllers/EventDispatch')
 
 const GenerateWorldMenu = {
     create() {
         let container = Container.create({
             id: "GenerateWorldMenu",
             style: {
-                width: pxFromInt(STYLE.WORLD_MAP_WIDTH),
+                width: pxFromInt(STYLE.WORLD_MAP_SIZE[document.windowID].x),
                 height: pxFromInt(CONFIG.SITE_HEIGHT - 1 - STYLE.ADMIN_WINDOW_BUTTON_HEIGHT),
                 backgroundColor: STYLE.ADMIN_WINDOW_AREA_COLOR,
             }
         });
 
-        container.elements = { menuButtons: null, mapDisplay: null, worldSeedInput: null, worldContainer: null, worldControl: null };
+        container.elements = { menuButtons: null, worldSeedInput: null };
         
         GenerateWorldMenu.createGenerateWorldMenu(container);
-        GenerateWorldMenu.createWorldControllerMenu(container);
-        
-        GenerateWorldMenu.onCreateWorldClick(container);
 
         return container;
     },
@@ -110,35 +106,15 @@ const GenerateWorldMenu = {
         container.elements.menuButtons.appendChild(container.elements.worldSeedInput);
     },
 
-    createWorldControllerMenu(container) {
-        let paddingLeft = pxFromInt(STYLE.INTERACTIVE_MAP_PADDING_LEFT);
-        let paddingRight = pxFromInt(STYLE.INTERACTIVE_MAP_PADDING_RIGHT);
-        container.elements.worldContainer = Container.create({
-            id: "World Container",
-            style: {
-                padding: "2px " + paddingLeft + " 2px " + paddingRight,
-            },
-        });
-        container.appendChild(container.elements.worldContainer);
-    },
-
     onLoadWorldClick() {
         console.log("TEST 1");
     },
 
     onCreateWorldClick(container) {
-        if (container.elements.worldControl !== null) {
-            container.elements.worldContainer.innerHTML = "";
-            container.elements.worldControl = null;
-        }
-
         let seed = TextInput.getValue(container.elements.worldSeedInput);
         if (!seed) { seed = Date.now(); }
 
-        container.elements.worldControl = WorldController.create(seed);
-        container.elements.worldContainer.innerHTML = "";
-        container.elements.worldContainer.appendChild(container.elements.worldControl.elements.mapImage);
-        setTimeout(() => { InteractiveMap.LoadMapObjects(container.elements.worldControl.elements.mapImage); }, 10); //  TODO: Swap this out with a DOM content loaded callback?
+        EventDispatch.SendEvent("Map Create", { seed: seed });
     }
 }
 

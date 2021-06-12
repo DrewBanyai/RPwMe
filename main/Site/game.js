@@ -18,6 +18,8 @@ const { gameMessages } = require('./Messaging/GameMessages')
 var { GameDisplay } = require('./SiteParts/GameDisplay')
 
 window.addEventListener('DOMContentLoaded', () => {
+  document.windowID = "GAME";
+  
   gameMessages.Initialize();
   LoadSiteContent();
 })
