@@ -37,10 +37,11 @@ const InteractiveMap = {
         container.properties = properties;
 
         let mapImageSrc = "Images/Locations/Level_0/" + options.mapSelection + ".png"
+        console.log(mapImageSrc, options.mapImage);
 
         //  Get an img tag for the map image to get the full width and height
         container.elements.mapImage = Image.create({ id: "MapImage", style: { opacity: "0%", }});
-        container.elements.mapImage.setValue(mapImageSrc);
+        container.elements.mapImage.setValue(options.mapImage);
         container.appendChild(container.elements.mapImage);
 
         container.elements.mapContainer = Container.create({
@@ -50,7 +51,7 @@ const InteractiveMap = {
                 borderRadius: "6px",
                 width: parseInt(properties.size.X) + "px",
                 height: parseInt(properties.size.Y) + "px",
-                backgroundImage: "url(" + mapImageSrc + ")",
+                backgroundImage: "url(" + options.mapImage + ")",
                 backgroundSize: "cover"
             }
         });

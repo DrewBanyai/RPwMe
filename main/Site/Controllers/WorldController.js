@@ -44,6 +44,7 @@ const WorldController = {
         //  Choose a random map identifier
         const mapList = Object.keys(LOCATION_DATA);
         container.mapIdentifier = mapList[Math.floor(Random() * mapList.length)];
+        let mapImage = LOCATION_DATA[container.mapIdentifier].MapImage;
 
         //  Generate all cities and landmarks that will populate the map
         let cityArray = WorldController.generateCityArray(LOCATION_DATA[container.mapIdentifier]);
@@ -56,7 +57,7 @@ const WorldController = {
         CampaignController.PrintCampaignData();
 
         //  Create the visual represenation of this map
-        container.elements.mapImage = InteractiveMap.create({ mapSelection: container.mapIdentifier, cities: cityArray, landmarks: landmarkArray });
+        container.elements.mapImage = InteractiveMap.create({ mapSelection: container.mapIdentifier, mapImage: mapImage, cities: cityArray, landmarks: landmarkArray });
     },
 
     generateCityArray: (mapData) => {

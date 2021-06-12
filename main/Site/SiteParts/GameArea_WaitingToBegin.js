@@ -85,7 +85,7 @@ let GameArea_WaitingToBegin = {
                 lineHeight: "42px",
             },
             attributes: {
-                value: "RPwMe is a simulated Pen &amp; Paper Roleplaying system designed to allow Twitch viewers to play through a custom adventure",
+                value: "RPwMe is a simulated Pen &amp; Paper Roleplaying system designed to allow Twitch viewers to play through a custom adventure.",
             },
             writeDelay: 30,
             callback: () => { setTimeout(() => { GameArea_WaitingToBegin.createWaitingExplanation(container); }, 500); }
