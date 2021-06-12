@@ -16,8 +16,9 @@
 
 const CONFIG = require('../../config')
 const STYLE = require('../style')
-const { Container, Button } = require('../Components/ArcadiaJS')
+const { Container, Label, BasicButton } = require('../Components/ArcadiaJS')
 const { pxFromInt } = require('../HelperFunctions/pxFromInt')
+const { EventDispatch } = require('../Controllers/EventDispatch')
 
 "use strict"
 
@@ -33,7 +34,16 @@ let AdminArea_Players = {
             }
         });
 
-        container.elements = { startPlayerJoinMenu: null };
+        container.elements = { startPlayerJoinMenu: null, playerDataDisplay: null };
+
+        AdminArea_Players.createStartPlayerJoinMenu(container);
+        AdminArea_Players.createPlayerDataDisplay(container);
+
+        EventDispatch.AddEventHandler("Start Player Join Mode", (eventType, eventData) => {
+            container.elements.startPlayerJoinMenu.show(false);
+            container.elements.playerDataDisplay.show(true);
+            AdminArea_Players.UpdatePlayerData(container);
+        });
 
         return container;
     },
@@ -44,12 +54,68 @@ let AdminArea_Players = {
             style: {
                 width: "100%",
                 height: "100%",
-                display: "flex",
+                display: "block",
+                textAlign: "center",
             }
         });
-        container.appendChild(playerJoinMenu);
+        container.appendChild(container.elements.startPlayerJoinMenu);
+        container.elements.startPlayerJoinMenu.show = (visible) => { container.elements.startPlayerJoinMenu.style.display = (visible ? "block" : "none"); }
 
-        let startPlayerJoinButton = Button
+        let startPlayerJoinLabel1 = Label.create({
+            id: "StartPlayerJoinLabel",
+            style: {
+                fontFamily: "Vesper Libre",
+                fontSize: "36px",
+                color: "rgb(200, 200, 200)",
+                margin: "100px 100px 0px 0px",
+            },
+            attributes: { value: "The game is currently in Campaign Edit Mode.", },
+        });
+        container.elements.startPlayerJoinMenu.appendChild(startPlayerJoinLabel1);
+
+        let startPlayerJoinLabel2 = Label.create({
+            id: "StartPlayerJoinLabel",
+            style: {
+                fontFamily: "Vesper Libre",
+                fontSize: "36px",
+                color: "rgb(200, 200, 200)",
+                margin: "0px 100px 0px 0px",
+            },
+            attributes: { value: "Press the button below to move into the Player Join Mode.", },
+        });
+        container.elements.startPlayerJoinMenu.appendChild(startPlayerJoinLabel2);
+
+        let startPlayerJoinButton = BasicButton.create({
+            id: "StartPlayerJoinButton",
+            style: {
+                fontFamily: "Vesper Libre",
+                fontSize: "18px",
+                margin: "0px 100px 0px 0px",
+                display: "inline-flex",
+            },
+            attributes: { value: "Allow Players To Join", },
+        });
+        BasicButton.setOnClick(startPlayerJoinButton, () => { EventDispatch.SendEvent("Start Player Join Mode", {}); });
+        container.elements.startPlayerJoinMenu.appendChild(startPlayerJoinButton);
+    },
+
+    createPlayerDataDisplay(container) {
+        container.elements.playerDataDisplay = Container.create({
+            id: "PlayerDataDisplay",
+            style: {
+                width: "100%",
+                height: "100%",
+                display: "none",
+            }
+        });
+        container.appendChild(container.elements.playerDataDisplay);
+        container.elements.playerDataDisplay.show = (visible) => { container.elements.playerDataDisplay.style.display = (visible ? "block" : "none"); }
+    },
+
+    UpdatePlayerData(container) {
+        let playerDataDisplay = container.elements.playerDataDisplay;
+        return;
+        //  TODO: Grab latest player data from CAMPAIGN_DATA and update the display UI
     }
 };
 

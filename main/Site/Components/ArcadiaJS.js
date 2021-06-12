@@ -128,7 +128,6 @@ const BasicButton = {
         Container.applyOptions(container, options);
         container.elements = { bgColor: null, textLabel: null };
 
-
         let bgColorNormal = "rgb(15, 157, 88)";
         let bgColorHighlight = "rgb(11, 115, 65)";
         let bgColorSelected = "rgb(7, 75, 44)";
