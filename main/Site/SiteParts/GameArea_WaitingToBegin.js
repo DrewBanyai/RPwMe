@@ -16,8 +16,9 @@
 
 const CONFIG = require('../../config')
 const STYLE = require('../style')
-const { Container, Image } = require('../Components/ArcadiaJS')
+const { Container, Label } = require('../Components/ArcadiaJS')
 const { pxFromInt } = require('../HelperFunctions/pxFromInt')
+const { HandwrittenNote } = require('../Components/HandwrittenNote')
 
 let GameArea_WaitingToBegin = {
     create() {
@@ -29,23 +30,87 @@ let GameArea_WaitingToBegin = {
                 backgroundColor: STYLE.GAME_WINDOW_AREA_COLOR,
                 display: STYLE.GAME_WINDOW_MENU_DISPLAY_TYPE,
                 justifyContent: "center",
+                overflow: "hidden",
             }
         });
 
-        let programLogo = Container.create({
-            id: "ProgramLogo",
+        container.elements = { paper: null }
+
+        container.elements.paper = Container.create({
+            id: "LinedPaperBackground",
             style: {
-                fontFamily: "FFF Tusj",
-                fontSize: "132px",
-                margin: "20px 0px 0px 0px",
-                color: "rgb(1, 100, 150)",
+                width: "1240px",
+                height: "740px",
+                position: "relative",
+                top: "6px",
+                backgroundImage: "url(Images/CollegeRuledLinedPaper.png)",
+                backgroundSize: "100%",
+                overflow: "hidden",
             },
         });
-        programLogo.innerHTML = "RPwMe";
-        container.appendChild(programLogo);
+        container.appendChild(container.elements.paper);
+
+        let programLogo = Label.create({
+            id: "ProgramLogo",
+            style: {
+                position: "relative",
+                fontFamily: "FFF Tusj",
+                fontSize: "132px",
+                margin: "25px ​144px 0px 0px",
+                color: "rgb(1, 100, 150)",
+                position: "relative",
+                left: "217px",
+                top: "50px",
+            },
+            attributes: {
+                value: "RPwMe"
+            }
+        });
+        container.elements.paper.appendChild(programLogo);
+
+        GameArea_WaitingToBegin.createProgramExplanation(container);
 
         return container;
     },
+
+    createProgramExplanation(container) {
+        let programExplanation = HandwrittenNote.create({
+            id: "ProgramExplanation",
+            style: {
+                fontSize: "24px",
+                width: "630px",
+                position: "absolute",
+                left: "217px",
+                top: "233px",
+                lineHeight: "42px",
+            },
+            attributes: {
+                value: "RPwMe is a simulated Pen &amp; Paper Roleplaying system designed to allow Twitch viewers to play through a custom adventure",
+            },
+            writeDelay: 30,
+            callback: () => { setTimeout(() => { GameArea_WaitingToBegin.createWaitingExplanation(container); }, 500); }
+        });
+        container.elements.paper.appendChild(programExplanation);
+    },
+
+    createWaitingExplanation(container) {
+        let waitingExplanation = HandwrittenNote.create({
+            id: "WaitingExplanation",
+            style: {
+                fontSize: "24px",
+                width: "630px",
+                position: "absolute",
+                left: "217px",
+                top: "358px",
+                lineHeight: "41px",
+            },
+            attributes: {
+                value: "The Game Master is currently setting up the world, so hold tight for a bit. If you want to read up on how the game is played, type !rpwme in the chat for an explanation.",
+            },
+            writeDelay: 30,
+        });
+        container.elements.paper.appendChild(waitingExplanation);
+    }
 };
 
 //  Module Exports
