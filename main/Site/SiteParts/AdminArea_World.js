@@ -16,11 +16,11 @@
 
 const CONFIG = require('../../config')
 const STYLE = require('../style')
-const Container = require('../Components/ArcadiaJS').Container
+const { Container } = require('../Components/ArcadiaJS')
 const { WorldController } = require('../Controllers/WorldController')
 const { InteractiveMap } = require('../Components/InteractiveMap')
 const { EventDispatch } = require('../Controllers/EventDispatch')
-const pxFromInt = require('../HelperFunctions/pxFromInt').pxFromInt
+const { pxFromInt } = require('../HelperFunctions/pxFromInt')
 
 let AdminArea_World = {
     create() {

@@ -16,8 +16,8 @@
 
 const CONFIG = require('../../config')
 const STYLE = require('../style')
-const Container = require('../Components/ArcadiaJS').Container
-const pxFromInt = require('../HelperFunctions/pxFromInt').pxFromInt
+const { Container } = require('../Components/ArcadiaJS')
+const { pxFromInt } = require('../HelperFunctions/pxFromInt')
 
 "use strict"
 

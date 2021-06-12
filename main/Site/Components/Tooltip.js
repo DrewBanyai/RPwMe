@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-const Container = require('../Components/ArcadiaJS').Container
+const { Container } = require('../Components/ArcadiaJS')
 
 "use strict"
 

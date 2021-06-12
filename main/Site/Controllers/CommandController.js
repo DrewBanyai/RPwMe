@@ -22,6 +22,7 @@ const CONFIG = require('../../config')
 const CommandControl = {
     COMMAND_USER_TYPES: [ "viewer", "player", "gm", ],
     COMMANDS_LIST: {
+        "!rpwme":           { effect: "Request for information about how to play", who: { viewer: true, player: true, gm: true }, args: { min: 0, max: 0 } },
         "!join":            { effect: "Request to join as a player", who: { viewer: true, player: false, gm: false }, args: { min: 0, max: 0 } },
         "!play":            { effect: "Request to join as a player", who: { viewer: true, player: false, gm: false }, args: { min: 0, max: 0 } },
     

@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-const ipcMain = require('electron').ipcMain
+const { ipcMain } = require('electron')
 const windows = require('../../windows')
 
 //  IPC messaging functions

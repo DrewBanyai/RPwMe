@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-const ipcRenderer = require('electron').ipcRenderer
+const { ipcRenderer } = require('electron')
 
 const adminMessages = {
     //////////////////////////////

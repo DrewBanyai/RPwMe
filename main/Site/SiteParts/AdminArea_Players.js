@@ -16,8 +16,8 @@
 
 const CONFIG = require('../../config')
 const STYLE = require('../style')
-const Container = require('../Components/ArcadiaJS').Container
-const pxFromInt = require('../HelperFunctions/pxFromInt').pxFromInt
+const { Container, Button } = require('../Components/ArcadiaJS')
+const { pxFromInt } = require('../HelperFunctions/pxFromInt')
 
 "use strict"
 
@@ -33,10 +33,24 @@ let AdminArea_Players = {
             }
         });
 
-        container.elements = {};
+        container.elements = { startPlayerJoinMenu: null };
 
         return container;
     },
+
+    createStartPlayerJoinMenu(container) {
+        container.elements.startPlayerJoinMenu = Container.create({
+            id: "StartPlayerJoinMenu",
+            style: {
+                width: "100%",
+                height: "100%",
+                display: "flex",
+            }
+        });
+        container.appendChild(playerJoinMenu);
+
+        let startPlayerJoinButton = Button
+    }
 };
 
 //  Module Exports

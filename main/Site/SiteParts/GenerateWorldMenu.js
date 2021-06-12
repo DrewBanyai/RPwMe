@@ -16,7 +16,7 @@
 
 const CONFIG = require('../../config')
 const STYLE = require('../style')
-const pxFromInt = require('../HelperFunctions/pxFromInt').pxFromInt
+const { pxFromInt } = require('../HelperFunctions/pxFromInt')
 const { Container, Label, TextInput, BasicButton } = require('../Components/ArcadiaJS')
 const { EventDispatch } = require('../Controllers/EventDispatch')
 
