@@ -48,6 +48,7 @@ module.exports = {
     ADMIN: { x: 800, y: 600 },
     GAME: { x: 1024, y: 768 },
   },
+  
   INTERACTIVE_MAP_PADDING_LEFT: 4,
   INTERACTIVE_MAP_PADDING_RIGHT: 2,
 
