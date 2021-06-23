@@ -23,17 +23,16 @@ const CommandControl = {
     COMMAND_USER_TYPES: [ "viewer", "player", "gm", ],
     COMMANDS_LIST: {
         "!rpwme":           { effect: "Request for information about how to play", who: { viewer: true, player: true, gm: true }, args: { min: 0, max: 0 } },
-        "!join":            { effect: "Request to join as a player", who: { viewer: true, player: false, gm: false }, args: { min: 0, max: 0 } },
-        "!play":            { effect: "Request to join as a player", who: { viewer: true, player: false, gm: false }, args: { min: 0, max: 0 } },
-    
-        "!inventory":       { effect: "Request to open the given player's inventory", who: { viewer: false, player: true, gm: false }, args: { min: 0, max: 0 } },
-        "!items":           { effect: "Request to open the given player's inventory", who: { viewer: false, player: true, gm: false }, args: { min: 0, max: 0 } },
-        "!backpack":        { effect: "Request to open the given player's inventory", who: { viewer: false, player: true, gm: false }, args: { min: 0, max: 0 } },
+        "!join":            { effect: "Request to join as a player", who: { viewer: true, player: false, gm: true }, args: { min: 0, max: 0 } },
     
         "!name":            { effect: "Request to specify the given player's character name", who: { viewer: false, player: true, gm: false }, args: { min: 1, max: 10 } },
         "!race":            { effect: "Request to specify the given player's character race", who: { viewer: false, player: true, gm: false }, args: { min: 1, max: 1 } },
         "!class":           { effect: "Request to specify the given player's character class", who: { viewer: false, player: true, gm: false }, args: { min: 1, max: 1 } },
         "!reroll":          { effect: "Request to re-roll the given player's character stats", who: { viewer: false, player: true, gm: false }, args: { min: 0, max: 0 } },
+    
+        "!inventory":       { effect: "Request to open the given player's inventory", who: { viewer: false, player: true, gm: false }, args: { min: 0, max: 0 } },
+        "!items":           { effect: "Request to open the given player's inventory", who: { viewer: false, player: true, gm: false }, args: { min: 0, max: 0 } },
+        "!backpack":        { effect: "Request to open the given player's inventory", who: { viewer: false, player: true, gm: false }, args: { min: 0, max: 0 } },
     
         "!investigate":     { effect: "Request to have the party investigate", who: { viewer: false, player: true, gm: false }, args: { min: 1, max: 1000 } },
         "!look":            { effect: "Request to have a closer look at a specified target", who: { viewer: false, player: true, gm: false }, args: { min: 1, max: 1000 } },
@@ -45,6 +44,8 @@ const CommandControl = {
         "!sleep":           { effect: "Request to have the party sleep in their current location", who: { viewer: false, player: true, gm: false }, args: { min: 0, max: 0 } },
         "!rest":            { effect: "Request to have the party sleep in their current location", who: { viewer: false, player: true, gm: false }, args: { min: 0, max: 0 } },
     
+        "!spellbook":       { effect: "Request to get the spellbook of the given player's character in chat", who: { viewer: false, player: true, gm: false }, args: { min: 0, max: 0 } },
+
         "!move":            { effect: "Request to move the given player to the specified position", who: { viewer: false, player: true, gm: false }, args: { min: 1, max: 1 } },
         "!attack":          { effect: "Request to attack a random or specified target", who: { viewer: false, player: true, gm: false }, args: { min: 0, max: 10 } },
     
@@ -86,7 +87,7 @@ const CommandControl = {
     
         return { valid: true, reason: "" };
     },
-    CommandRequest: (commandString, userType) => {
+    CommandRequest: (username, commandString, userType) => {
         let commandValid = CommandControl.CheckIsCommandValid(commandString, userType)
         if (!commandValid || !commandValid.valid) { 
             if (CONFIG.DEBUG) console.log("Command not valid: ", '"' + commandValid.reason + '"');
@@ -96,8 +97,9 @@ const CommandControl = {
         let commandParsed = CommandControl.GetCommandStringParsed(commandString);
         let commandData = CommandControl.GetCommandData(commandParsed.id);
     
-        if (CONFIG.DEBUG) console.log("Command event: ", commandParsed.id, { data: commandData, args: commandParsed.args });
-        EventDispatch.SendEvent(commandParsed.id, { data: commandData, args: commandParsed.args });
+        let eventData = { user: username, data: commandData, args: commandParsed.args };
+        if (CONFIG.DEBUG) console.log("Command event: ", commandParsed.id, eventData);
+        EventDispatch.SendEvent(commandParsed.id, eventData);
         return true;
     },
     GetCommandEffect: (commandQuery) => {
@@ -124,7 +126,7 @@ const CommandControl = {
                 let userIsGM = (userstate.username == CampaignController.GetCampaignGameMaster());
                 let userIsPlayer = (CampaignController.GetPlayerExists(userstate.username));
                 let userType = (userIsGM ? "gm" : (userIsPlayer ? "player" : ("viewer")));
-                CommandControl.CommandRequest(message, userType);
+                CommandControl.CommandRequest(userstate.username, message, userType);
             });
         });
     },

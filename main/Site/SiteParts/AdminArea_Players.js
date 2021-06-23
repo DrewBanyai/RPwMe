@@ -19,6 +19,9 @@ const STYLE = require('../style')
 const { Container, Label, BasicButton } = require('../Components/ArcadiaJS')
 const { pxFromInt } = require('../HelperFunctions/pxFromInt')
 const { EventDispatch } = require('../Controllers/EventDispatch')
+const { CampaignController } = require('../Data/CampaignController')
+const { PlayerJoinRequest } = require('../Components/PlayerJoinRequest')
+const { ActivePlayerEntry } = require('../Components/ActivePlayerEntry')
 
 "use strict"
 
@@ -34,16 +37,14 @@ let AdminArea_Players = {
             }
         });
 
-        container.elements = { startPlayerJoinMenu: null, playerDataDisplay: null };
+        container.elements = { startPlayerJoinMenu: null, playerDataDisplay: null, playerListMenu: null, activePlayerList: null, playerRequestList: null };
+        container.requestUsers = [];
+        container.selectedPlayer = "";
 
         AdminArea_Players.createStartPlayerJoinMenu(container);
         AdminArea_Players.createPlayerDataDisplay(container);
 
-        EventDispatch.AddEventHandler("Start Player Join Mode", (eventType, eventData) => {
-            container.elements.startPlayerJoinMenu.show(false);
-            container.elements.playerDataDisplay.show(true);
-            AdminArea_Players.UpdatePlayerData(container);
-        });
+        AdminArea_Players.SetupEventHandlers(container);
 
         return container;
     },
@@ -110,12 +111,181 @@ let AdminArea_Players = {
         });
         container.appendChild(container.elements.playerDataDisplay);
         container.elements.playerDataDisplay.show = (visible) => { container.elements.playerDataDisplay.style.display = (visible ? "block" : "none"); }
+
+        AdminArea_Players.AddPlayerListUI(container);
+    },
+
+    AddPlayerListUI(container) {
+        container.elements.playerListMenu = Container.create({
+            id: "PlayerListMenu",
+            style: {
+                width: "20%",
+                height: pxFromInt(CONFIG.WINDOW_HEIGHT - 1 - STYLE.ADMIN_WINDOW_BUTTON_HEIGHT),
+                display: "block",
+                backgroundColor: "rgb(255, 0, 255, 0.3)",
+            }
+        });
+        container.elements.playerDataDisplay.appendChild(container.elements.playerListMenu);
+
+        //  Active Player List
+        let activePlayerListBox = Container.create({
+            id: "ActivePlayerListBox",
+            style: {
+                width: "100%",
+                height: "323px",
+                display: "table",
+                backgroundColor: "rgb(40, 40, 40)",
+            }
+        });
+        container.elements.playerListMenu.appendChild(activePlayerListBox);
+
+        let activePlayerListTitle = Label.create({
+            id: "ActivePlayerListTitle",
+            style: {
+                fontFamily: "Vesper Libre",
+                fontSize: "20px",
+                color: "rgb(200, 200, 200)",
+                fontWeight: "bold",
+                margin: "0px auto 0px auto",
+                height: "28px",
+                textAlign: "center",
+                userSelect: "none",
+            },
+            attributes: { value: "Active Players", },
+        });
+        activePlayerListBox.appendChild(activePlayerListTitle);
+
+        container.elements.activePlayerList = Container.create({
+            id: "ActivePlayerListContainer",
+            style: {
+                width: "228px",
+                height: "264px",
+                borderRadius: "6px",
+                backgroundColor: "rgb(20, 20, 20)",
+                margin: "4px 4px 4px 4px",
+                padding: "9px",
+                overflow: "hidden",
+                border: "1px solid rgb(255, 255, 255)",
+            }
+        });
+        activePlayerListBox.appendChild(container.elements.activePlayerList);
+
+        //  Player Request List
+        let playerRequestListBox = Container.create({
+            id: "PlayerRequestListBox",
+            style: {
+                width: "100%",
+                height: "324px",
+                display: "table",
+                backgroundColor: "rgb(40, 40, 40)",
+            }
+        });
+        container.elements.playerListMenu.appendChild(playerRequestListBox);
+
+        let joinRequestListTitle = Label.create({
+            id: "JoinRequestListTitle",
+            style: {
+                fontFamily: "Vesper Libre",
+                fontSize: "20px",
+                color: "rgb(200, 200, 200)",
+                fontWeight: "bold",
+                margin: "0px auto 0px auto",
+                height: "28px",
+                textAlign: "center",
+                userSelect: "none",
+            },
+            attributes: { value: "Join Requests", },
+        });
+        playerRequestListBox.appendChild(joinRequestListTitle);
+
+        container.elements.playerRequestList = Container.create({
+            id: "JoinRequestListContainer",
+            style: {
+                width: "228px",
+                height: "264px",
+                borderRadius: "6px",
+                backgroundColor: "rgb(20, 20, 20)",
+                margin: "4px 4px 4px 4px",
+                padding: "9px",
+                overflow: "hidden",
+                border: "1px solid rgb(255, 255, 255)",
+            }
+        });
+        playerRequestListBox.appendChild(container.elements.playerRequestList);
+
+        //  If a !join command is used by a viewer, attempt to add the player request
+        EventDispatch.AddEventHandler("!join", (eventType, eventData) => { AdminArea_Players.AddPlayerJoinRequest(container, eventData); });
+    },
+
+    SetupEventHandlers(container) {
+        //  When we move into Player Join Mode, show the player data menu and then update all data
+        EventDispatch.AddEventHandler("Start Player Join Mode", (eventType, eventData) => {
+            container.elements.startPlayerJoinMenu.show(false);
+            container.elements.playerDataDisplay.show(true);
+            AdminArea_Players.UpdatePlayerData(container);
+        });
+    },
+
+    AddActivePlayerEntry(container, eventData) {
+        let player = ActivePlayerEntry.create({
+            name: eventData.user,
+            selectCallback: () => {
+                console.log(eventData.user, " selected!");
+            },
+        });
+        ActivePlayerEntry.setRemoveCallback(player, () => {
+            //  Remove the user from the campaign
+            CampaignController.RemoveCampaignPlayer(eventData.user);
+
+            //  Remove the player join request entry from the UI
+            container.elements.activePlayerList.removeChild(player);
+        });
+        container.elements.activePlayerList.appendChild(player);
+    },
+
+    AddPlayerJoinRequest(container, eventData) {
+        if (CampaignController.GetPlayerExists(eventData.user) || container.requestUsers.includes(eventData.user)) { return false; }
+
+        let player = PlayerJoinRequest.create({ name: eventData.user });
+        PlayerJoinRequest.setApproveCallback(player, () => { AdminArea_Players.ApprovePlayerJoinRequest(container, eventData, player); });
+        PlayerJoinRequest.setDenyCallback(player, () => { AdminArea_Players.DenyPlayerJoinRequest(container, eventData, player); });
+        container.elements.playerRequestList.appendChild(player);
+        container.requestUsers.push(eventData.user);
+    },
+
+    ApprovePlayerJoinRequest(container, eventData, joinRequest) {
+        //  Remove the request user from the hidden array
+        container.requestUsers = container.requestUsers.filter((user) => user != eventData.user);
+
+        //  Remove the player join request entry from the UI
+        container.elements.playerRequestList.removeChild(joinRequest);
+
+        //  Add the user as an approved campaign player
+        CampaignController.AddCampaignPlayer(eventData.user);
+
+        //  Update the player data display if needed
+        AdminArea_Players.AddActivePlayerEntry(container, eventData);
+        AdminArea_Players.UpdatePlayerData(container);
+    },
+
+    DenyPlayerJoinRequest(container, eventData, joinRequest) {
+        //  Remove the request user from the hidden array
+        container.requestUsers = container.requestUsers.filter((user) => user != eventData.user);
+        
+        //  Remove the player join request entry from the UI
+        container.elements.playerRequestList.removeChild(joinRequest);
     },
 
     UpdatePlayerData(container) {
-        let playerDataDisplay = container.elements.playerDataDisplay;
-        return;
+        //  If we haven't selected a player, and there is one in the list, select it now
+        let playersList = CampaignController.GetPlayersList();
+        if (container.selectedPlayer !== "" && !playersList.includes(container.selectedPlayer)) { container.selectedPlayer = ""; }
+        if (container.selectedPlayer === "" && playersList.length > 0) { container.selectedPlayer = playersList[0]; }
+
         //  TODO: Grab latest player data from CAMPAIGN_DATA and update the display UI
+        let playerDataDisplay = container.elements.playerDataDisplay;
+
+        return;
     }
 };
 

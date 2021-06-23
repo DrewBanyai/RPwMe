@@ -21,6 +21,7 @@ const CAMPAIGN_STATUS_LIST = [
     "Waiting For Campaign Start"
 ];
 
+const MaxPlayerCount = 3;
 let CampaignObjectCount = 0;
 
 const CampaignController = {
@@ -76,18 +77,23 @@ const CampaignController = {
         CAMPAIGN_DATA.Locations.Landmarks[id] = locationData;
     },
     AddCampaignPlayer(playerUsername) {
-        if (!CAMPAIGN_DATA) { console.error("CAMPAIGN_DATA is null or invalid!"); return; }
-        if (!CAMPAIGN_DATA.hasOwnProperty("Players")) { console.error("CAMPAIGN_DATA has no Players data!"); return; }
-        if (CAMPAIGN_DATA.Players.includes(playerUsername)) { console.error("Attempting to add player user that already exists in campaign."); return; }
+        if (!CAMPAIGN_DATA) { console.error("CAMPAIGN_DATA is null or invalid!"); return false; }
+        if (!CAMPAIGN_DATA.hasOwnProperty("Players")) { console.error("CAMPAIGN_DATA has no Players data!"); return false; }
+        if (CAMPAIGN_DATA.Players.includes(playerUsername)) { console.error("Attempting to add player user that already exists in campaign."); return false; }
     
         CAMPAIGN_DATA.Players.push(playerUsername);
+        return true;
     },
     RemoveCampaignPlayer(playerUsername) {
-        if (!CAMPAIGN_DATA) { console.error("CAMPAIGN_DATA is null or invalid!"); return; }
-        if (!CAMPAIGN_DATA.hasOwnProperty("Players")) { console.error("CAMPAIGN_DATA has no Players data!"); return; }
-        if (!CAMPAIGN_DATA.Players.includes(playerUsername)) { console.error("Attempting to remove player user that does not exist in campaign."); return; }
+        if (!CAMPAIGN_DATA) { console.error("CAMPAIGN_DATA is null or invalid!"); return false; }
+        if (!CAMPAIGN_DATA.hasOwnProperty("Players")) { console.error("CAMPAIGN_DATA has no Players data!"); return false; }
+        if (!CAMPAIGN_DATA.Players.includes(playerUsername)) { console.error("Attempting to remove player user that does not exist in campaign."); return false; }
     
-        CAMPAIGN_DATA.Players = CAMPAIGN_DATA.Players.filter(entry => (entry == playerUsername));
+        CAMPAIGN_DATA.Players = CAMPAIGN_DATA.Players.filter(entry => (entry !== playerUsername));
+        return true;
+    },
+    GetPlayersList() {
+        return CAMPAIGN_DATA.Players;
     },
     GetPlayerExists(playerUsername) {
         if (!CAMPAIGN_DATA) { console.error("CAMPAIGN_DATA is null or invalid!"); return; }

@@ -124,6 +124,7 @@ let AdminWindowTopButtons = {
                 top: pxFromInt(STYLE.ADMIN_WINDOW_BUTTON_HEIGHT - 18),
                 color: STYLE.ADMIN_WINDOW_BUTTON_COLOR_NORMAL,
                 display: "none",
+                userSelect: "none",
             }
         });
         button.onmouseover = () => { button.nameLabel.style.display = ""; }
