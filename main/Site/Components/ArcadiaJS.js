@@ -178,5 +178,73 @@ const BasicButton = {
 	setEnabled: (container, enabled) => { container.disabled = (!enabled); }
 }
 
+
+const FontawesomeButton = {
+	create: (options) => {
+        if (!options.id) options.id = "FontawesomeButton";
+        
+		//  Create the main button, a rounded box
+        let container = Container.create({
+            id: options.id,
+			style: {
+				width: "24px",
+				height: "24px",
+				borderRadius: "6px",
+				display: "flex",
+                border: "1px solid rgb(240, 240, 240)",
+			}
+        });
+        Container.applyOptions(container, options);
+        container.elements = { bgColor: null, icon: null };
+
+        let bgColorNormal = options.bgColorNormal ? options.bgColorNormal : "rgb(15, 157, 88)";
+        let bgColorHighlight = options.bgColorHighlight ? options.bgColorHighlight : "rgb(11, 115, 65)";
+        let bgColorSelected = options.bgColorSelected ? options.bgColorSelected : "rgb(7, 75, 44)";
+
+        //  Create the background color (to avoid border changing button size)
+		container.elements.bgColor = Container.create({
+			style: {
+				width: "100%",
+				height: "100%",
+				lineHeight: "26px",
+				borderRadius: "6px",
+				display: "flex",
+                backgroundColor: bgColorNormal,
+				cursor: container.style.cursor,
+			}
+		});
+		container.appendChild(container.elements.bgColor);
+
+		//  Create a centered label on the button
+		container.elements.icon = Fontawesome.create({
+			attributes: { className: options.icon ? options.icon : "fas fa-question" },
+			style: {
+				margin: "auto",
+				cursor: "default",
+				userSelect: "none",
+				textAlign: "center",
+                color: "rgb(220, 220, 220)",
+				userSelect: "none",
+				cursor: container.style.cursor,
+			},
+		});
+		container.elements.bgColor.appendChild(container.elements.icon);
+
+		//  Set mouse reactions
+		container.onmouseover = () => { if (!container.disabled) { container.elements.bgColor.style.backgroundColor = bgColorHighlight; } }
+		container.onmouseout = () => { if (!container.disabled) { container.elements.bgColor.style.backgroundColor = bgColorNormal; } }
+		container.onmousedown = () => { if (!container.disabled) { container.elements.bgColor.style.backgroundColor = bgColorSelected; } }
+		container.onmouseup = () => { if (!container.disabled) { container.elements.bgColor.style.backgroundColor = bgColorHighlight; } }
+
+        return container;
+	},
+	
+	setFontSize: (container, size) => { container.elements.icon.setFontSize(size); },
+	
+	setOnClick: (container, callback) => { container.onclick = () => { if (container.disabled) { return; } callback(); }; },
+	
+	setEnabled: (container, enabled) => { container.disabled = (!enabled); }
+}
+
 //  Module Exports
-module.exports = { Container, Fontawesome, Image, Label, TextInput , BasicButton }
+module.exports = { Container, Fontawesome, Image, Label, TextInput , BasicButton, FontawesomeButton }
