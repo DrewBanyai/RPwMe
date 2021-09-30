@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+const { EventDispatch } = require('../Controllers/EventDispatch')
+
 let CAMPAIGN_DATA = {};
 
 const CAMPAIGN_STATUS_LIST = [
@@ -41,7 +43,7 @@ const CampaignController = {
     ResetCampaignData() {
         CAMPAIGN_DATA = {
             Status: "",
-            Players: [],
+            Players: { 0: null, 1: null, 2: null},
             GameMaster: "",
             Locations: {
                 Cities: {},
@@ -76,31 +78,66 @@ const CampaignController = {
     
         CAMPAIGN_DATA.Locations.Landmarks[id] = locationData;
     },
+    CreateNewPlayer(playerUsername, playerIndex) {
+        return {
+            playerUsername: playerUsername,
+            playerIndex: playerIndex,
+            race: null,
+            class: null,
+            name: null
+        };
+    },
     AddCampaignPlayer(playerUsername) {
         if (!CAMPAIGN_DATA) { console.error("CAMPAIGN_DATA is null or invalid!"); return false; }
         if (!CAMPAIGN_DATA.hasOwnProperty("Players")) { console.error("CAMPAIGN_DATA has no Players data!"); return false; }
-        if (CAMPAIGN_DATA.Players.includes(playerUsername)) { console.error("Attempting to add player user that already exists in campaign."); return false; }
-    
-        CAMPAIGN_DATA.Players.push(playerUsername);
-        return true;
+        if (this.GetPlayerExists(playerUsername)) { console.error("Attempting to add player user that already exists in campaign."); return false; }
+        if (this.GetPlayerCount() >= 3) { console.error("Attempting to add a player when the player list is full."); return false; }
+
+        for (let i = 0; i < 3; ++i) {
+            if (!CAMPAIGN_DATA.Players[i]) {
+                CAMPAIGN_DATA.Players[i] = this.CreateNewPlayer(playerUsername, i);
+                EventDispatch.SendEvent("Player Added", { playerUsername: playerUsername, playerIndex: i });
+                return true;
+            }
+        }
     },
     RemoveCampaignPlayer(playerUsername) {
         if (!CAMPAIGN_DATA) { console.error("CAMPAIGN_DATA is null or invalid!"); return false; }
         if (!CAMPAIGN_DATA.hasOwnProperty("Players")) { console.error("CAMPAIGN_DATA has no Players data!"); return false; }
-        if (!CAMPAIGN_DATA.Players.includes(playerUsername)) { console.error("Attempting to remove player user that does not exist in campaign."); return false; }
+        if (!this.GetPlayerExists(playerUsername)) { console.error("Attempting to remove player user that does not exist in campaign."); return false; }
     
-        CAMPAIGN_DATA.Players = CAMPAIGN_DATA.Players.filter(entry => (entry !== playerUsername));
-        return true;
+        for (let i = 0; i < 3; ++i) {
+            if (CAMPAIGN_DATA.Players[i] && CAMPAIGN_DATA.Players[i].playerUsername === playerUsername) {
+                CAMPAIGN_DATA.Players[i] = null;
+                EventDispatch.SendEvent("Player Removed", { playerUsername: playerUsername, playerIndex: i });
+                return true;
+            }
+        }
+    },
+    GetPlayerCount() {
+        let count = 0;
+        for (let i = 0; i < 3; ++i) count += ((CAMPAIGN_DATA.Players[i]) ? 1 : 0);
+        return count;
     },
     GetPlayersList() {
         return CAMPAIGN_DATA.Players;
+    },
+    GetPlayer(playerUsername) {
+        if (!this.GetPlayerExists(playerUsername)) { return null; }
+
+        for (let i = 0; i < 3; ++i)
+            if (CAMPAIGN_DATA.Players[i] && CAMPAIGN_DATA.Players[i].playerUsername === playerUsername)
+                return CAMPAIGN_DATA.Players[i];
     },
     GetPlayerExists(playerUsername) {
         if (!CAMPAIGN_DATA) { console.error("CAMPAIGN_DATA is null or invalid!"); return; }
         if (!CAMPAIGN_DATA.hasOwnProperty("Players")) { console.error("CAMPAIGN_DATA has no Players data!"); return; }
         if (!playerUsername || (typeof playerUsername !== 'string')) { console.error("Attempting to check if player exists with invalid data."); return; }
 
-        return CAMPAIGN_DATA.Players.includes(playerUsername);
+        for (let i = 0; i < 3; ++i)
+            if (CAMPAIGN_DATA.Players[i] && CAMPAIGN_DATA.Players[i].playerUsername === playerUsername)
+                return true;
+        return false;
     },
     GetCampaignGameMaster() {
         if (!CAMPAIGN_DATA) { console.error("CAMPAIGN_DATA is null or invalid!"); return null; }
@@ -108,16 +145,23 @@ const CampaignController = {
         
         return CAMPAIGN_DATA.GameMaster;
     },
-    SetCampaignGameMaster (gmUsername) {
+    SetCampaignGameMaster(gmUsername) {
         if (!CAMPAIGN_DATA) { console.error("CAMPAIGN_DATA is null or invalid!"); return; }
         if (!CAMPAIGN_DATA.hasOwnProperty("GameMaster")) { console.error("CAMPAIGN_DATA has no GameMaster data!"); return; }
         if (!gmUsername || (typeof gmUsername !== 'string')) { console.error("Attempting to set Game Master with invalid data."); return; }
     
         CAMPAIGN_DATA.GameMaster = gmUsername;
+    },
+    GetCampaignData() {
+        return CAMPAIGN_DATA;
+    },
+    UpdateCampaignData(campaignData) {
+        if (!campaignData) { console.error("Attempting to set new Campaign Data with null data entry!"); return; }
+        CAMPAIGN_DATA = campaignData;
     }
 }
 
 CampaignController.ResetCampaignData();
 
 //  Module Exports
-module.exports = { CampaignController }
+module.exports = { CampaignController, CAMPAIGN_DATA }

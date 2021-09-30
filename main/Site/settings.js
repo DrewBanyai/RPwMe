@@ -16,8 +16,8 @@
 
 module.exports = {
   TWITCH_DATA: {
-      CHANNEL: "",
-      USERNAME: "",
-      TOKEN: ""
+      CHANNEL: "drewthebear",
+      USERNAME: "RPwMe",
+      TOKEN: "oauth:153q2gprx1o6q2hulxtfsv1t15e1im"
   },
 }

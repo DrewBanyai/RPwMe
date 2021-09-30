@@ -18,7 +18,10 @@ const CONFIG = require('../../config')
 const STYLE = require('../style')
 const { Container } = require('../Components/ArcadiaJS')
 const { pxFromInt } = require('../HelperFunctions/pxFromInt')
+const { EventDispatch } = require('../Controllers/EventDispatch')
+
 const { GameArea_WaitingToBegin } = require('./GameArea_WaitingToBegin')
+const { GameArea_PlayerJoin } = require('./GameArea_PlayerJoin')
 
 let GameDisplay = {
     create: () => {
@@ -40,6 +43,7 @@ let GameDisplay = {
         //  Fill in the main admin areas as well as the buttons in the top button strip
         GameDisplay.addMainAreaEntries(container);
         GameDisplay.showMenuScreen(container, "WaitingToBegin");
+        GameDisplay.setupEventCallbacks(container);
 
         return container;
     },
@@ -56,7 +60,13 @@ let GameDisplay = {
         };
 
         addMainEntry("WaitingToBegin", GameArea_WaitingToBegin.create());
-        
+        addMainEntry("PlayerJoin", GameArea_PlayerJoin.create());
+    },
+
+    setupEventCallbacks: (container) => {
+        EventDispatch.AddEventHandler("Player Join Allowed", (eventType, eventData) => {
+            GameDisplay.showMenuScreen(container, "PlayerJoin");
+        });
     },
 
     showMenuScreen: (container, menuID) => {

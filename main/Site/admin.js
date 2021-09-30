@@ -26,7 +26,6 @@ var { CommandControl } = require('./Controllers/CommandController')
 window.addEventListener('DOMContentLoaded', () => {
     document.windowID = "ADMIN";
 
-    adminMessages.Initialize();
     LoadSiteContent();
     InitTwitchBot();
 })

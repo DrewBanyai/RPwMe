@@ -22,8 +22,12 @@ const { EventDispatch } = require('../Controllers/EventDispatch')
 const { CampaignController } = require('../Data/CampaignController')
 const { PlayerJoinRequest } = require('../Components/PlayerJoinRequest')
 const { ActivePlayerEntry } = require('../Components/ActivePlayerEntry')
+const { adminMessages } = require('../Messaging/AdminMessages')
 
 "use strict"
+
+const playerRaceFromCommands = { "!dwarf": "Dwarf", "!elf": "Elf", "!halfling": "Halfling", "!human": "Human" };
+const playerClassFromCommands = { "!cleric": "Cleric", "!fighter": "Fighter", "!mage": "Mage", "!thief": "Thief" };
 
 let AdminArea_Players = {
     create() {
@@ -213,8 +217,21 @@ let AdminArea_Players = {
         });
         playerRequestListBox.appendChild(container.elements.playerRequestList);
 
-        //  If a !join command is used by a viewer, attempt to add the player request
+        //  Add event dispatchers for joining, leaving, selecting race, selecting class, selecting name, and approving character
         EventDispatch.AddEventHandler("!join", (eventType, eventData) => { AdminArea_Players.AddPlayerJoinRequest(container, eventData); });
+        EventDispatch.AddEventHandler("!leave", (eventType, eventData) => { AdminArea_Players.RemovePlayer(container, eventData); });
+
+        EventDispatch.AddEventHandler("!dwarf", (eventType, eventData) => { AdminArea_Players.SetPlayerRace(container, eventData); });
+        EventDispatch.AddEventHandler("!elf", (eventType, eventData) => { AdminArea_Players.SetPlayerRace(container, eventData); });
+        EventDispatch.AddEventHandler("!halfling", (eventType, eventData) => { AdminArea_Players.SetPlayerRace(container, eventData); });
+        EventDispatch.AddEventHandler("!human", (eventType, eventData) => { AdminArea_Players.SetPlayerRace(container, eventData); });
+
+        EventDispatch.AddEventHandler("!cleric", (eventType, eventData) => { AdminArea_Players.SetPlayerClass(container, eventData); });
+        EventDispatch.AddEventHandler("!fighter", (eventType, eventData) => { AdminArea_Players.SetPlayerClass(container, eventData); });
+        EventDispatch.AddEventHandler("!mage", (eventType, eventData) => { AdminArea_Players.SetPlayerClass(container, eventData); });
+        EventDispatch.AddEventHandler("!thief", (eventType, eventData) => { AdminArea_Players.SetPlayerClass(container, eventData); });
+
+        EventDispatch.AddEventHandler("!name", (eventType, eventData) => { AdminArea_Players.SetPlayerName(container, eventData); });
     },
 
     SetupEventHandlers(container) {
@@ -223,7 +240,16 @@ let AdminArea_Players = {
             container.elements.startPlayerJoinMenu.show(false);
             container.elements.playerDataDisplay.show(true);
             AdminArea_Players.UpdatePlayerData(container);
+
+            adminMessages.sendCampaignToGameScreen(CampaignController.GetCampaignData());
+            adminMessages.sendPlayerJoinAllowedFlag();
         });
+
+        EventDispatch.AddEventHandler("Player Added", (eventType, eventData) => { adminMessages.sendPlayerJoinedEvent(eventData); });
+        EventDispatch.AddEventHandler("Player Removed", (eventType, eventData) => { adminMessages.sendPlayerLeftEvent(eventData); });
+        EventDispatch.AddEventHandler("Player Race Set", (eventType, eventData) => { adminMessages.sendPlayerRaceSetEvent(eventData); });
+        EventDispatch.AddEventHandler("Player Class Set", (eventType, eventData) => { adminMessages.sendPlayerClassSetEvent(eventData); });
+        EventDispatch.AddEventHandler("Player Name Set", (eventType, eventData) => { adminMessages.sendPlayerNameSetEvent(eventData); });
     },
 
     AddActivePlayerEntry(container, eventData) {
@@ -251,6 +277,70 @@ let AdminArea_Players = {
         PlayerJoinRequest.setDenyCallback(player, () => { AdminArea_Players.DenyPlayerJoinRequest(container, eventData, player); });
         container.elements.playerRequestList.appendChild(player);
         container.requestUsers.push(eventData.user);
+    },
+
+    RemovePlayer(container, eventData) {
+        if (container.requestUsers.includes(eventData.user)) {
+            container.requestUsers = container.requestUsers.filter((entry) => { return entry !== eventData.user });
+
+            let playerEntry = null;
+            for (let i = 0; i < container.elements.playerRequestList.children.length; ++i)
+                if (container.elements.playerRequestList.children[i].username == eventData.user)
+                    playerEntry = container.elements.playerRequestList.children[i];
+            if (playerEntry) container.elements.playerRequestList.removeChild(playerEntry);
+            
+            return true;
+        }
+
+        if (CampaignController.GetPlayerExists(eventData.user)) {
+            CampaignController.RemoveCampaignPlayer(eventData.user);
+
+            let playerEntry = null;
+            for (let i = 0; i < container.elements.activePlayerList.children.length; ++i)
+                if (container.elements.activePlayerList.children[i].username == eventData.user)
+                    playerEntry = container.elements.activePlayerList.children[i];
+            if (playerEntry) container.elements.activePlayerList.removeChild(playerEntry);
+            
+            return true;
+        }
+
+        return false;
+    },
+
+    SetPlayerRace(container, eventData) {
+        if (!CampaignController.GetPlayerExists(eventData.user)) { console.warn("Attempting to set race of a user that is not a campaign player."); return false; }
+        if (!["!dwarf", "!elf", "!halfling", "!human"].includes(eventData.command)) { console.error("Setting player race with an incompatible command."); return false; }
+        
+        let player = CampaignController.GetPlayer(eventData.user);
+        if (player.race !== null) { console.warn("Player attempting to change their race once it is already set."); return false; }
+
+        player.race = playerRaceFromCommands[eventData.command];
+        EventDispatch.SendEvent("Player Race Set", { playerUsername: eventData.user, playerIndex: player.playerIndex, race: player.race });
+    },
+
+    SetPlayerClass(container, eventData) {
+        if (!CampaignController.GetPlayerExists(eventData.user)) { console.warn("Attempting to set class of a user that is not a campaign player."); return false; }
+        if (!["!cleric", "!fighter", "!mage", "!thief"].includes(eventData.command)) { console.error("Setting player class with an incompatible command."); return false; }
+        
+        let player = CampaignController.GetPlayer(eventData.user);
+        if (player.race === null) { console.warn("Player attempting to change their class without setting their race."); return false; }
+        if (player.class !== null) { console.warn("Player attempting to change their class once it is already set."); return false; }
+
+        player.class = playerClassFromCommands[eventData.command];
+        EventDispatch.SendEvent("Player Class Set", { playerUsername: eventData.user, playerIndex: player.playerIndex, class: player.class });
+    },
+
+    SetPlayerName(container, eventData) {
+        if (!CampaignController.GetPlayerExists(eventData.user)) { console.warn("Attempting to set name of a user that is not a campaign player."); return false; }
+        if (!["!name"].includes(eventData.command)) { console.error("Setting player name with an incompatible command."); return false; }
+
+        let player = CampaignController.GetPlayer(eventData.user);
+        if (player.race === null) { console.warn("Player attempting to change their name without setting their race."); return false; }
+        if (player.class === null) { console.warn("Player attempting to change their name without setting their class."); return false; }
+        if (player.name !== null) { console.warn("Player attempting to change their name once it is already set."); return false; }
+
+        player.name = eventData.args.join(" ");
+        EventDispatch.SendEvent("Player Name Set", { playerUsername: eventData.user, playerIndex: player.playerIndex, name: player.name, playerData: player });
     },
 
     ApprovePlayerJoinRequest(container, eventData, joinRequest) {

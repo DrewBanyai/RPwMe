@@ -19,6 +19,15 @@ const STYLE = require('../style')
 const { Container, Label } = require('../Components/ArcadiaJS')
 const { pxFromInt } = require('../HelperFunctions/pxFromInt')
 const { HandwrittenNote } = require('../Components/HandwrittenNote')
+const { EventDispatch } = require('../Controllers/EventDispatch')
+
+const playerJoinCardPos = {
+    0: { x: 226, y: 240 },
+    1: { x: 576, y: 240 }, 
+    2: { x: 926, y: 240 }
+};
+
+const playerJoinCardModes = [ "WaitingForJoin", "ChooseYourRace", "ChooseYourClass", "ChooseYourName", "CharacterOverview" ];
 
 let GameArea_PlayerJoin = {
     create() {
@@ -34,11 +43,208 @@ let GameArea_PlayerJoin = {
             }
         });
 
-        container.elements = { playerJoinCard1: null, playerJoinCard2: null, playerJoinCard3: null, }
+        container.elements = { paper: null, playerJoinCards: { 0: null, 1: null, 2: null } }
 
-        //GameArea_PlayerJoin.createPlayerJoinCard(0, )
+        container.elements.paper = Container.create({ id: "LinedPaperBackground", style: STYLE.LINED_PAPER_BACKGROUND, });
+        container.appendChild(container.elements.paper);
+
+        //  Create the three player join cards
+        GameArea_PlayerJoin.createPlayerJoinCard(container, 0);
+        GameArea_PlayerJoin.createPlayerJoinCard(container, 1);
+        GameArea_PlayerJoin.createPlayerJoinCard(container, 2);
+
+        //  Set up event callbacks
+        EventDispatch.AddEventHandler("Player Joined", (eventType, eventData) => { this.playerJoinedCallback(eventData, container); });
+        EventDispatch.AddEventHandler("Player Left", (eventType, eventData) => { this.playerLeftCallback(eventData, container); });
+        EventDispatch.AddEventHandler("Player Race Set", (eventType, eventData) => { this.playerRaceSetCallback(eventData, container); });
+        EventDispatch.AddEventHandler("Player Class Set", (eventType, eventData) => { this.playerClassSetCallback(eventData, container); });
+        EventDispatch.AddEventHandler("Player Name Set", (eventType, eventData) => { this.playerNameSetCallback(eventData, container); });
 
         return container;
+    },
+
+    createPlayerJoinCard(container, playerIndex) {
+        let playerJoinCard = container.elements.playerJoinCards[playerIndex] = Container.create({
+            id: "PlayerJoinCard_" + playerIndex.toString(),
+            style: {
+                width: "300px",
+                height: "400px",
+                position: "absolute",
+                left: playerJoinCardPos[playerIndex].x.toString() + "px",
+                top: playerJoinCardPos[playerIndex].y.toString() + "px",
+                backgroundImage: "url(Images/PlayerJoinCardBG.png)",
+                backgroundSize: "100%",
+            }
+        })
+        container.appendChild(playerJoinCard);
+
+        //  Create different mode element roots
+        for (var modeIndex in playerJoinCardModes) {
+            let mode = playerJoinCardModes[modeIndex];
+            playerJoinCard.appendChild(playerJoinCard[mode] = Container.create({ id: mode + "_" + playerIndex.toString(), style: { display: "none" } }));
+        }
+
+        //  Create name tag node
+        playerJoinCard.NameTagBox = Container.create({
+            id: "NameTagBox_" + playerIndex.toString(),
+            style: {
+                width: "100%",
+                height: "46px",
+                borderBottom: "5px dashed rgb(130, 130, 130)"
+            }
+        });
+        playerJoinCard.appendChild(playerJoinCard.NameTagBox);
+
+        playerJoinCard.NameTag = HandwrittenNote.create({
+            id: "PlayerJoinCardNameTag_" + playerIndex.toString(),
+            style: STYLE.PLAYER_JOIN_CARD_NAME_TAG,
+            attributes: { value: "Type '!join' to play", },
+            writeDelay: 30,
+        });
+        playerJoinCard.NameTagBox.appendChild(playerJoinCard.NameTag);
+
+        //  Create the elements for the different card modes
+        this.createCardModeElements_ChooseYourRace(playerJoinCard);
+        this.createCardModeElements_ChooseYourClass(playerJoinCard);
+        this.createCardModeElements_ChooseYourName(playerJoinCard);
+        this.createCardModeElements_CharacterOverview(playerJoinCard);
+
+        this.setPlayerJoinCardMode(playerJoinCard, "WaitingForJoin");
+    },
+
+    createCardModeElements_ChooseYourRace(card) {
+        let container = card["ChooseYourRace"];
+
+        let modeTitleLabel = HandwrittenNote.create({ style: STYLE.PLAYER_JOIN_CARD_CHOICE, attributes: { value: "Choose Your Race" }, writeDelay: 30, });
+        modeTitleLabel.style.top = "56px";
+        container.appendChild(modeTitleLabel);
+
+        let dwarfLabel = HandwrittenNote.create({ style: STYLE.PLAYER_JOIN_CARD_CHOICE, attributes: { value: "!dwarf" }, writeDelay: 30, });
+        dwarfLabel.style.top = "140px";
+        container.appendChild(dwarfLabel);
+
+        let elfLabel = HandwrittenNote.create({ style: STYLE.PLAYER_JOIN_CARD_CHOICE, attributes: { value: "!elf" }, writeDelay: 30, });
+        elfLabel.style.top = "180px";
+        container.appendChild(elfLabel);
+
+        let halflingLabel = HandwrittenNote.create({ style: STYLE.PLAYER_JOIN_CARD_CHOICE, attributes: { value: "!halfling" }, writeDelay: 30, });
+        halflingLabel.style.top = "220px";
+        container.appendChild(halflingLabel);
+
+        let humanLabel = HandwrittenNote.create({ style: STYLE.PLAYER_JOIN_CARD_CHOICE, attributes: { value: "!human" }, writeDelay: 30, });
+        humanLabel.style.top = "260px";
+        container.appendChild(humanLabel);
+
+        let randomLabel = HandwrittenNote.create({ style: STYLE.PLAYER_JOIN_CARD_RANDOM, attributes: { value: "!random to leave it in the hands of fate" }, writeDelay: 30, });
+        randomLabel.style.top = "360px";
+        container.appendChild(randomLabel);
+    },
+
+    createCardModeElements_ChooseYourClass(card) {
+        let container = card["ChooseYourClass"];
+
+        let modeTitleLabel = HandwrittenNote.create({ style: STYLE.PLAYER_JOIN_CARD_CHOICE, attributes: { value: "Choose Your Class" }, writeDelay: 30, });
+        modeTitleLabel.style.top = "56px";
+        container.appendChild(modeTitleLabel);
+
+        let clericLabel = HandwrittenNote.create({ style: STYLE.PLAYER_JOIN_CARD_CHOICE, attributes: { value: "!cleric" }, writeDelay: 30, });
+        clericLabel.style.top = "140px";
+        container.appendChild(clericLabel);
+
+        let fighterLabel = HandwrittenNote.create({ style: STYLE.PLAYER_JOIN_CARD_CHOICE, attributes: { value: "!fighter" }, writeDelay: 30, });
+        fighterLabel.style.top = "180px";
+        container.appendChild(fighterLabel);
+
+        let mageLabel = HandwrittenNote.create({ style: STYLE.PLAYER_JOIN_CARD_CHOICE, attributes: { value: "!mage" }, writeDelay: 30, });
+        mageLabel.style.top = "220px";
+        container.appendChild(mageLabel);
+
+        let thiefLabel = HandwrittenNote.create({ style: STYLE.PLAYER_JOIN_CARD_CHOICE, attributes: { value: "!thief" }, writeDelay: 30, });
+        thiefLabel.style.top = "260px";
+        container.appendChild(thiefLabel);
+
+        let randomLabel = HandwrittenNote.create({ style: STYLE.PLAYER_JOIN_CARD_RANDOM, attributes: { value: "!random to leave it in the hands of fate" }, writeDelay: 30, });
+        randomLabel.style.top = "360px";
+        container.appendChild(randomLabel);
+    },
+
+    createCardModeElements_ChooseYourName(card) {
+        let container = card["ChooseYourName"];
+
+        let modeTitleLabel = HandwrittenNote.create({ style: STYLE.PLAYER_JOIN_CARD_CHOICE, attributes: { value: "Choose Your Name" }, writeDelay: 30, });
+        modeTitleLabel.style.top = "56px";
+        container.appendChild(modeTitleLabel);
+
+        let nameLabel = HandwrittenNote.create({ style: STYLE.PLAYER_JOIN_CARD_CHOICE, attributes: { value: "!name Your Name" }, writeDelay: 30, });
+        nameLabel.style.top = "180px";
+        container.appendChild(nameLabel);
+
+        let randomLabel = HandwrittenNote.create({ style: STYLE.PLAYER_JOIN_CARD_RANDOM, attributes: { value: "!random to leave it in the hands of fate" }, writeDelay: 30, });
+        randomLabel.style.top = "360px";
+        container.appendChild(randomLabel);
+    },
+
+    createCardModeElements_CharacterOverview(card) {
+        let container = card["CharacterOverview"];
+
+        let modeTitleLabel = HandwrittenNote.create({ style: STYLE.PLAYER_JOIN_CARD_CHOICE, attributes: { value: "Character Overview" }, writeDelay: 30, });
+        modeTitleLabel.style.top = "56px";
+        container.appendChild(modeTitleLabel);
+    },
+
+    setPlayerJoinCardMode(card, mode) {
+        for (var modeIndex in playerJoinCardModes) {
+            let modeName = playerJoinCardModes[modeIndex];
+            card[modeName].style.display = "none";
+        }
+        card[mode].style.display = "block";
+    },
+
+    playerJoinedCallback(eventData, container) {
+        if (!eventData) { console.error("Player Joined with null data. Something went wrong."); return false; }
+        if (!eventData.playerUsername || (typeof eventData.playerUsername !== 'string')) { console.error("Player Joined with improper name format."); return false; }
+        if (![0, 1, 2].includes(eventData.playerIndex)) { console.error("Player Joined with improper index."); return false; }
+
+        let playerJoinCard = container.elements.playerJoinCards[eventData.playerIndex];
+        playerJoinCard.NameTag.setValue(eventData.playerUsername);
+        this.setPlayerJoinCardMode(playerJoinCard, "ChooseYourRace");
+    },
+
+    playerLeftCallback(eventData, container) {
+        if (!eventData) { console.error("Player Left with null data. Something went wrong."); return false; }
+        if (!eventData.playerUsername || (typeof eventData.playerUsername !== 'string')) { console.error("Player Left with improper name format."); return false; }
+        if (![0, 1, 2].includes(eventData.playerIndex)) { console.error("Player Left with improper index."); return false; }
+
+        let playerJoinCard = container.elements.playerJoinCards[eventData.playerIndex];
+        playerJoinCard.NameTag.setValue("Type '!join' to play");
+        this.setPlayerJoinCardMode(playerJoinCard, "WaitingForJoin");
+    },
+
+    playerRaceSetCallback(eventData, container) {
+        if (!eventData) { console.error("Player Race Set with null data. Something went wrong."); return false; }
+        if (!eventData.playerUsername || (typeof eventData.playerUsername !== 'string')) { console.error("Player Race Set with improper name format."); return false; }
+        if (!["Dwarf", "Elf", "Halfling", "Human"].includes(eventData.race)) { console.error("Player Set Race with improper type."); return false; }
+
+        let playerJoinCard = container.elements.playerJoinCards[eventData.playerIndex];
+        this.setPlayerJoinCardMode(playerJoinCard, "ChooseYourClass");
+    },
+
+    playerClassSetCallback(eventData, container) {
+        if (!eventData) { console.error("Player Class Set with null data. Something went wrong."); return false; }
+        if (!eventData.playerUsername || (typeof eventData.playerUsername !== 'string')) { console.error("Player Class Set with improper name format."); return false; }
+        if (!["Cleric", "Fighter", "Mage", "Thief"].includes(eventData.class)) { console.error("Player Set Class with improper type."); return false; }
+
+        let playerJoinCard = container.elements.playerJoinCards[eventData.playerIndex];
+        this.setPlayerJoinCardMode(playerJoinCard, "ChooseYourName");
+    },
+
+    playerNameSetCallback(eventData, container) {
+        if (!eventData) { console.error("Player Name Set with null data. Something went wrong."); return false; }
+        if (!eventData.playerUsername || (typeof eventData.playerUsername !== 'string')) { console.error("Player Name Set with improper name format."); return false; }
+        if (!eventData.name) { console.error("Player Set Name with improper type."); return false; }
+
+        let playerJoinCard = container.elements.playerJoinCards[eventData.playerIndex];
+        this.setPlayerJoinCardMode(playerJoinCard, "CharacterOverview");
     },
 };
 

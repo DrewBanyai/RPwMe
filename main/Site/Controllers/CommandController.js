@@ -24,11 +24,20 @@ const CommandControl = {
     COMMANDS_LIST: {
         "!rpwme":           { effect: "Request for information about how to play", who: { viewer: true, player: true, gm: true }, args: { min: 0, max: 0 } },
         "!join":            { effect: "Request to join as a player", who: { viewer: true, player: false, gm: true }, args: { min: 0, max: 0 } },
+        "!leave":           { effect: "Leave the game as a player", who: { viewer: true, player: true, gm: true }, args: { min: 0, max: 0 } },
     
-        "!name":            { effect: "Request to specify the given player's character name", who: { viewer: false, player: true, gm: false }, args: { min: 1, max: 10 } },
-        "!race":            { effect: "Request to specify the given player's character race", who: { viewer: false, player: true, gm: false }, args: { min: 1, max: 1 } },
-        "!class":           { effect: "Request to specify the given player's character class", who: { viewer: false, player: true, gm: false }, args: { min: 1, max: 1 } },
-        "!reroll":          { effect: "Request to re-roll the given player's character stats", who: { viewer: false, player: true, gm: false }, args: { min: 0, max: 0 } },
+        "!dwarf":           { effect: "Specify your player race as Dwarf", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
+        "!elf":             { effect: "Specify your player race as Elf", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
+        "!halfling":        { effect: "Specify your player race as Halfling", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
+        "!human":           { effect: "Specify your player race as Human", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
+    
+        "!cleric":          { effect: "Specify your player class as Cleric", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
+        "!fighter":         { effect: "Specify your player class as Fighter", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
+        "!mage":            { effect: "Specify your player class as Mage", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
+        "!thief":           { effect: "Specify your player class as Thief", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
+
+        "!name":            { effect: "Request to specify the given player's character name", who: { viewer: false, player: true, gm: true }, args: { min: 1, max: 10 } },
+        "!reroll":          { effect: "Request to re-roll the given player's character stats", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
     
         "!inventory":       { effect: "Request to open the given player's inventory", who: { viewer: false, player: true, gm: false }, args: { min: 0, max: 0 } },
         "!items":           { effect: "Request to open the given player's inventory", who: { viewer: false, player: true, gm: false }, args: { min: 0, max: 0 } },
@@ -97,7 +106,7 @@ const CommandControl = {
         let commandParsed = CommandControl.GetCommandStringParsed(commandString);
         let commandData = CommandControl.GetCommandData(commandParsed.id);
     
-        let eventData = { user: username, data: commandData, args: commandParsed.args };
+        let eventData = { user: username, command: commandParsed.id, data: commandData, args: commandParsed.args };
         if (CONFIG.DEBUG) console.log("Command event: ", commandParsed.id, eventData);
         EventDispatch.SendEvent(commandParsed.id, eventData);
         return true;

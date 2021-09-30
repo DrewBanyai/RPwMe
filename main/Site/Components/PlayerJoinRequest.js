@@ -33,6 +33,8 @@ const PlayerJoinRequest = {
 
         container.elements = { approveButton: null, denyButton: null };
 
+        container.username = options.name ? options.name : "UNKNOWN";
+
         let nameLabel = Label.create({
             id: "PlayerJoinRequestNameLabel",
             style: {
@@ -46,7 +48,7 @@ const PlayerJoinRequest = {
                 margin: "0px 0px 0px 4px",
                 userSelect: "none",
             },
-            attributes: { value: options.name ? options.name : "UNKNOWN" },
+            attributes: { value: container.username },
         });
         container.appendChild(nameLabel);
 

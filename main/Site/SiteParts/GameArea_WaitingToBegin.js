@@ -36,18 +36,7 @@ let GameArea_WaitingToBegin = {
 
         container.elements = { paper: null }
 
-        container.elements.paper = Container.create({
-            id: "LinedPaperBackground",
-            style: {
-                width: "1240px",
-                height: "740px",
-                position: "relative",
-                top: "6px",
-                backgroundImage: "url(Images/CollegeRuledLinedPaper.png)",
-                backgroundSize: "100%",
-                overflow: "hidden",
-            },
-        });
+        container.elements.paper = Container.create({ id: "LinedPaperBackground", style: STYLE.LINED_PAPER_BACKGROUND, });
         container.appendChild(container.elements.paper);
 
         let programLogo = Label.create({

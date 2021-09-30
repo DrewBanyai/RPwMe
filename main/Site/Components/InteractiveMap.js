@@ -38,7 +38,8 @@ const InteractiveMap = {
             id: "InteractiveMap",
             style: {
                 width: parseInt(properties.size.X) + "px",
-                height: parseInt(properties.size.Y) + "px"
+                height: parseInt(properties.size.Y) + "px",
+                overflow: "hidden",
             }
         });
         container.options = options;

@@ -33,6 +33,8 @@ const ActivePlayerEntry = {
 
         container.elements = { removeButton: null };
 
+        container.username = options.name ? options.name : "UNKNOWN";
+
         let nameLabel = Label.create({
             id: "ActivePlayerEntryNameLabel",
             style: {

@@ -54,4 +54,42 @@ module.exports = {
 
   INFOBOX_WORLD_PADDING_LEFT: 2,
   INFOBOX_WORLD_PADDING_RIGHT: 4,
+
+  LINED_PAPER_BACKGROUND: {
+    width: "1240px",
+    height: "740px",
+    position: "relative",
+    top: "6px",
+    backgroundImage: "url(Images/CollegeRuledLinedPaper.png)",
+    backgroundSize: "100%",
+    overflow: "hidden",
+  },
+
+  PLAYER_JOIN_CARD_NAME_TAG: {
+    fontSize: "26px",
+    width: "282px",
+    position: "absolute",
+    left: "5px",
+    top: "8px",
+    lineHeight: "41px",
+    textAlign: "center",
+  },
+
+  PLAYER_JOIN_CARD_CHOICE: {
+    fontSize: "32px",
+    width: "282px",
+    position: "absolute",
+    left: "6px",
+    lineHeight: "41px",
+    textAlign: "center",
+  },
+
+  PLAYER_JOIN_CARD_RANDOM: {
+    fontSize: "18px",
+    width: "282px",
+    position: "absolute",
+    left: "10px",
+    lineHeight: "41px",
+    textAlign: "center",
+  },
 }

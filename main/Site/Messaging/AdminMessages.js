@@ -20,26 +20,14 @@ const adminMessages = {
     //////////////////////////////
     //  Send Messages
     //////////////////////////////
-    sendTestMessage(message) {
-        ipcRenderer.send('send-test', message)
-    },
-
-    //////////////////////////////
-    //  Receive Messages
-    //////////////////////////////
-    receiveWindowID(event, ...args) {
-        const windowID = args[0]
-        
-        var idLabel = document.querySelector('#ProgramLogo')
-        if (idLabel) idLabel.innerHTML = windowID
-    },
-
-    //////////////////////////////
-    //  Callback Definitions
-    //////////////////////////////
-    Initialize() {
-        ipcRenderer.on('window-id-send', adminMessages.receiveWindowID)
-    }
+    sendTestMessage(message) { ipcRenderer.send('send-test', message); },
+    sendCampaignToGameScreen(campaignData) { ipcRenderer.send('campaign-update', campaignData); },
+    sendPlayerJoinAllowedFlag() { ipcRenderer.send('player-join-allowed', null); },
+    sendPlayerJoinedEvent(eventData) { ipcRenderer.send('player-joined', eventData); },
+    sendPlayerLeftEvent(eventData) { ipcRenderer.send('player-left', eventData); },
+    sendPlayerRaceSetEvent(eventData) { ipcRenderer.send('player-race-set', eventData); },
+    sendPlayerClassSetEvent(eventData) { ipcRenderer.send('player-class-set', eventData); },
+    sendPlayerNameSetEvent(eventData) { ipcRenderer.send('player-name-set', eventData); },
 }
 
 //  Module Exports

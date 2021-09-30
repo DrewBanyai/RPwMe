@@ -17,17 +17,24 @@
 const { ipcMain } = require('electron')
 const windows = require('../../windows')
 
-//  IPC messaging functions
-function setupSendTestCallback() {
-    ipcMain.on('send-test', sendTestTriggered)
+function passToGameWindow(messageID, event, arg) { 
+    //  Find the GAME window and send the message through
+    if (!Object.getOwnPropertyDescriptor(windows.windowMap, "GAME")) { return; }
+    const win = windows.windowMap["GAME"];
+    win.webContents.send(messageID, arg);
 }
 
-function sendTestTriggered (event, arg) {
-    //  Find the GAME window and send a test message
-    if (!Object.getOwnPropertyDescriptor(windows.windowMap, "GAME")) { return }
-    const win = windows.windowMap["GAME"]
-    win.webContents.send('change-window-id', arg)
+//  IPC messaging functions
+function setupMessageCallbacks() {
+    ipcMain.on('send-test', (event, arg) => { passToGameWindow('change-window-id', event, arg); });
+    ipcMain.on('campaign-update', (event, arg) => { passToGameWindow('campaign-update', event, arg); });
+    ipcMain.on('player-join-allowed', (event, arg) => { passToGameWindow('player-join-allowed', event, arg); });
+    ipcMain.on('player-joined', (event, arg) => { passToGameWindow('player-joined', event, arg); });
+    ipcMain.on('player-left', (event, arg) => { passToGameWindow('player-left', event, arg); });
+    ipcMain.on('player-race-set', (event, arg) => { passToGameWindow('player-race-set', event, arg); });
+    ipcMain.on('player-class-set', (event, arg) => { passToGameWindow('player-class-set', event, arg); });
+    ipcMain.on('player-name-set', (event, arg) => { passToGameWindow('player-name-set', event, arg); });
 }
 
 //  Module Exports
-module.exports = { setupSendTestCallback }
+module.exports = { setupMessageCallbacks }
