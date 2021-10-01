@@ -223,7 +223,7 @@ let GameArea_PlayerJoin = {
     playerRaceSetCallback(eventData, container) {
         if (!eventData) { console.error("Player Race Set with null data. Something went wrong."); return false; }
         if (!eventData.playerUsername || (typeof eventData.playerUsername !== 'string')) { console.error("Player Race Set with improper name format."); return false; }
-        if (!["Dwarf", "Elf", "Halfling", "Human"].includes(eventData.character.race)) { console.error("Player Set Race with improper type."); return false; }
+        if (!["Dwarf", "Elf", "Halfling", "Human"].includes(eventData.character.Race)) { console.error("Player Set Race with improper type."); return false; }
 
         let playerJoinCard = container.elements.playerJoinCards[eventData.playerIndex];
         this.setPlayerJoinCardMode(playerJoinCard, "ChooseYourClass");
@@ -232,7 +232,7 @@ let GameArea_PlayerJoin = {
     playerClassSetCallback(eventData, container) {
         if (!eventData) { console.error("Player Class Set with null data. Something went wrong."); return false; }
         if (!eventData.playerUsername || (typeof eventData.playerUsername !== 'string')) { console.error("Player Class Set with improper name format."); return false; }
-        if (!["Cleric", "Fighter", "Wizard", "Rogue"].includes(eventData.character.class)) { console.error("Player Set Class with improper type."); return false; }
+        if (!["Cleric", "Fighter", "Wizard", "Rogue"].includes(eventData.character.Class)) { console.error("Player Set Class with improper type."); return false; }
 
         let playerJoinCard = container.elements.playerJoinCards[eventData.playerIndex];
         this.setPlayerJoinCardMode(playerJoinCard, "ChooseYourName");
@@ -241,7 +241,7 @@ let GameArea_PlayerJoin = {
     playerNameSetCallback(eventData, container) {
         if (!eventData) { console.error("Player Name Set with null data. Something went wrong."); return false; }
         if (!eventData.playerUsername || (typeof eventData.playerUsername !== 'string')) { console.error("Player Name Set with improper name format."); return false; }
-        if (!eventData.character.name) { console.error("Player Set Name with improper type."); return false; }
+        if (!eventData.character.Name) { console.error("Player Set Name with improper type."); return false; }
 
         let playerJoinCard = container.elements.playerJoinCards[eventData.playerIndex];
         this.setPlayerJoinCardMode(playerJoinCard, "CharacterOverview");

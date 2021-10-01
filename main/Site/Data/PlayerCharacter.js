@@ -15,6 +15,7 @@
 */
 
 var { RandIntBetween } = require('../HelperFunctions/Random')
+var { DiceRoller } = require('../HelperFunctions/DiceRoller')
 
 const PlayerCharacter = 
 {
@@ -23,75 +24,174 @@ const PlayerCharacter =
             playerUsername: username,
             playerIndex: index,
             character: {
-                race: null,
-                class: null,
-                name: null
+                Race: null,
+                Class: null,
+                Name: null,
+                Inventory: []
             }
         }
     },
     CreateAbilityScoreData(str, dex, con, int, wis, cha) {
-        return { STRENGTH: str, DEXTERITY: dex, CONSTITUTION: con, INTELLIGENCE: int, WISDOM: wis, CHARISMA: cha };
+        return {
+            STRENGTH: str,
+            DEXTERITY: dex,
+            CONSTITUTION: con,
+            INTELLIGENCE: int,
+            WISDOM: wis,
+            CHARISMA: cha
+        };
     },
-    CreateSavingThrowAdvantageData(fortitude, reflex, will, poison, charm, fright) {
-        return { FORTITUDE: fortitude, REFLEX: reflex, WILL: will, POISON: poison, CHARM: charm, FRIGHT: fright };
+    CreateSavingThrowAdvantageData(savingThrowList) {
+        let data = {
+            STRENGTH: false,
+            DEXTERITY: false,
+            CONSTITUTION: false,
+            INTELLIGENCE: false,
+            WISDOM: false,
+            CHARISMA: false,
+            FORTITUDE: false,
+            REFLEX: false,
+            WILL: false,
+            POISON: false,
+            CHARM: false,
+            FRIGHT: false
+        };
+        for (let i = 0; i < savingThrowList.length; ++i) data[savingThrowList[i]] = true;
+        return data;
     },
-    CreateWeaponProficiencyData(battleaxe, handaxe, lightHammer, warhammer) {
-        return { BATTLEAXE: battleaxe, HANDAXE: handaxe, LIGHTHAMMER: lightHammer, WARHAMMER: warhammer };
+    CreateWeaponProficiencyData(proficienyList) {
+        let data = {
+            CLUB: false,
+            DAGGER: false,
+            GREATCLUB: false,
+            HANDAXE: false,
+            JAVELIN: false,
+            LIGHTHAMMER: false,
+            MACE: false,
+            QUARTERSTAFF: false,
+            SICKLE: false,
+            SPEAR: false,
+            CROSSBOW_LIGHT: false,
+            DART: false,
+            SHORTBOW: false,
+            SLING: false,
+            BATTLEAXE: false,
+            FLAIL: false,
+            GLAIVE: false,
+            GREATAXE: false,
+            GREATSWORD: false,
+            HALBERD: false,
+            LANCE: false,
+            LONGSWORD: false,
+            MAUL: false,
+            MORNINGSTAR: false,
+            PIKE: false,
+            RAPIER: false,
+            SCIMITAR: false,
+            SHORTSWORD: false,
+            TRIDENT: false,
+            WARPICK: false,
+            WARHAMMER: false,
+            WHIP: false,
+            BLOWGUN: false,
+            CROSSBOW_HAND: false,
+            CROSSBOW_HEAVY: false,
+            LONGBOW: false,
+            NET: false
+        };
+        for (let i = 0; i < proficienyList.length; ++i) data[proficienyList[i]] = true;
+        return data;
+    },
+    CreateArmorProficiencyData(proficienyList) {
+        let data = {
+            PADDED: false,
+            LEATHER: false,
+            STUDDED: false,
+            HIDE: false,
+            CHAIN: false,
+            SCALE: false,
+            BREASTPLATE: false,
+            HALFPLATE: false,
+            RING: false,
+            CHAIN: false,
+            SPLINT: false,
+            PLATE: false,
+            SHIELDS: false
+        };
+        for (let i = 0; i < proficienyList.length; ++i) data[proficienyList[i]] = true;
+        return data;
+    },
+    CreateToolProficiencyData(proficienyList) {
+        let data = {
+            SMITHSTOOLS: false,
+            BREWERSSUPPLIES: false,
+            MASONSTOOLS: false,
+        };
+        for (let i = 0; i < proficienyList.length; ++i) data[proficienyList[i]] = true;
+        return data;
     },
     CreateCharacterAttributesData(darkvision) {
         return { DARKVISION: darkvision };
     },
-    CreateCharacterLanguages(common, dwarvish, elvish, giant, gnomish, goblin, halfling, orc, abyssal, celestial, draconic, deepSpeech, infernal, primordial, sylvan, undercommon) {
-        return {
-            COMMON: common,
-            DWARVISH: dwarvish,
-            ELVISH: elvish,
-            GIANT: giant,
-            GNOMISH: gnomish,
-            GOBLIN: goblin,
-            HALFLING: halfling,
-            ORC: orc,
-            ABYSSAL: abyssal,
-            CELESTIAL: celestial,
-            DRACONIC: draconic,
-            DEEPSPEECH: deepSpeech,
-            INFERNAL: infernal,
-            PRIMORDIAL: primordial,
-            SYLVAN: sylvan,
-            UNDERCOMMON: undercommon
+    CreateCharacterLanguages(languageList) {
+        let data = {
+            COMMON: false,
+            DWARVISH: false,
+            ELVISH: false,
+            GIANT: false,
+            GNOMISH: false,
+            GOBLIN: false,
+            HALFLING: false,
+            ORC: false,
+            ABYSSAL: false,
+            CELESTIAL: false,
+            DRACONIC: false,
+            DEEPSPEECH: false,
+            INFERNAL: false,
+            PRIMORDIAL: false,
+            SYLVAN: false,
+            UNDERCOMMON: false
         };
+        for (let i = 0; i < languageList.length; ++i) data[languageList[i]] = true;
+        return data;
     },
-    CreateSkillProficiencies(athl, acro, sleight, stealth, arcana, history, invest, nat, rel, anim, insight, med, percep, surv, dec, intim, perfor, persuade) {
-        return {
-            ATHLETICS: athl,
-            ACROBATICS: acro,
-            SLEIGHTOFHAND: sleight,
-            STEALTH: stealth,
-            ARCANA: arcana,
-            HISTORY: history,
-            INVESTIGATION: invest,
-            NATURE: nat,
-            RELIGION: rel,
-            ANIMALHANDLING: anim,
-            INSIGHT: insight,
-            MEDICINE: med,
-            PERCEPTION: percep,
-            SURVIVAL: surv,
-            DECEPTION: dec,
-            INTIMIDATE: intim,
-            PERFORMANCE: perfor,
-            PERSUASION: persuade
+    CreateSkillProficiencies(proficienyList) {
+        let data = {
+            ATHLETICS: false,
+            ACROBATICS: false,
+            SLEIGHTOFHAND: false,
+            STEALTH: false,
+            ARCANA: false,
+            HISTORY: false,
+            INVESTIGATION: false,
+            NATURE: false,
+            RELIGION: false,
+            ANIMALHANDLING: false,
+            INSIGHT: false,
+            MEDICINE: false,
+            PERCEPTION: false,
+            SURVIVAL: false,
+            DECEPTION: false,
+            INTIMIDATE: false,
+            PERFORMANCE: false,
+            PERSUASION: false
         };
+        for (let i = 0; i < proficienyList.length; ++i) data[proficienyList[i]] = true;
+        return data;
     },
-    GetRaceTraits(race) {
-        switch (race) {
+    GetRaceTraits(charRace) {
+        switch (charRace) {
             case "Dwarf":
+                let toolProficiency = ["SMITHSTOOLS", "BREWERSSUPPLIES", "MASONSTOOLS"][RandIntBetween(0, 2)];
+
                 return {
                     AbilityScoreChanges: this.CreateAbilityScoreData(0, 0, 2, 0, 0, 0),
-                    SavingThrowAdvantages: this.CreateSavingThrowAdvantageData(false, false, false, true, false, false),
-                    WeaponProficiencies: this.CreateWeaponProficiencyData(true, true, true, true),
-                    Languages: this.CreateCharacterLanguages(true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false),
-                    SkillProficiencies: this.CreateSkillProficiencies(false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false),
+                    SavingThrowAdvantages: this.CreateSavingThrowAdvantageData(["POISON"]),
+                    WeaponProficiencies: this.CreateWeaponProficiencyData(["BATTLEAXE", "HANDAXE", "LIGHTHAMMER", "WARHAMMER"]),
+                    ArmorProficiencies: this.CreateArmorProficiencyData([]),
+                    ToolProficiencies: this.CreateToolProficiencyData([toolProficiency]),
+                    Languages: this.CreateCharacterLanguages(["COMMON", "DWARVISH"]),
+                    SkillProficiencies: this.CreateSkillProficiencies([]),
                     Age: RandIntBetween(50, 200),
                     Alignment: "Neutral",
                     Size: "Medium",
@@ -105,10 +205,12 @@ const PlayerCharacter =
             case "Elf":
                 return {
                     AbilityScoreChanges: this.CreateAbilityScoreData(0, 2, 0, 0, 0, 0),
-                    SavingThrowAdvantages: this.CreateSavingThrowAdvantageData(false, false, false, false, true, false),
-                    WeaponProficiencies: this.CreateWeaponProficiencyData(false, false, false, false),
-                    Languages: this.CreateCharacterLanguages(true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false),
-                    SkillProficiencies: this.CreateSkillProficiencies(false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false),
+                    SavingThrowAdvantages: this.CreateSavingThrowAdvantageData(["CHARM"]),
+                    WeaponProficiencies: this.CreateWeaponProficiencyData([]),
+                    ArmorProficiencies: this.CreateArmorProficiencyData([]),
+                    ToolProficiencies: this.CreateToolProficiencyData([]),
+                    Languages: this.CreateCharacterLanguages(["COMMON", "ELVISH"]),
+                    SkillProficiencies: this.CreateSkillProficiencies(["PERCEPTION"]),
                     Age: RandIntBetween(100, 500),
                     Alignment: "Neutral",
                     Size: "Medium",
@@ -123,10 +225,12 @@ const PlayerCharacter =
             case "Halfling":
                 return {
                     AbilityScoreChanges: this.CreateAbilityScoreData(0, 2, 0, 0, 0, 0),
-                    SavingThrowAdvantages: this.CreateSavingThrowAdvantageData(false, false, false, false, false, true),
-                    WeaponProficiencies: this.CreateWeaponProficiencyData(false, false, false, false),
-                    Languages: this.CreateCharacterLanguages(true, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false),
-                    SkillProficiencies: this.CreateSkillProficiencies(false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false),
+                    SavingThrowAdvantages: this.CreateSavingThrowAdvantageData(["FRIGHT"]),
+                    WeaponProficiencies: this.CreateWeaponProficiencyData([]),
+                    ArmorProficiencies: this.CreateArmorProficiencyData([]),
+                    ToolProficiencies: this.CreateToolProficiencyData([]),
+                    Languages: this.CreateCharacterLanguages(["COMMON", "HALFLING"]),
+                    SkillProficiencies: this.CreateSkillProficiencies([]),
                     Age: RandIntBetween(20, 150),
                     Alignment: "Neutral",
                     Size: "Small",
@@ -141,10 +245,12 @@ const PlayerCharacter =
             case "Human":
                 return {
                     AbilityScoreChanges: this.CreateAbilityScoreData(1, 1, 1, 1, 1, 1),
-                    SavingThrowAdvantages: this.CreateSavingThrowAdvantageData(false, false, false, false, false, false),
-                    WeaponProficiencies: this.CreateWeaponProficiencyData(false, false, false, false),
-                    Languages: this.CreateCharacterLanguages(true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false),
-                    SkillProficiencies: this.CreateSkillProficiencies(false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false),
+                    SavingThrowAdvantages: this.CreateSavingThrowAdvantageData([]),
+                    WeaponProficiencies: this.CreateWeaponProficiencyData([]),
+                    ArmorProficiencies: this.CreateArmorProficiencyData([]),
+                    ToolProficiencies: this.CreateToolProficiencyData([]),
+                    Languages: this.CreateCharacterLanguages(["COMMON"]),
+                    SkillProficiencies: this.CreateSkillProficiencies([]),
                     Age: RandIntBetween(20, 50),
                     Alignment: "Neutral",
                     Size: "Medium",
@@ -155,7 +261,101 @@ const PlayerCharacter =
                     ]
                 };
         }
-    }
+    },
+    GetClassTraits(charClass) {
+        switch (charClass) {
+            case "Cleric":
+                let skill1 = ["HISTORY", "INSIGHT", "MEDICINE", "PERSUASION", "RELIGION"][RandIntBetween(0, 4)];
+                let skill2 = skill1;
+                while (skill1 === skill2) skill2 = ["HISTORY", "INSIGHT", "MEDICINE", "PERSUASION", "RELIGION"][RandIntBetween(0, 4)];
+
+                return {
+                    HitDicePerLevel: "1d8",
+                    SavingThrowAdvantages: this.CreateSavingThrowAdvantageData(["WISDOM", "CHARISMA"]),
+                    WeaponProficiencies: this.CreateWeaponProficiencyData(["CLUB", "DAGGER", "GREATCLUB", "HANDAXE", "JAVELIN", "LIGHTHAMMER", "MACE", "QUARTERSTAFF", "SICKLE", "SPEAR"]),
+                    ArmorProficiencies: this.CreateArmorProficiencyData(["PADDED", "LEATHER", "STUDDED", "HIDE", "CHAIN", "SCALE", "BREASTPLATE", "HALFPLATE", "SHIELDS"]),
+                    ToolProficiencies: this.CreateToolProficiencyData([]),
+                    SkillProficiencies: this.CreateSkillProficiencies([skill1, skill2]),
+                };
+
+            case "Fighter":
+                return {
+
+                };
+
+            case "Wizard":
+                return {
+
+                };
+            
+            case "Rogue":
+                return {
+
+                };
+        }
+    },
+    GetClassHitPointsAtFirstLevel(charClass) {
+        switch (charClass) {
+            case "Cleric": return (modifiers) => { return 8 + modifiers.CONSTITUTION; }
+            case "Fighter": return (modifiers) => { return 8 + modifiers.CONSTITUTION; }
+            case "Wizard": return (modifiers) => { return 8 + modifiers.CONSTITUTION; }
+            case "Rogue": return (modifiers) => { return 8 + modifiers.CONSTITUTION; }
+        }
+    },
+    GetClassHitPointsAfterFirstLevel(charClass) {
+        switch (charClass) {
+            case "Cleric": return (modifiers) => { return DiceRoller.RollString("1d8").total + modifiers.CONSTITUTION; }
+            case "Fighter": return (modifiers) => { return DiceRoller.RollString("1d8").total + modifiers.CONSTITUTION; }
+            case "Wizard": return (modifiers) => (modifiers) => { return DiceRoller.RollString("1d8").total + modifiers.CONSTITUTION; }
+            case "Rogue": return (modifiers) => (modifiers) => { return DiceRoller.RollString("1d8").total + modifiers.CONSTITUTION; }
+        }
+    },
+    GetClassStartingEquipmentFunc(charClass) {
+        switch (charClass) {
+            case "Cleric":
+                return (character) => {
+                    let equipment = [];
+
+                    let weapons = ["Mace", "Warhammer"]
+                    equipment.push({ item: weapons[RandIntBetween(0, character.WeaponProficiencies["WARHAMMER"] ? 1 : 0)], count: 1});
+
+                    let armors = ["Scale Mail", "Leather Armor", "Chain mail"];
+                    equipment.push({ item: armors[RandIntBetween(0, character.ArmorProficiencies["CHAIN"] ? 2 : 1)], count: 1 });
+
+                    let simpleWeapons = ["Club", "Dagger", "Greatclub", "Handaxe", "Javelin", "Light Hammer", "Mace", "Quarterstaff", "Sickle", "Spear"];
+                    let extraWeapons = ["Light Crossbow", simpleWeapons[RandIntBetween(0, 9)]];
+                    let extraWeapon = extraWeapons[RandIntBetween(0, 1)];
+                    equipment.push({ item: extraWeapon, count: 1 });
+                    if (extraWeapon === "Light Crossbow") equipment.push({ item: "Bolt", count: 20 })
+
+                    let packs = ["Priest's Pack", "Explorer's Pack"];
+                    equipment.push({ item: packs[RandIntBetween(0, 1)], count: 1 });
+
+                    equipment.push({ item: "Shield", count: 1 });
+                    equipment.push({ item: "Holy Symbol", count: 1 });
+
+                    return equipment;
+                };
+            
+            case "Fighter":
+                return (character) => {
+                    let equipment = [];
+                    return equipment;
+                }
+            
+            case "Wizard":
+                return (character) => {
+                    let equipment = [];
+                    return equipment;
+                }
+            
+            case "Rogue":
+                return (character) => {
+                    let equipment = [];
+                    return equipment;
+                }
+        }
+    },
 }
 
 //  Module Exports

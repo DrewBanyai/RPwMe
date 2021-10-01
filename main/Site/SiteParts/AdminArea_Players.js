@@ -315,9 +315,9 @@ let AdminArea_Players = {
         if (!["!dwarf", "!elf", "!halfling", "!human"].includes(eventData.command)) { console.error("Setting player race with an incompatible command."); return false; }
         
         let player = CampaignController.GetPlayer(eventData.user);
-        if (player.character.race !== null) { console.warn("Player attempting to change their race once it is already set."); return false; }
+        if (player.character.Race !== null) { console.warn("Player attempting to change their race once it is already set."); return false; }
 
-        player.character.race = playerRaceFromCommands[eventData.command];
+        player.character.Race = playerRaceFromCommands[eventData.command];
         EventDispatch.SendEvent("Player Race Set", { playerUsername: eventData.user, playerIndex: player.playerIndex, character: player.character });
     },
 
@@ -326,10 +326,10 @@ let AdminArea_Players = {
         if (!["!cleric", "!fighter", "!wizard", "!rogue"].includes(eventData.command)) { console.error("Setting player class with an incompatible command."); return false; }
         
         let player = CampaignController.GetPlayer(eventData.user);
-        if (player.character.race === null) { console.warn("Player attempting to change their class without setting their race."); return false; }
-        if (player.character.class !== null) { console.warn("Player attempting to change their class once it is already set."); return false; }
+        if (player.character.Race === null) { console.warn("Player attempting to change their class without setting their race."); return false; }
+        if (player.character.Class !== null) { console.warn("Player attempting to change their class once it is already set."); return false; }
 
-        player.character.class = playerClassFromCommands[eventData.command];
+        player.character.Class = playerClassFromCommands[eventData.command];
         EventDispatch.SendEvent("Player Class Set", { playerUsername: eventData.user, playerIndex: player.playerIndex, character: player.character });
     },
 
@@ -338,12 +338,14 @@ let AdminArea_Players = {
         if (!["!name"].includes(eventData.command)) { console.error("Setting player name with an incompatible command."); return false; }
 
         let player = CampaignController.GetPlayer(eventData.user);
-        if (player.character.race === null) { console.warn("Player attempting to change their name without setting their race."); return false; }
-        if (player.character.class === null) { console.warn("Player attempting to change their name without setting their class."); return false; }
-        if (player.character.name !== null) { console.warn("Player attempting to change their name once it is already set."); return false; }
+        if (player.character.Race === null) { console.warn("Player attempting to change their name without setting their race."); return false; }
+        if (player.character.Class === null) { console.warn("Player attempting to change their name without setting their class."); return false; }
+        if (player.character.Name !== null) { console.warn("Player attempting to change their name once it is already set."); return false; }
 
-        player.character.name = eventData.args.join(" ");
-        Object.assign(player.character, PlayerCharacter.GetRaceTraits(player.character.race));
+        player.character.Name = eventData.args.join(" ");
+        Object.assign(player.character, PlayerCharacter.GetRaceTraits(player.character.Race));
+        Object.assign(player.character, PlayerCharacter.GetClassTraits(player.character.Class));
+        Object.assign(player.character.Inventory, PlayerCharacter.GetClassStartingEquipmentFunc(player.character.Class)(player.character));
         EventDispatch.SendEvent("Player Name Set", { playerUsername: eventData.user, playerIndex: player.playerIndex, character: player.character });
     },
 
