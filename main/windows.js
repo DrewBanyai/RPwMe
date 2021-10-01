@@ -32,6 +32,7 @@ function createWindow(windowID, title, width, height, devTools, menu) {
     const newWindow = new BrowserWindow({
         width: width,
         height: height,
+        icon: path.join(__dirname , '/Site/Images/Icon_' + windowID + '.png'),
         useContentSize: true,
         resizable: false,
         autoHideMenuBar: true,
