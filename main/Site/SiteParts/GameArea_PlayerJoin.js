@@ -243,6 +243,7 @@ let GameArea_PlayerJoin = {
         if (!eventData.playerUsername || (typeof eventData.playerUsername !== 'string')) { console.error("Player Name Set with improper name format."); return false; }
         if (!eventData.character.Name) { console.error("Player Set Name with improper type."); return false; }
 
+        console.log("INVENTORY:", eventData.character);
         let playerJoinCard = container.elements.playerJoinCards[eventData.playerIndex];
         this.setPlayerJoinCardMode(playerJoinCard, "CharacterOverview");
     },
