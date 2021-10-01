@@ -155,13 +155,13 @@ let GameArea_PlayerJoin = {
         fighterLabel.style.top = "180px";
         container.appendChild(fighterLabel);
 
-        let mageLabel = HandwrittenNote.create({ style: STYLE.PLAYER_JOIN_CARD_CHOICE, attributes: { value: "!mage" }, writeDelay: 30, });
-        mageLabel.style.top = "220px";
-        container.appendChild(mageLabel);
+        let wizardLabel = HandwrittenNote.create({ style: STYLE.PLAYER_JOIN_CARD_CHOICE, attributes: { value: "!wizard" }, writeDelay: 30, });
+        wizardLabel.style.top = "220px";
+        container.appendChild(wizardLabel);
 
-        let thiefLabel = HandwrittenNote.create({ style: STYLE.PLAYER_JOIN_CARD_CHOICE, attributes: { value: "!thief" }, writeDelay: 30, });
-        thiefLabel.style.top = "260px";
-        container.appendChild(thiefLabel);
+        let rogueLabel = HandwrittenNote.create({ style: STYLE.PLAYER_JOIN_CARD_CHOICE, attributes: { value: "!rogue" }, writeDelay: 30, });
+        rogueLabel.style.top = "260px";
+        container.appendChild(rogueLabel);
 
         let randomLabel = HandwrittenNote.create({ style: STYLE.PLAYER_JOIN_CARD_RANDOM, attributes: { value: "!random to leave it in the hands of fate" }, writeDelay: 30, });
         randomLabel.style.top = "360px";
@@ -223,7 +223,7 @@ let GameArea_PlayerJoin = {
     playerRaceSetCallback(eventData, container) {
         if (!eventData) { console.error("Player Race Set with null data. Something went wrong."); return false; }
         if (!eventData.playerUsername || (typeof eventData.playerUsername !== 'string')) { console.error("Player Race Set with improper name format."); return false; }
-        if (!["Dwarf", "Elf", "Halfling", "Human"].includes(eventData.race)) { console.error("Player Set Race with improper type."); return false; }
+        if (!["Dwarf", "Elf", "Halfling", "Human"].includes(eventData.character.race)) { console.error("Player Set Race with improper type."); return false; }
 
         let playerJoinCard = container.elements.playerJoinCards[eventData.playerIndex];
         this.setPlayerJoinCardMode(playerJoinCard, "ChooseYourClass");
@@ -232,7 +232,7 @@ let GameArea_PlayerJoin = {
     playerClassSetCallback(eventData, container) {
         if (!eventData) { console.error("Player Class Set with null data. Something went wrong."); return false; }
         if (!eventData.playerUsername || (typeof eventData.playerUsername !== 'string')) { console.error("Player Class Set with improper name format."); return false; }
-        if (!["Cleric", "Fighter", "Mage", "Thief"].includes(eventData.class)) { console.error("Player Set Class with improper type."); return false; }
+        if (!["Cleric", "Fighter", "Wizard", "Rogue"].includes(eventData.character.class)) { console.error("Player Set Class with improper type."); return false; }
 
         let playerJoinCard = container.elements.playerJoinCards[eventData.playerIndex];
         this.setPlayerJoinCardMode(playerJoinCard, "ChooseYourName");
@@ -241,7 +241,7 @@ let GameArea_PlayerJoin = {
     playerNameSetCallback(eventData, container) {
         if (!eventData) { console.error("Player Name Set with null data. Something went wrong."); return false; }
         if (!eventData.playerUsername || (typeof eventData.playerUsername !== 'string')) { console.error("Player Name Set with improper name format."); return false; }
-        if (!eventData.name) { console.error("Player Set Name with improper type."); return false; }
+        if (!eventData.character.name) { console.error("Player Set Name with improper type."); return false; }
 
         let playerJoinCard = container.elements.playerJoinCards[eventData.playerIndex];
         this.setPlayerJoinCardMode(playerJoinCard, "CharacterOverview");

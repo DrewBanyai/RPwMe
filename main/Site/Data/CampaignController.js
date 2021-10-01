@@ -15,15 +15,16 @@
 */
 
 const { EventDispatch } = require('../Controllers/EventDispatch')
+const { PlayerCharacter } = require('./PlayerCharacter')
 
 let CAMPAIGN_DATA = {};
 
 const CAMPAIGN_STATUS_LIST = [
     "Generating Campaign Data",
-    "Waiting For Campaign Start"
+    "Waiting For Campaign Start",
+    "Waiting For Players"
 ];
 
-const MaxPlayerCount = 3;
 let CampaignObjectCount = 0;
 
 const CampaignController = {
@@ -78,15 +79,6 @@ const CampaignController = {
     
         CAMPAIGN_DATA.Locations.Landmarks[id] = locationData;
     },
-    CreateNewPlayer(playerUsername, playerIndex) {
-        return {
-            playerUsername: playerUsername,
-            playerIndex: playerIndex,
-            race: null,
-            class: null,
-            name: null
-        };
-    },
     AddCampaignPlayer(playerUsername) {
         if (!CAMPAIGN_DATA) { console.error("CAMPAIGN_DATA is null or invalid!"); return false; }
         if (!CAMPAIGN_DATA.hasOwnProperty("Players")) { console.error("CAMPAIGN_DATA has no Players data!"); return false; }
@@ -95,7 +87,7 @@ const CampaignController = {
 
         for (let i = 0; i < 3; ++i) {
             if (!CAMPAIGN_DATA.Players[i]) {
-                CAMPAIGN_DATA.Players[i] = this.CreateNewPlayer(playerUsername, i);
+                CAMPAIGN_DATA.Players[i] = PlayerCharacter.CreateNewCharacter(playerUsername, i);
                 EventDispatch.SendEvent("Player Added", { playerUsername: playerUsername, playerIndex: i });
                 return true;
             }

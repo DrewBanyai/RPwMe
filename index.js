@@ -22,7 +22,7 @@ const core = require('./main/Site/Messaging/CoreMessaging')
 
 App.whenReady().then(() => {
     windows.initialize()
-    core.setupSendTestCallback();
+    core.setupMessageCallbacks();
     
     App.on('activate', () => {
         if (Object.keys(windowMap).length === 0) windows.initialize()

@@ -33,8 +33,8 @@ const CommandControl = {
     
         "!cleric":          { effect: "Specify your player class as Cleric", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
         "!fighter":         { effect: "Specify your player class as Fighter", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
-        "!mage":            { effect: "Specify your player class as Mage", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
-        "!thief":           { effect: "Specify your player class as Thief", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
+        "!wizard":            { effect: "Specify your player class as Wizard", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
+        "!rogue":           { effect: "Specify your player class as Rogue", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
 
         "!name":            { effect: "Request to specify the given player's character name", who: { viewer: false, player: true, gm: true }, args: { min: 1, max: 10 } },
         "!reroll":          { effect: "Request to re-roll the given player's character stats", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
