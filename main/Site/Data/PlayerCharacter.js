@@ -14,6 +14,7 @@
     limitations under the License.
 */
 
+var { ChooseXFromList } = require('../HelperFunctions/HelperFuncs')
 var { RandIntBetween } = require('../HelperFunctions/Random')
 var { DiceRoller } = require('../HelperFunctions/DiceRoller')
 var { EQUIPMENT, GetEquipmentTriggerList } = require('../Data/OGL_Equipment')
@@ -215,9 +216,7 @@ const PlayerCharacter =
     GetClassTraits(charClass) {
         switch (charClass) {
             case "Cleric":
-                let clericSkill1 = ["HISTORY", "INSIGHT", "MEDICINE", "PERSUASION", "RELIGION"][RandIntBetween(0, 4)];
-                let clericSkill2 = clericSkill1;
-                while (clericSkill1 === clericSkill2) clericSkill2 = ["HISTORY", "INSIGHT", "MEDICINE", "PERSUASION", "RELIGION"][RandIntBetween(0, 4)];
+                let clericSkills = ChooseXFromList(2, ["HISTORY", "INSIGHT", "MEDICINE", "PERSUASION", "RELIGION"]);
 
                 let clericWeaponProfs = GetEquipmentTriggerList(["SIMPLE_MELEE"], []);
                 let clericArmorProfs = GetEquipmentTriggerList([], ["LIGHT_ARMOR", "HEAVY_ARMOR", "SHIELDS"]);
@@ -228,14 +227,11 @@ const PlayerCharacter =
                     WeaponProficiencies: this.CreateWeaponProficiencyData(clericWeaponProfs),
                     ArmorProficiencies: this.CreateArmorProficiencyData(clericArmorProfs),
                     ToolProficiencies: this.CreateToolProficiencyData([]),
-                    SkillProficiencies: this.CreateSkillProficiencies([clericSkill1, clericSkill2]),
+                    SkillProficiencies: this.CreateSkillProficiencies(clericSkills),
                 };
 
             case "Fighter":
-                let skillsPickTwo = ["ACROBATICS", "ANIMAL HANDLING", "ATHLETICS", "HISTORY", "INSIGHT", "INTIMIDATION", "PERCEPTION", "SURVIVAL"];
-                let fighterSkill1 = skillsPickTwo[RandIntBetween(0, skillsPickTwo.length - 1)];
-                let fighterSkill2 = fighterSkill1;
-                while (fighterSkill1 === fighterSkill2) fighterSkill2 = skillsPickTwo[RandIntBetween(0, skillsPickTwo.length - 1)];
+                let fighterSkills = ChooseXFromList(2, ["ACROBATICS", "ANIMAL HANDLING", "ATHLETICS", "HISTORY", "INSIGHT", "INTIMIDATION", "PERCEPTION", "SURVIVAL"]);
 
                 let fighterWeaponProfs = GetEquipmentTriggerList(["SIMPLE_MELEE", "SIMPLE_RANGED", "MARTIAL_MELEE", "MARTIAL_RANGED"], []);
                 let fighterArmorProfs = GetEquipmentTriggerList([], ["LIGHT_ARMOR", "MEDIUM_ARMOR", "HEAVY_ARMOR", "SHIELDS"]);
@@ -256,7 +252,7 @@ const PlayerCharacter =
                     WeaponProficiencies: this.CreateWeaponProficiencyData(fighterWeaponProfs),
                     ArmorProficiencies: this.CreateArmorProficiencyData(fighterArmorProfs),
                     ToolProficiencies: this.CreateToolProficiencyData([]),
-                    SkillProficiencies: this.CreateSkillProficiencies([fighterSkill1, fighterSkill2]),
+                    SkillProficiencies: this.CreateSkillProficiencies(fighterSkills),
                     Notes: [
                         fightingStyleNote,
                         "On your turn, you can use a bonus action to regain hit points equal to 1d10 + your level. Must finish a short or long rest to use this ability again.",
@@ -264,13 +260,32 @@ const PlayerCharacter =
                 };
 
             case "Wizard":
-                return {
+                let wizardSkills = ChooseXFromList(2, ["ARCANA", "HISTORY", "INSIGHT", "INVESTIGATION", "MEDICINE", "RELIGION"]);
 
+                return {
+                    HitDicePerLevel: "1d6",
+                    SavingThrowAdvantages: this.CreateSavingThrowAdvantageData(["INTELLIGENCE", "WISDOM"]),
+                    WeaponProficiencies: this.CreateWeaponProficiencyData(["DAGGER", "DART", "SLING", "QUARTERSTAFF", "CROSSBOW_LIGHT"]),
+                    ArmorProficiencies: this.CreateArmorProficiencyData([]),
+                    ToolProficiencies: this.CreateToolProficiencyData([]),
+                    SkillProficiencies: this.CreateSkillProficiencies(wizardSkills),
+                    Notes: []
                 };
             
             case "Rogue":
-                return {
+                let rogueSkills = ChooseXFromList(4, ["ACROBATICS", "ATHLETICS", "DECEPTION", "INSIGHT", "INTIMIDATION", "INVESTIGATION", "PERCEPTION", "PERFORMANCE", "PERSUASION", "SLEIGHT OF HAND", "STEALTH"]);
 
+                let rogueWeaponProfs = GetEquipmentTriggerList(["SIMPLE_MELEE", "SIMPLE_RANGED"], []).concat(["CROSSBOW_HAND", "LONGSWORD", "RAPIER", "SHORTSWORD"]);
+                let rogueArmorProfs = GetEquipmentTriggerList([], ["LIGHT_ARMOR"]);
+
+                return {
+                    HitDicePerLevel: "1d8",
+                    SavingThrowAdvantages: this.CreateSavingThrowAdvantageData(["DEXTERITY", "INTELLIGENCE"]),
+                    WeaponProficiencies: this.CreateWeaponProficiencyData(rogueWeaponProfs),
+                    ArmorProficiencies: this.CreateArmorProficiencyData(rogueArmorProfs),
+                    ToolProficiencies: this.CreateToolProficiencyData("THIEVESTOOLS"),
+                    SkillProficiencies: this.CreateSkillProficiencies(rogueSkills),
+                    Notes: []
                 };
         }
     },
@@ -278,7 +293,6 @@ const PlayerCharacter =
         switch (charClass) {
             case "Cleric": return (modifiers) => { return 8 + modifiers.CONSTITUTION; }
             case "Fighter": return (modifiers) => { return 10 + modifiers.CONSTITUTION; }
-
             case "Wizard": return (modifiers) => { return 8 + modifiers.CONSTITUTION; }
             case "Rogue": return (modifiers) => { return 8 + modifiers.CONSTITUTION; }
         }
@@ -287,8 +301,7 @@ const PlayerCharacter =
         switch (charClass) {
             case "Cleric": return (modifiers) => { return DiceRoller.RollString("1d8").total + modifiers.CONSTITUTION; }
             case "Fighter": return (modifiers) => { return DiceRoller.RollString("1d10").total + modifiers.CONSTITUTION; }
-
-            case "Wizard": return (modifiers) => (modifiers) => { return DiceRoller.RollString("1d8").total + modifiers.CONSTITUTION; }
+            case "Wizard": return (modifiers) => (modifiers) => { return DiceRoller.RollString("1dd").total + modifiers.CONSTITUTION; }
             case "Rogue": return (modifiers) => (modifiers) => { return DiceRoller.RollString("1d8").total + modifiers.CONSTITUTION; }
         }
     },
@@ -321,8 +334,7 @@ const PlayerCharacter =
                 return (character) => {
                     let equipment = [];
 
-                    let choice1 = RandIntBetween(0, 1);
-                    if (choice1 === 0) equipment.push({ item: "Chain Mail", count: 1 });
+                    if (RandIntBetween(0, 1) === 0) equipment.push({ item: "Chain Mail", count: 1 });
                     else {
                         equipment.push({ item: "Leather Armor", count: 1 });
                         equipment.push({ item: "Longbow", count: 1 });
@@ -330,8 +342,7 @@ const PlayerCharacter =
                     }
 
                     let martialWeapons = GetEquipmentTriggerList(["MARTIAL_MELEE"], []);
-                    let choice2 = RandIntBetween(0, 1);
-                    if (choice2 === 0) {
+                    if (RandIntBetween(0, 1) === 0) {
                         equipment.push({ item: martialWeapons[RandIntBetween(0, martialWeapons.length - 1)], count: 1 });
                         equipment.push({ item: "Shield", count: 1 });
                     }
@@ -343,15 +354,13 @@ const PlayerCharacter =
                         equipment.push({ item: martialWeapon2, count: 1 });
                     }
 
-                    let choice3 = RandIntBetween(0, 1);
-                    if (choice3 === 0) {
+                    if (RandIntBetween(0, 1) === 0) {
                         equipment.push({ item: "Light Crossbow", count: 1 });
                         equipment.push({ item: "Bolt", count: 20 });
                     }
                     else equipment.push({ item: "Handaxe", count: 2 });
 
-                    let choice4 = RandIntBetween(0, 1);
-                    if (choice4 === 0) equipment.push({ item: "Dungeoneer's Pack", count: 1 });
+                    if (RandIntBetween(0, 1) === 0) equipment.push({ item: "Dungeoneer's Pack", count: 1 });
                     else equipment.push({ item: "Explorer's Pack", count: 1 });
 
                     return equipment;
@@ -360,12 +369,41 @@ const PlayerCharacter =
             case "Wizard":
                 return (character) => {
                     let equipment = [];
+
+                    if (RandIntBetween(0, 1) === 0) equipment.push({ item: "Quarterstaff", count: 1 });
+                    else equipment.push({ item: "Dagger", count: 1 });
+
+                    if (RandIntBetween(0, 1) === 0) equipment.push({ item: "Component Pouch", count: 1 });
+                    else equipment.push({ item: "Arcane Focus", count: 1 });
+
+                    if (RandIntBetween(0, 1) === 0) equipment.push({ item: "Scholar's Pack", count: 1 });
+                    else equipment.push({ item: "Explorer's Pack", count: 1 });
+
+                    equipment.push({ item: "Spellbook", count: 1 });
+
                     return equipment;
                 }
             
             case "Rogue":
                 return (character) => {
                     let equipment = [];
+
+                    if (RandIntBetween(0, 1) === 0) equipment.push({ item: "Rapier", count: 1 });
+                    else equipment.push({ item: "Shortsword", count: 1 });
+
+                    if (RandIntBetween(0, 1) === 0) {
+                        equipment.push({ item: "Shortbow", count: 1 });
+                        equipment.push({ item: "Arrow", count: 20 });
+                    }
+                    else equipment.push({ item: "Shortsword", count: 1 });
+
+                    let pack = ChooseXFromList(1, ["Burglar's Pack", "Dungeoneer's Pack", "Explorer's Pack"])[0];
+                    equipment.push({ item: pack, count: 1 });
+
+                    equipment.push({ item: "Leather Armor", count: 1 });
+                    equipment.push({ item: "Dagger", count: 2 });
+                    equipment.push({ item: "Thieve's Tools", count: 1 });
+
                     return equipment;
                 }
         }

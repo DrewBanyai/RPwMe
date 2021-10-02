@@ -16,7 +16,7 @@
 
 var { LOCATION_NAMES } = require('../Data/LocationNames')
 var { CITY_DATA, GetRandomBusinessOfType } = require('../Data/CityData')
-var { Random } = require('../HelperFunctions/Random')
+var { Random, RandIntBetween } = require('../HelperFunctions/Random')
 
 let usedLocationNames = [];
 const ClearUsedLocationNames = () => { usedLocationNames = []; }
@@ -52,5 +52,18 @@ const GenerateBusinesses = (businessTypes) => {
     return businessList;
 }
 
+const ChooseXFromList = (count, list) => {
+    if (count <= 0) { console.error("Attempting to user ChooseXFromList to create an empty or negative size set!"); return []; }
+    if (count >= list.length) { console.error("Attempting to use ChooseXFromList to grab an entire list, or a set larger that the list!"); return []; }
+
+    let returnList = [];
+    for (let i = 0; i < count; ++i) {
+        let itemIndex = RandIntBetween(0, list.length - 1);
+        while (returnList.includes(list[itemIndex])) itemIndex = RandIntBetween(0, list.length - 1);
+        returnList.push(list[itemIndex]);
+    }
+    return returnList;
+}
+
 //  Module Exports
-module.exports = { ClearUsedLocationNames, GetLocationName, ClearUsedPositions, GetLocationPosition, GenerateBusinesses }
+module.exports = { ClearUsedLocationNames, GetLocationName, ClearUsedPositions, GetLocationPosition, GenerateBusinesses, ChooseXFromList }
