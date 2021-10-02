@@ -26,5 +26,5 @@ module.exports = {
         ADMIN: 'Site/admin.js',
         GAME: 'Site/game.js'
     },
-    DEBUG: false
+    DEBUG: []
 }

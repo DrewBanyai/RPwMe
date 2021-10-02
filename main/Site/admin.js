@@ -41,7 +41,7 @@ function InitTwitchBot() {
     let username = (SETTINGS && SETTINGS.TWITCH_DATA && SETTINGS.TWITCH_DATA.USERNAME) ? SETTINGS.TWITCH_DATA.USERNAME : null
     let token = (SETTINGS && SETTINGS.TWITCH_DATA && SETTINGS.TWITCH_DATA.TOKEN) ? SETTINGS.TWITCH_DATA.TOKEN : null;
     let channel = (SETTINGS && SETTINGS.TWITCH_DATA && SETTINGS.TWITCH_DATA.CHANNEL) ? SETTINGS.TWITCH_DATA.CHANNEL : null;
-    TwitchControl.InitializeTwitchControl(username, token, channel, CONFIG.DEBUG);
+    TwitchControl.InitializeTwitchControl(username, token, channel, CONFIG.DEBUG.includes("TWITCH"));
     
     //  Set up the game master's ID in the Campaign Controller
     CampaignController.SetCampaignGameMaster(TwitchControl.ConnectionData.Channel.toLowerCase());

@@ -99,7 +99,7 @@ const CommandControl = {
     CommandRequest: (username, commandString, userType) => {
         let commandValid = CommandControl.CheckIsCommandValid(commandString, userType)
         if (!commandValid || !commandValid.valid) { 
-            if (CONFIG.DEBUG) console.log("Command not valid: ", '"' + commandValid.reason + '"');
+            if (CONFIG.DEBUG.includes("COMMANDS")) console.log("Command not valid: ", '"' + commandValid.reason + '"');
             return false;
         }
 
@@ -107,7 +107,7 @@ const CommandControl = {
         let commandData = CommandControl.GetCommandData(commandParsed.id);
     
         let eventData = { user: username, command: commandParsed.id, data: commandData, args: commandParsed.args };
-        if (CONFIG.DEBUG) console.log("Command event: ", commandParsed.id, eventData);
+        if (CONFIG.DEBUG.includes("COMMANDS")) console.log("Command event: ", commandParsed.id, eventData);
         EventDispatch.SendEvent(commandParsed.id, eventData);
         return true;
     },

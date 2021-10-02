@@ -23,9 +23,9 @@ const path = require('path')
 var windowMap = {}
 
 function initialize () {
-    var windowWidth = CONFIG.WINDOW_WIDTH + (CONFIG.DEBUG ? 600 : 0);
-    createWindow("ADMIN", `${CONFIG.APP_NAME} - Admin Window`, windowWidth, CONFIG.WINDOW_HEIGHT, CONFIG.DEBUG, false);
-    createWindow("GAME", `${CONFIG.APP_NAME} - Game Window`, windowWidth, CONFIG.WINDOW_HEIGHT, CONFIG.DEBUG, false);
+    var windowWidth = CONFIG.WINDOW_WIDTH + (CONFIG.DEBUG.includes("CONSOLE") ? 600 : 0);
+    createWindow("ADMIN", `${CONFIG.APP_NAME} - Admin Window`, windowWidth, CONFIG.WINDOW_HEIGHT, CONFIG.DEBUG.includes("CONSOLE"), false);
+    createWindow("GAME", `${CONFIG.APP_NAME} - Game Window`, windowWidth, CONFIG.WINDOW_HEIGHT, CONFIG.DEBUG.includes("CONSOLE"), false);
 }
 
 function createWindow(windowID, title, width, height, devTools, menu) {
@@ -48,7 +48,7 @@ function createWindow(windowID, title, width, height, devTools, menu) {
     if (!menu) newWindow.setMenuBarVisibility(false);
 
     //  If the program is in debug mode, show the dev tools menu
-    if (CONFIG.DEBUG) newWindow.webContents.openDevTools()
+    if (CONFIG.DEBUG.includes("CONSOLE")) newWindow.webContents.openDevTools()
 
     //  Load in the HTML file for this window
     newWindow.loadFile(CONFIG.INDEX[windowID])
