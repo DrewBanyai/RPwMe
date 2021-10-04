@@ -93,16 +93,22 @@ const EQUIPMENT = {
         { name: "Burglar's Pack", trigger: "BURGLARSPACK", cost: 1600, type: "Tools", weight: 47.5, notes: "Includes a backpack, a bag of 1,000 ball bearings, 10 feet of string, a bell, 5 candles, a crowbar, a hammer, 10 pitons, a hooded lantern, 2 flasks of oil, 5 days rations, a tinderbox, and a waterskin. The pack also has 50 feet of hempen rope strapped to the side of it." },
         { name: "Dungeoneer's Pack", trigger: "DUNGEONEERSPACK", cost: 1200, type: "Tools", weight: 61.5, notes: "Includes a backpack, a crowbar, a hammer, 10 pitons, 10 torches, a tinderbox, 10 days of rations, and a waterskin. The pack also has 50 feet of hempen rope strapped to the side of it." },
         { name: "Explorer's Pack", trigger: "EXPLORERSPACK", cost: 1000, type: "Tools", weight: 59, notes: "Includes a backpack, a bedroll, a mess kit, a tinderbox, 10 torches, 10 days of rations, and a waterskin. The pack also has 50 feet of hempen rope strapped to the side of it." },
-    ]
+    ],
+    GetEquipmentTriggerList(weaponList, armorList) {
+        //  Create a list of weapon and armor triggers and return it
+        let list = [];
+        weaponList.forEach(weaponKey => { for (let entry in EQUIPMENT.WEAPONS[weaponKey]) list.push(EQUIPMENT.WEAPONS[weaponKey][entry].trigger); });
+        armorList.forEach(armorKey => { for (let entry in EQUIPMENT.ARMOR[armorKey]) list.push(EQUIPMENT.ARMOR[armorKey][entry].trigger); });
+        return list;
+    },
+    GetEquipmentNameList(weaponList, armorList) {
+        //  Create a list of weapon and armor triggers and return it
+        let list = [];
+        weaponList.forEach(weaponKey => { for (let entry in EQUIPMENT.WEAPONS[weaponKey]) list.push(EQUIPMENT.WEAPONS[weaponKey][entry].name); });
+        armorList.forEach(armorKey => { for (let entry in EQUIPMENT.ARMOR[armorKey]) list.push(EQUIPMENT.ARMOR[armorKey][entry].name); });
+        return list;
+    },
 };
 
-let GetEquipmentTriggerList = (weaponList, armorList) => {
-    //  Create a list of weapon and armor triggers and return it
-    let list = [];
-    weaponList.forEach(weaponKey => { for (let entry in EQUIPMENT.WEAPONS[weaponKey]) list.push(EQUIPMENT.WEAPONS[weaponKey][entry].trigger); });
-    armorList.forEach(armorKey => { for (let entry in EQUIPMENT.ARMOR[armorKey]) list.push(EQUIPMENT.ARMOR[armorKey][entry].trigger); });
-    return list;
-}
-
 //  Module Exports
-module.exports = { EQUIPMENT, GetEquipmentTriggerList }
+module.exports = { EQUIPMENT }

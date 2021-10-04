@@ -14,7 +14,8 @@
     limitations under the License.
 */
 
-const { EventDispatch } = require('../Controllers/EventDispatch')
+const { EventDispatch } = require('../Controllers/EventDispatch');
+const { RandIntBetween } = require('../HelperFunctions/Random');
 const { PlayerCharacter } = require('./PlayerCharacter')
 
 let CAMPAIGN_DATA = {};
@@ -143,6 +144,9 @@ const CampaignController = {
         if (!gmUsername || (typeof gmUsername !== 'string')) { console.error("Attempting to set Game Master with invalid data."); return; }
     
         CAMPAIGN_DATA.GameMaster = gmUsername;
+    },
+    DetermineCharacterLevels() {
+        CAMPAIGN_DATA.CharacterLevel = RandIntBetween(3, 8);
     },
     GetCampaignData() {
         return CAMPAIGN_DATA;

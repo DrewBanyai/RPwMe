@@ -242,17 +242,21 @@ let AdminArea_Players = {
             container.elements.playerDataDisplay.show(true);
             AdminArea_Players.UpdatePlayerData(container);
 
+            CampaignController.DetermineCharacterLevels();
             adminMessages.sendCampaignToGameScreen(CampaignController.GetCampaignData());
             adminMessages.sendPlayerJoinAllowedFlag();
             CampaignController.SetCampaignStatus("Waiting For Players");
-
         });
 
         EventDispatch.AddEventHandler("Player Added", (eventType, eventData) => { adminMessages.sendPlayerJoinedEvent(eventData); });
         EventDispatch.AddEventHandler("Player Removed", (eventType, eventData) => { adminMessages.sendPlayerLeftEvent(eventData); });
         EventDispatch.AddEventHandler("Player Race Set", (eventType, eventData) => { adminMessages.sendPlayerRaceSetEvent(eventData); });
-        EventDispatch.AddEventHandler("Player Class Set", (eventType, eventData) => { adminMessages.sendPlayerClassSetEvent(eventData); });
-        EventDispatch.AddEventHandler("Player Name Set", (eventType, eventData) => { adminMessages.sendPlayerNameSetEvent(eventData); });
+        EventDispatch.AddEventHandler("Player Class Set", (eventType, eventData) => { adminMessages.sendPlayerClassSetEvent(eventData); })
+
+        EventDispatch.AddEventHandler("Player Name Set", (eventType, eventData) => {
+            PlayerCharacter.DefineCharacter(eventData.character);
+            adminMessages.sendPlayerNameSetEvent(eventData);
+        });
     },
 
     AddActivePlayerEntry(container, eventData) {
@@ -343,9 +347,6 @@ let AdminArea_Players = {
         if (player.character.Name !== null) { console.warn("Player attempting to change their name once it is already set."); return false; }
 
         player.character.Name = eventData.args.join(" ");
-        Object.assign(player.character, PlayerCharacter.GetRaceTraits(player.character.Race));
-        Object.assign(player.character, PlayerCharacter.GetClassTraits(player.character.Class));
-        Object.assign(player.character.Inventory, PlayerCharacter.GetClassStartingEquipmentFunc(player.character.Class)(player.character));
         EventDispatch.SendEvent("Player Name Set", { playerUsername: eventData.user, playerIndex: player.playerIndex, character: player.character });
     },
 
