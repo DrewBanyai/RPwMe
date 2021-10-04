@@ -24,6 +24,7 @@ var { ChooseXFromList } = require('../../HelperFunctions/HelperFuncs')
 var { RandIntBetween } = require('../../HelperFunctions/Random')
 
 const CLASSES = {
+    CharacterLevel: RandIntBetween(3, 8),
     Cleric: {
         DetermineAbilityScores() {
             const abilityScoreChoices = [
@@ -41,8 +42,8 @@ const CLASSES = {
             return ChooseXFromList(1, abilityScoreChoices)[0];
         },
         GetStartingSkillProficiencies() { return ChooseXFromList(2, ["HISTORY", "INSIGHT", "MEDICINE", "PERSUASION", "RELIGION"]); },
-        GetClassHitPointsAtFirstLevel() { return 8 + modifiers.CONSTITUTION; },
-        GetClassHitPointsAfterFirstLevel(modifiers) { return DiceRoller.RollString("1d8").total + modifiers.CONSTITUTION; },
+        GetClassHitPointsAtFirstLevel(modifiers) { return 8 + modifiers.Constitution; },
+        GetClassHitPointsAfterFirstLevel(modifiers) { return DiceRoller.RollString("1d8").total + modifiers.Constitution; },
         GetClassTraits() {
             let clericSkills = CLASSES.Cleric.GetStartingSkillProficiencies();
 
@@ -97,8 +98,8 @@ const CLASSES = {
             return ChooseXFromList(1, abilityScoreChoices)[0];
         },
         GetStartingSkillProficiencies() { return ChooseXFromList(2, ["ACROBATICS", "ANIMAL HANDLING", "ATHLETICS", "HISTORY", "INSIGHT", "INTIMIDATION", "PERCEPTION", "SURVIVAL"]); },
-        GetClassHitPointsAtFirstLevel() { return 10 + modifiers.CONSTITUTION; },
-        GetClassHitPointsAfterFirstLevel(modifiers) { return DiceRoller.RollString("1d10").total + modifiers.CONSTITUTION; },
+        GetClassHitPointsAtFirstLevel(modifiers) { return 10 + modifiers.Constitution; },
+        GetClassHitPointsAfterFirstLevel(modifiers) { return DiceRoller.RollString("1d10").total + modifiers.Constitution; },
         GetClassTraits() {
             let fighterSkills = CLASSES.Fighter.GetStartingSkillProficiencies();
 
@@ -180,8 +181,8 @@ const CLASSES = {
             return ChooseXFromList(1, abilityScoreChoices)[0];
         },
         GetStartingSkillProficiencies() { return ChooseXFromList(4, ["ACROBATICS", "ATHLETICS", "DECEPTION", "INSIGHT", "INTIMIDATION", "INVESTIGATION", "PERCEPTION", "PERFORMANCE", "PERSUASION", "SLEIGHT OF HAND", "STEALTH"]); },
-        GetClassHitPointsAtFirstLevel() { return 8 + modifiers.CONSTITUTION; },
-        GetClassHitPointsAfterFirstLevel(modifiers) { return DiceRoller.RollString("1d8").total + modifiers.CONSTITUTION; },
+        GetClassHitPointsAtFirstLevel(modifiers) { return 8 + modifiers.Constitution; },
+        GetClassHitPointsAfterFirstLevel(modifiers) { return DiceRoller.RollString("1d8").total + modifiers.Constitution; },
         GetClassTraits() {
             let rogueSkills = CLASSES.Rogue.GetStartingSkillProficiencies();
 
@@ -237,8 +238,8 @@ const CLASSES = {
             return ChooseXFromList(1, abilityScoreChoices)[0];
         },
         GetStartingSkillProficiencies() { return ChooseXFromList(2, ["ARCANA", "HISTORY", "INSIGHT", "INVESTIGATION", "MEDICINE", "RELIGION"]); },
-        GetClassHitPointsAtFirstLevel() { return 8 + modifiers.CONSTITUTION; },
-        GetClassHitPointsAfterFirstLevel(modifiers) { return DiceRoller.RollString("1d8").total + modifiers.CONSTITUTION; },
+        GetClassHitPointsAtFirstLevel(modifiers) { return 8 + modifiers.Constitution; },
+        GetClassHitPointsAfterFirstLevel(modifiers) { return DiceRoller.RollString("1d8").total + modifiers.Constitution; },
         GetClassTraits() {
             let wizardSkills = CLASSES.Wizard.GetStartingSkillProficiencies();
 

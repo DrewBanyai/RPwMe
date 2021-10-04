@@ -15,7 +15,8 @@
 */
 
 var { RACES } = require('./OGL/Races')
-var { CLASSES } = require('./OGL/Classes')
+var { CLASSES } = require('./OGL/Classes');
+const { ABILITY_SCORES } = require('./OGL/AbilityScores');
 
 const PlayerCharacter = 
 {
@@ -27,18 +28,35 @@ const PlayerCharacter =
                 Race: null,
                 Class: null,
                 Name: null,
-                Inventory: []
+                Level: 0,
+                Inventory: [],
+                Health: {
+                    maximum: -1,
+                    current: -1,
+                    temporary: -1
+                }
             }
         }
     },
     DefineCharacter(character) {
-        //  Assign race and class traits, then determine the character Ability Score based on requirements of the class
+        //  Assign the character race and class traits
         Object.assign(character, RACES[character.Race].GetRacialTraits());
         Object.assign(character, CLASSES[character.Class].GetClassTraits());
+
+        //  Determine the character Ability Score based on requirements of the class, and implement race adjustments
         character.AbilityScores = CLASSES[character.Class].DetermineAbilityScores();
+        ABILITY_SCORES.AdjustScores(character.AbilityScores, RACES[character.Race].GetAbilityScoreChanges());
 
         //  Note: Assign inventory AFTER Ability Scores, so that items can be decided based on score (dexterity fighter vs strength fighter, for example)
+        character.Inventory = [];
         Object.assign(character.Inventory, CLASSES[character.Class].GetClassStartingEquipment(character));
+
+        //  Assign the player's level, then their health based on class and level
+        character.Level = CLASSES.CharacterLevel;
+        character.AbilityScoreModifiers = ABILITY_SCORES.GetModifierBlock(character.AbilityScores);
+        let health = CLASSES[character.Class].GetClassHitPointsAtFirstLevel(character.AbilityScoreModifiers);
+        for (let i = 1; i < character.Level; ++i) health += CLASSES[character.Class].GetClassHitPointsAfterFirstLevel(character.AbilityScoreModifiers);
+        character.Health = { maximum: health, current: health, temporary: 0 };
     },
 }
 

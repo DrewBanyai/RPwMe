@@ -145,9 +145,6 @@ const CampaignController = {
     
         CAMPAIGN_DATA.GameMaster = gmUsername;
     },
-    DetermineCharacterLevels() {
-        CAMPAIGN_DATA.CharacterLevel = RandIntBetween(3, 8);
-    },
     GetCampaignData() {
         return CAMPAIGN_DATA;
     },

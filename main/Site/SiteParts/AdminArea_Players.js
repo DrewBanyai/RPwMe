@@ -242,7 +242,6 @@ let AdminArea_Players = {
             container.elements.playerDataDisplay.show(true);
             AdminArea_Players.UpdatePlayerData(container);
 
-            CampaignController.DetermineCharacterLevels();
             adminMessages.sendCampaignToGameScreen(CampaignController.GetCampaignData());
             adminMessages.sendPlayerJoinAllowedFlag();
             CampaignController.SetCampaignStatus("Waiting For Players");

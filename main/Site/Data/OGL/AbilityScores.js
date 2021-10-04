@@ -51,6 +51,12 @@ const ABILITY_SCORES = {
             case 30:    return 10;
         }
     },
+    GetModifierBlock(abilityScores) {
+        let data = {};
+        for (let score in abilityScores) { data[score] = this.GetModifier(abilityScores[score]); }
+        return data;
+    },
+    AdjustScores(characterScores, adjustment) { for (let score in characterScores) characterScores[score] += adjustment[score]; }
 };
 
 //  Module Exports
