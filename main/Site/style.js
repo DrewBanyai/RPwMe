@@ -74,7 +74,6 @@ module.exports = {
     lineHeight: "41px",
     textAlign: "center",
   },
-
   PLAYER_JOIN_CARD_CHOICE: {
     fontSize: "32px",
     width: "282px",
@@ -83,7 +82,6 @@ module.exports = {
     lineHeight: "41px",
     textAlign: "center",
   },
-
   PLAYER_JOIN_CARD_RANDOM: {
     fontSize: "18px",
     width: "282px",
@@ -92,4 +90,20 @@ module.exports = {
     lineHeight: "41px",
     textAlign: "center",
   },
+  PLAYER_JOIN_CHARACTER_NAMETAG: {
+    fontSize: "18px",
+    width: "282px",
+    position: "absolute",
+    top: "48px",
+    left: "10px",
+    lineHeight: "41px",
+    textAlign: "left",
+  },
+  PLAYER_JOIN_CHARACTER_ABILITY_SCORE: {
+    fontSize: "16px",
+    width: "20px",
+    position: "absolute",
+    lineHeight: "41px",
+    textAlign: "left",
+  }
 }

@@ -20,6 +20,7 @@ const { Container, Label } = require('../Components/ArcadiaJS')
 const { pxFromInt } = require('../HelperFunctions/pxFromInt')
 const { HandwrittenNote } = require('../Components/HandwrittenNote')
 const { EventDispatch } = require('../Controllers/EventDispatch')
+const { AbilityScoreBlock } = require('../Components/AbilityScoreBlock')
 
 const playerJoinCardPos = {
     0: { x: 226, y: 240 },
@@ -78,14 +79,10 @@ let GameArea_PlayerJoin = {
         })
         container.appendChild(playerJoinCard);
 
-        //  Create different mode element roots
-        for (var modeIndex in playerJoinCardModes) {
-            let mode = playerJoinCardModes[modeIndex];
-            playerJoinCard.appendChild(playerJoinCard[mode] = Container.create({ id: mode + "_" + playerIndex.toString(), style: { display: "none" } }));
-        }
+        playerJoinCard.elements = { nameTagBox: null, remainingCard: null, };
 
         //  Create name tag node
-        playerJoinCard.NameTagBox = Container.create({
+        playerJoinCard.elements.nameTagBox = Container.create({
             id: "NameTagBox_" + playerIndex.toString(),
             style: {
                 width: "100%",
@@ -93,7 +90,23 @@ let GameArea_PlayerJoin = {
                 borderBottom: "5px dashed rgb(130, 130, 130)"
             }
         });
-        playerJoinCard.appendChild(playerJoinCard.NameTagBox);
+        playerJoinCard.appendChild(playerJoinCard.elements.nameTagBox);
+
+        //  Create remaining card node
+        playerJoinCard.elements.remainingCard = Container.create({
+            id: "RemainingCard_" + playerIndex.toString(),
+            style: {
+                width: "100%",
+                height: "354px",
+            }
+        });
+        playerJoinCard.appendChild(playerJoinCard.elements.remainingCard);
+
+        //  Create different mode element roots
+        for (var modeIndex in playerJoinCardModes) {
+            let mode = playerJoinCardModes[modeIndex];
+            playerJoinCard.elements.remainingCard.appendChild(playerJoinCard[mode] = Container.create({ id: mode + "_" + playerIndex.toString(), style: { display: "none" } }));
+        }
 
         playerJoinCard.NameTag = HandwrittenNote.create({
             id: "PlayerJoinCardNameTag_" + playerIndex.toString(),
@@ -101,7 +114,7 @@ let GameArea_PlayerJoin = {
             attributes: { value: "Type '!join' to play", },
             writeDelay: 30,
         });
-        playerJoinCard.NameTagBox.appendChild(playerJoinCard.NameTag);
+        playerJoinCard.elements.nameTagBox.appendChild(playerJoinCard.NameTag);
 
         //  Create the elements for the different card modes
         this.createCardModeElements_ChooseYourRace(playerJoinCard);
@@ -187,9 +200,19 @@ let GameArea_PlayerJoin = {
     createCardModeElements_CharacterOverview(card) {
         let container = card["CharacterOverview"];
 
-        let modeTitleLabel = HandwrittenNote.create({ style: STYLE.PLAYER_JOIN_CARD_CHOICE, attributes: { value: "Character Overview" }, writeDelay: 30, });
-        modeTitleLabel.style.top = "56px";
-        container.appendChild(modeTitleLabel);
+        container.elements = { charNameTag: null, charStatBlock: null };
+
+        container.elements.charNameTag = HandwrittenNote.create({ style: STYLE.PLAYER_JOIN_CHARACTER_NAMETAG, attributes: { value: "UNDEFINED" }, writeDelay: 30, });
+        container.appendChild(container.elements.charNameTag);
+
+        container.elements.charStatBlock = AbilityScoreBlock.create({
+            style: {
+                position: "absolute",
+                left: "134px",
+                top: "80px",
+            }
+        });
+        container.appendChild(container.elements.charStatBlock);
     },
 
     setPlayerJoinCardMode(card, mode) {
@@ -198,6 +221,15 @@ let GameArea_PlayerJoin = {
             card[modeName].style.display = "none";
         }
         card[mode].style.display = "block";
+    },
+
+    setPlayerCharacterData(card, charData) {
+        //  DEBUG
+        console.log("CHARACTER:", charData);
+        //  DEBUG
+
+        card["CharacterOverview"].elements.charNameTag.setValue(charData.Name + ", " + charData.Race + " " + charData.Class + " (level " + charData.Level.toString() + ")");
+        AbilityScoreBlock.setAbilityScores(card["CharacterOverview"].elements.charStatBlock, charData.AbilityScores, charData.AbilityScoreModifiers);
     },
 
     playerJoinedCallback(eventData, container) {
@@ -243,8 +275,8 @@ let GameArea_PlayerJoin = {
         if (!eventData.playerUsername || (typeof eventData.playerUsername !== 'string')) { console.error("Player Name Set with improper name format."); return false; }
         if (!eventData.character.Name) { console.error("Player Set Name with improper type."); return false; }
 
-        console.log("INVENTORY:", eventData.character);
         let playerJoinCard = container.elements.playerJoinCards[eventData.playerIndex];
+        this.setPlayerCharacterData(playerJoinCard, eventData.character);
         this.setPlayerJoinCardMode(playerJoinCard, "CharacterOverview");
     },
 };
