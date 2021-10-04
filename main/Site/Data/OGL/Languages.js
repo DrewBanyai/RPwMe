@@ -41,7 +41,17 @@ const LANGUAGES = {
         //  Fill in the given keys as true
         for (let i = 0; i < knownList.length; ++i) data[knownList[i]] = true;
         return data;
-    }
+    },
+    GetLanguageTriggerList() {
+        let list = [];
+        for (let i in this.List) { list.push(this.List[i].trigger); }
+        return list;
+    },
+    GetLanguageNameList() {
+        let list = [];
+        for (let i in this.List) { list.push(this.List[i].name); }
+        return list;
+    },
 };
 
 //  Module Exports

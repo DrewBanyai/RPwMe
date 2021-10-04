@@ -20,6 +20,7 @@ var { LANGUAGES } = require('./Languages')
 var { SKILLS } = require('./Skills')
 
 var { RandIntBetween } = require('../../HelperFunctions/Random')
+const { ChooseXFromList } = require('../../HelperFunctions/HelperFuncs')
 
 const RACES = {
     Dwarf: {
@@ -92,21 +93,22 @@ const RACES = {
     Human: {
         GetAbilityScoreChanges() { return ABILITY_SCORES.CreateAbilityScoreBlock(1, 1, 1, 1, 1, 1); },
         GetRacialTraits() {
+            let languageTriggers = LANGUAGES.GetLanguageTriggerList();
+            languageTriggers = languageTriggers.filter((l) => { return l !== "Common" });
+
             return {
                 SavingThrowAdvantages: CHARACTER.CreateSavingThrowAdvantageMap([]),
                 WeaponProficiencies: CHARACTER.CreateWeaponProficiencyData([]),
                 ArmorProficiencies: CHARACTER.CreateArmorProficiencyData([]),
                 ToolProficiencies: CHARACTER.CreateToolProficiencyData([]),
-                Languages: LANGUAGES.CreateCharacterLanguages(["COMMON"]),
+                Languages: LANGUAGES.CreateCharacterLanguages(["COMMON", ChooseXFromList(1, languageTriggers)[0]]),
                 SkillProficiencies: CHARACTER.CreateCharacterSkillProficiencies([]),
                 Age: RandIntBetween(20, 50),
                 Alignment: "Neutral",
                 Size: "Medium",
                 Speed: 30,
                 Attributes: CHARACTER.CreateCharacterAttributesData(0),
-                Notes: [
-                    "Can pick 1 language of the players choice to learn aside from Common."
-                ]
+                Notes: []
             };
         },
     }
