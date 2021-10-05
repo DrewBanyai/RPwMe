@@ -35,6 +35,7 @@ const AbilityScoreBlock = {
         container.elements = {
             ScoreTypes: { Strength: null, Constitution: null, Dexterity: null, Intelligence: null, Wisdom: null, Charisma: null },
             ScoreValues: { Strength: null, Constitution: null, Dexterity: null, Intelligence: null, Wisdom: null, Charisma: null },
+            Divider: null,
             ScoreMods: { Strength: null, Constitution: null, Dexterity: null, Intelligence: null, Wisdom: null, Charisma: null },
         };
 
@@ -46,12 +47,17 @@ const AbilityScoreBlock = {
             container.elements.ScoreTypes[i].setValue(i);
             container.appendChild(container.elements.ScoreTypes[i]);
         }
+
         for (let i in container.elements.ScoreValues) {
             container.elements.ScoreValues[i] = HandwrittenNote.create({ id: "ValuesLabel_" + i, style: STYLE.PLAYER_JOIN_CHARACTER_ABILITY_SCORE, writeDelay: 30, });
             Object.assign(container.elements.ScoreValues[i].style, { top: ScoreHeight[i], left: "92px" });
             container.elements.ScoreValues[i].setValue("8");
             container.appendChild(container.elements.ScoreValues[i]);
         }
+
+        container.elements.Divider = Container.create({ style: { height: "86px", borderRight: "2px solid " + STYLE.GAME_WINDOW_PEN_WRITING_COLOR, position: "absolute", left: "116px", top: "11px", } });
+        container.appendChild(container.elements.Divider);
+
         for (let i in container.elements.ScoreMods) {
             container.elements.ScoreMods[i] = HandwrittenNote.create({ id: "ModsLabel_" + i, style: STYLE.PLAYER_JOIN_CHARACTER_ABILITY_SCORE, writeDelay: 30, });
             Object.assign(container.elements.ScoreMods[i].style, { top: ScoreHeight[i], left: "126px" });

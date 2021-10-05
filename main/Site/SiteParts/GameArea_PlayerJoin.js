@@ -16,11 +16,13 @@
 
 const CONFIG = require('../../config')
 const STYLE = require('../style')
-const { Container, Label } = require('../Components/ArcadiaJS')
+const { CLASSES } = require('../Data/OGL/Classes')
+const { Container, Image } = require('../Components/ArcadiaJS')
 const { pxFromInt } = require('../HelperFunctions/pxFromInt')
 const { HandwrittenNote } = require('../Components/HandwrittenNote')
 const { EventDispatch } = require('../Controllers/EventDispatch')
 const { AbilityScoreBlock } = require('../Components/AbilityScoreBlock')
+const { EQUIPMENT } = require('../Data/OGL/Equipment')
 
 const playerJoinCardPos = {
     0: { x: 226, y: 240 },
@@ -200,10 +202,28 @@ let GameArea_PlayerJoin = {
     createCardModeElements_CharacterOverview(card) {
         let container = card["CharacterOverview"];
 
-        container.elements = { charNameTag: null, charStatBlock: null };
+        container.elements = { charNameTag: null, charPortrait: null, charStatBlock: null, weaponOfChoice: null };
 
-        container.elements.charNameTag = HandwrittenNote.create({ style: STYLE.PLAYER_JOIN_CHARACTER_NAMETAG, attributes: { value: "UNDEFINED" }, writeDelay: 30, });
+        container.elements.charNameTag = HandwrittenNote.create({ style: STYLE.PLAYER_JOIN_CHARACTER_NAMETAG, writeDelay: 30, });
         container.appendChild(container.elements.charNameTag);
+
+        let portraitContainer = Container.create({
+            id: "PortraitContainer",
+            style: {
+                width: "100px",
+                height: "100px",
+                borderRadius: "6px",
+                overflow: "hidden",
+                border: "2px solid rgb(0, 0, 0, 0.65)",
+                position: "absolute",
+                left: "18px",
+                top: "80px",
+            },
+        });
+        container.appendChild(portraitContainer);
+
+        container.elements.charPortrait = Image.create({ id: "PortraitImage", style: { width: "100%", width: "100%" }, });
+        portraitContainer.appendChild(container.elements.charPortrait);
 
         container.elements.charStatBlock = AbilityScoreBlock.create({
             style: {
@@ -213,6 +233,9 @@ let GameArea_PlayerJoin = {
             }
         });
         container.appendChild(container.elements.charStatBlock);
+
+        container.elements.weaponOfChoice = HandwrittenNote.create({ id: "WeaponOfChoice", style: STYLE.PLAYER_JOIN_CHARACTER_WEAPONOFCHOICE, writeDelay: 30, });
+        container.appendChild(container.elements.weaponOfChoice);
     },
 
     setPlayerJoinCardMode(card, mode) {
@@ -228,8 +251,16 @@ let GameArea_PlayerJoin = {
         console.log("CHARACTER:", charData);
         //  DEBUG
 
-        card["CharacterOverview"].elements.charNameTag.setValue(charData.Name + ", " + charData.Race + " " + charData.Class + " (level " + charData.Level.toString() + ")");
-        AbilityScoreBlock.setAbilityScores(card["CharacterOverview"].elements.charStatBlock, charData.AbilityScores, charData.AbilityScoreModifiers);
+        let charOverview = card["CharacterOverview"]
+
+        charOverview.elements.charNameTag.setValue(charData.Name + ", " + charData.Race + " " + charData.Class + " (level " + charData.Level.toString() + ")");
+        
+        charOverview.elements.charPortrait.setValue("./Images/CharPortraits/" + charData.Race + ".png");
+        
+        AbilityScoreBlock.setAbilityScores(charOverview.elements.charStatBlock, charData.AbilityScores, charData.AbilityScoreModifiers);
+
+        let weaponOfChoice = CLASSES[charData.Class].DetermineWeaponOfChoice(charData);
+        charOverview.elements.weaponOfChoice.setValue("Weapon of Choice: " + weaponOfChoice);
     },
 
     playerJoinedCallback(eventData, container) {

@@ -59,7 +59,7 @@ const Image = {
 		container.setValue = (text) => Image.setValue(container, text);
 
         Container.applyOptions(container, options);
-		Image.setValue(container, container.value);
+		if (container.value) Image.setValue(container, container.value);
 
         return container;
 	},

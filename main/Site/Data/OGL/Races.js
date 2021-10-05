@@ -25,91 +25,145 @@ const { ChooseXFromList } = require('../../HelperFunctions/HelperFuncs')
 const RACES = {
     Dwarf: {
         GetAbilityScoreChanges() { return ABILITY_SCORES.CreateAbilityScoreBlock(0, 0, 2, 0, 0, 0); },
-        GetRacialTraits() {
-            let toolProficiency = ["SMITHSTOOLS", "BREWERSSUPPLIES", "MASONSTOOLS"][RandIntBetween(0, 2)];
+        AssignRacialTraits(character) {
+            if (!character.SavingThrowAdvantages) character.SavingThrowAdvantages = {};
+            Object.assign(character.SavingThrowAdvantages, CHARACTER.CreateSavingThrowAdvantageMap(["POISON"]));
 
-            return {
-                SavingThrowAdvantages: CHARACTER.CreateSavingThrowAdvantageMap(["POISON"]),
-                WeaponProficiencies: CHARACTER.CreateWeaponProficiencyData(["BATTLEAXE", "HANDAXE", "LIGHTHAMMER", "WARHAMMER"]),
-                ArmorProficiencies: CHARACTER.CreateArmorProficiencyData([]),
-                ToolProficiencies: CHARACTER.CreateToolProficiencyData([toolProficiency]),
-                Languages: LANGUAGES.CreateCharacterLanguages(["COMMON", "DWARVISH"]),
-                SkillProficiencies: CHARACTER.CreateCharacterSkillProficiencies([]),
-                Age: RandIntBetween(50, 200),
-                Alignment: "Neutral",
-                Size: "Medium",
-                Speed: 25,
-                Attributes: CHARACTER.CreateCharacterAttributesData(60),
-                Notes: [
-                    "Intelligence (History) checks related to the origin of stonework grant proficiency with double proficiency bonus."
-                ]
-            };
+            if (!character.WeaponProficiencies) character.WeaponProficiencies = {};
+            Object.assign(character.WeaponProficiencies, CHARACTER.CreateWeaponProficiencyData(["BATTLEAXE", "HANDAXE", "LIGHTHAMMER", "WARHAMMER"]));
+
+            if (!character.ArmorProficiencies) character.ArmorProficiencies = {};
+            Object.assign(character.ArmorProficiencies, CHARACTER.CreateArmorProficiencyData([]));
+
+            let toolProficiency = ["SMITHSTOOLS", "BREWERSSUPPLIES", "MASONSTOOLS"][RandIntBetween(0, 2)];
+            if (!character.ToolProficiencies) character.ToolProficiencies = {};
+            Object.assign(character.ToolProficiencies, CHARACTER.CreateToolProficiencyData([toolProficiency]));
+
+            if (!character.Languages) character.Languages = {};
+            Object.assign(character.Languages, LANGUAGES.CreateCharacterLanguages(["COMMON", "DWARVISH"]));
+
+            if (!character.SkillProficiencies) character.SkillProficiencies = {};
+            Object.assign(character.SkillProficiencies, CHARACTER.CreateCharacterSkillProficiencies([]));
+
+            if (!character.Attributes) character.Attributes = {};
+            Object.assign(character.Attributes, CHARACTER.CreateCharacterAttributesData(60));
+
+            character.Age = RandIntBetween(50, 200);
+            character.Alignment = "Neutral";
+            character.Size = "Medium";
+            character.Speed = 25;
+            
+            if (!character.Notes) character.Notes = [];
+            character.Notes.concat([
+                "Intelligence (History) checks related to the origin of stonework grant proficiency with double proficiency bonus."
+            ]);
         },
     },
     Elf: {
         GetAbilityScoreChanges() { return ABILITY_SCORES.CreateAbilityScoreBlock(0, 2, 0, 0, 0, 0); },
-        GetRacialTraits() {
-            return {
-                SavingThrowAdvantages: CHARACTER.CreateSavingThrowAdvantageMap(["CHARM"]),
-                WeaponProficiencies: CHARACTER.CreateWeaponProficiencyData([]),
-                ArmorProficiencies: CHARACTER.CreateArmorProficiencyData([]),
-                ToolProficiencies: CHARACTER.CreateToolProficiencyData([]),
-                Languages: LANGUAGES.CreateCharacterLanguages(["COMMON", "ELVISH"]),
-                SkillProficiencies: CHARACTER.CreateCharacterSkillProficiencies(["PERCEPTION"]),
-                Age: RandIntBetween(100, 500),
-                Alignment: "Neutral",
-                Size: "Medium",
-                Speed: 30,
-                Attributes: CHARACTER.CreateCharacterAttributesData(60),
-                Notes: [
-                    "Due to Fey ancestry, cannot be put to sleep by magic.",
-                    "Meditates for 4 hours a day instead of sleeping, remaining semiconscious. Gives long rest benefits."
-                ]
-            };
+        AssignRacialTraits(character) {
+            if (!character.SavingThrowAdvantages) character.SavingThrowAdvantages = {};
+            Object.assign(character.SavingThrowAdvantages, CHARACTER.CreateSavingThrowAdvantageMap(["CHARM"]));
+
+            if (!character.WeaponProficiencies) character.WeaponProficiencies = {};
+            Object.assign(character.WeaponProficiencies, CHARACTER.CreateWeaponProficiencyData([]));
+
+            if (!character.ArmorProficiencies) character.ArmorProficiencies = {};
+            Object.assign(character.ArmorProficiencies, CHARACTER.CreateArmorProficiencyData([]));
+
+            if (!character.ToolProficiencies) character.ToolProficiencies = {};
+            Object.assign(character.ToolProficiencies, CHARACTER.CreateToolProficiencyData([]));
+
+            if (!character.Languages) character.Languages = {};
+            Object.assign(character.Languages, LANGUAGES.CreateCharacterLanguages(["COMMON", "ELVISH"]));
+
+            if (!character.SkillProficiencies) character.SkillProficiencies = {};
+            Object.assign(character.SkillProficiencies, CHARACTER.CreateCharacterSkillProficiencies(["PERCEPTION"]));
+
+            if (!character.Attributes) character.Attributes = {};
+            Object.assign(character.Attributes, CHARACTER.CreateCharacterAttributesData(60));
+
+            character.Age = RandIntBetween(100, 500);
+            character.Alignment = "Neutral";
+            character.Size = "Medium";
+            character.Speed = 30;
+
+            if (!character.Notes) character.Notes = [];
+            character.Notes.concat([
+                "Due to Fey ancestry, cannot be put to sleep by magic.",
+                "Meditates for 4 hours a day instead of sleeping, remaining semiconscious. Gives long rest benefits."
+            ]);
         },
     },
     Halfling: {
         GetAbilityScoreChanges() { return ABILITY_SCORES.CreateAbilityScoreBlock(0, 2, 0, 0, 0, 0); },
-        GetRacialTraits() {
-            return {
-                SavingThrowAdvantages: CHARACTER.CreateSavingThrowAdvantageMap(["FRIGHT"]),
-                WeaponProficiencies: CHARACTER.CreateWeaponProficiencyData([]),
-                ArmorProficiencies: CHARACTER.CreateArmorProficiencyData([]),
-                ToolProficiencies: CHARACTER.CreateToolProficiencyData([]),
-                Languages: LANGUAGES.CreateCharacterLanguages(["COMMON", "HALFLING"]),
-                SkillProficiencies: CHARACTER.CreateCharacterSkillProficiencies([]),
-                Age: RandIntBetween(20, 150),
-                Alignment: "Neutral",
-                Size: "Small",
-                Speed: 25,
-                Attributes: CHARACTER.CreateCharacterAttributesData(0),
-                Notes: [
-                    "When a 1 is rolled on a d20 for an attack roll, ability check, or saving throw, you can reroll the die and must use the new roll",
-                    "Can move through the space of any creature that is of a size larger than yours."
-                ]
-            };
+        AssignRacialTraits(character) {
+            if (!character.SavingThrowAdvantages) character.SavingThrowAdvantages = {};
+            Object.assign(character.SavingThrowAdvantages, CHARACTER.CreateSavingThrowAdvantageMap(["FRIGHT"]));
+
+            if (!character.WeaponProficiencies) character.WeaponProficiencies = {};
+            Object.assign(character.WeaponProficiencies, CHARACTER.CreateWeaponProficiencyData([]));
+
+            if (!character.ArmorProficiencies) character.ArmorProficiencies = {};
+            Object.assign(character.ArmorProficiencies, CHARACTER.CreateArmorProficiencyData([]));
+
+            if (!character.ToolProficiencies) character.ToolProficiencies = {};
+            Object.assign(character.ToolProficiencies, CHARACTER.CreateToolProficiencyData([]));
+
+            if (!character.Languages) character.Languages = {};
+            Object.assign(character.Languages, LANGUAGES.CreateCharacterLanguages(["COMMON", "HALFLING"]));
+
+            if (!character.SkillProficiencies) character.SkillProficiencies = {};
+            Object.assign(character.SkillProficiencies, CHARACTER.CreateCharacterSkillProficiencies([]));
+
+            if (!character.Attributes) character.Attributes = {};
+            Object.assign(character.Attributes, CHARACTER.CreateCharacterAttributesData(0));
+
+            character.Age = RandIntBetween(20, 150);
+            character.Alignment = "Neutral";
+            character.Size = "Small";
+            character.Speed = 25;
+            
+            if (!character.Notes) character.Notes = [];
+            character.Notes.concat([
+                "When a 1 is rolled on a d20 for an attack roll, ability check, or saving throw, you can reroll the die and must use the new roll",
+                "Can move through the space of any creature that is of a size larger than yours."
+            ]);
         },
     },
     Human: {
         GetAbilityScoreChanges() { return ABILITY_SCORES.CreateAbilityScoreBlock(1, 1, 1, 1, 1, 1); },
-        GetRacialTraits() {
+        AssignRacialTraits(character) {
+            if (!character.SavingThrowAdvantages) character.SavingThrowAdvantages = {};
+            Object.assign(character.SavingThrowAdvantages, CHARACTER.CreateSavingThrowAdvantageMap([]));
+
+            if (!character.WeaponProficiencies) character.WeaponProficiencies = {};
+            Object.assign(character.WeaponProficiencies, CHARACTER.CreateWeaponProficiencyData([]));
+
+            if (!character.ArmorProficiencies) character.ArmorProficiencies = {};
+            Object.assign(character.ArmorProficiencies, CHARACTER.CreateArmorProficiencyData([]));
+
+            if (!character.ToolProficiencies) character.ToolProficiencies = {};
+            Object.assign(character.ToolProficiencies, CHARACTER.CreateToolProficiencyData([]));
+
             let languageTriggers = LANGUAGES.GetLanguageTriggerList();
             languageTriggers = languageTriggers.filter((l) => { return l !== "Common" });
+            if (!character.Languages) character.Languages = {};
+            Object.assign(character.Languages, LANGUAGES.CreateCharacterLanguages(["COMMON", ChooseXFromList(1, languageTriggers)[0]]));
 
-            return {
-                SavingThrowAdvantages: CHARACTER.CreateSavingThrowAdvantageMap([]),
-                WeaponProficiencies: CHARACTER.CreateWeaponProficiencyData([]),
-                ArmorProficiencies: CHARACTER.CreateArmorProficiencyData([]),
-                ToolProficiencies: CHARACTER.CreateToolProficiencyData([]),
-                Languages: LANGUAGES.CreateCharacterLanguages(["COMMON", ChooseXFromList(1, languageTriggers)[0]]),
-                SkillProficiencies: CHARACTER.CreateCharacterSkillProficiencies([]),
-                Age: RandIntBetween(20, 50),
-                Alignment: "Neutral",
-                Size: "Medium",
-                Speed: 30,
-                Attributes: CHARACTER.CreateCharacterAttributesData(0),
-                Notes: []
-            };
+            if (!character.SkillProficiencies) character.SkillProficiencies = {};
+            Object.assign(character.SkillProficiencies, CHARACTER.CreateCharacterSkillProficiencies([]));
+
+            if (!character.Attributes) character.Attributes = {};
+            Object.assign(character.Attributes, CHARACTER.CreateCharacterAttributesData(0));
+
+            character.Age = RandIntBetween(20, 50);
+            character.Alignment = "Neutral";
+            character.Size = "Medium";
+            character.Speed = 30;
+
+            if (!character.Notes) character.Notes = [];
+            character.Notes.concat([])
         },
     }
 }

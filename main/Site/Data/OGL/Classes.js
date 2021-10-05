@@ -17,7 +17,6 @@
 var { ABILITY_SCORES } = require('./AbilityScores')
 var { CHARACTER } = require('./Character')
 var { EQUIPMENT } = require('./Equipment')
-var { SKILLS } = require('./Skills')
 
 var { DiceRoller } = require('../../HelperFunctions/DiceRoller')
 var { ChooseXFromList } = require('../../HelperFunctions/HelperFuncs')
@@ -44,23 +43,33 @@ const CLASSES = {
         GetStartingSkillProficiencies() { return ChooseXFromList(2, ["HISTORY", "INSIGHT", "MEDICINE", "PERSUASION", "RELIGION"]); },
         GetClassHitPointsAtFirstLevel(modifiers) { return 8 + modifiers.Constitution; },
         GetClassHitPointsAfterFirstLevel(modifiers) { return DiceRoller.RollString("1d8").total + modifiers.Constitution; },
-        GetClassTraits() {
-            let clericSkills = CLASSES.Cleric.GetStartingSkillProficiencies();
+        AssignClassTraits(character) {
+            character.HitDicePerLevel = "1d8";
 
-            let clericWeaponProfs = EQUIPMENT.GetEquipmentTriggerList(["SIMPLE_MELEE"], []);
+            if (!character.SavingThrowAdvantages) character.SavingThrowAdvantages = {};
+            Object.assign(character.SavingThrowAdvantages, CHARACTER.CreateSavingThrowAdvantageMap(["Wisdom", "Charisma"]));
+
+            let clericWeaponProfs = EQUIPMENT.GetEquipmentTriggerList(["SIMPLE_MELEE", "SIMPLE_RANGED"], []);
+            if (!character.WeaponProficiencies) character.WeaponProficiencies = {};
+            Object.assign(character.WeaponProficiencies, CHARACTER.CreateWeaponProficiencyData(clericWeaponProfs));
+
             let clericArmorProfs = EQUIPMENT.GetEquipmentTriggerList([], ["LIGHT_ARMOR", "HEAVY_ARMOR", "SHIELDS"]);
+            if (!character.ArmorProficiencies) character.ArmorProficiencies = {};
+            Object.assign(character.ArmorProficiencies, CHARACTER.CreateArmorProficiencyData(clericArmorProfs));
 
-            return {
-                HitDicePerLevel: "1d8",
-                SavingThrowAdvantages: CHARACTER.CreateSavingThrowAdvantageMap(["WISDOM", "CHARISMA"]),
-                WeaponProficiencies: CHARACTER.CreateWeaponProficiencyData(clericWeaponProfs),
-                ArmorProficiencies: CHARACTER.CreateArmorProficiencyData(clericArmorProfs),
-                ToolProficiencies: CHARACTER.CreateToolProficiencyData([]),
-                SkillProficiencies: CHARACTER.CreateCharacterSkillProficiencies(clericSkills),
-            };
+            if (!character.ToolProficiencies) character.ToolProficiencies = {};
+            Object.assign(character.ToolProficiencies, CHARACTER.CreateToolProficiencyData([]));
+
+            let clericSkills = CLASSES.Cleric.GetStartingSkillProficiencies();
+            if (!character.SkillProficiencies) character.SkillProficiencies = {};
+            Object.assign(character.SkillProficiencies, CHARACTER.CreateCharacterSkillProficiencies(clericSkills));
         },
         GetClassStartingEquipment(character) {
             let equipment = [];
+
+            let testArray = [];
+            for (let i = 0; i < 10; ++i) testArray[i] = RandIntBetween(0, character.WeaponProficiencies["WARHAMMER"] ? 1 : 0);
+            console.log(testArray);
 
             let weapon = ["Mace", "Warhammer"][RandIntBetween(0, character.WeaponProficiencies["WARHAMMER"] ? 1 : 0)]
             equipment.push({ item: weapon, count: 1});
@@ -68,9 +77,9 @@ const CLASSES = {
             let armor = ["Scale Mail", "Leather Armor", "Chain mail"][RandIntBetween(0, character.ArmorProficiencies["CHAINMAIL"] ? 2 : 1)];
             equipment.push({ item: armor, count: 1 });
 
-            let extraWeapon = ["Light Crossbow", EQUIPMENT.WEAPONS.SIMPLE_MELEE[RandIntBetween(0, EQUIPMENT.WEAPONS.SIMPLE_MELEE.length - 1)].name][RandIntBetween(0, 1)];
+            let extraWeapon = ["Crossbow, light", EQUIPMENT.WEAPONS.SIMPLE_MELEE[RandIntBetween(0, EQUIPMENT.WEAPONS.SIMPLE_MELEE.length - 1)].name][RandIntBetween(0, 1)];
             equipment.push({ item: extraWeapon, count: 1 });
-            if (extraWeapon === "Light Crossbow") equipment.push({ item: "Bolt", count: 20 })
+            if (extraWeapon === "Crossbow, light") equipment.push({ item: "Bolt", count: 20 })
 
             let clericPack = ["Priest's Pack", "Explorer's Pack"][RandIntBetween(0, 1)];
             equipment.push({ item: clericPack, count: 1 });
@@ -79,6 +88,55 @@ const CLASSES = {
             equipment.push({ item: "Holy Symbol", count: 1 });
 
             return equipment;
+        },
+        DetermineWeaponOfChoice(character) {
+            let allWeapons = EQUIPMENT.GetAllWeaponsInOneList();
+            let inventory = character.Inventory;
+
+            let ownedWeapons = [];
+            for (let itemIndex in inventory) {
+                let equipmentItem = allWeapons.find((w) => w.name === inventory[itemIndex].item);
+                if (equipmentItem) { ownedWeapons.push(equipmentItem); }
+            }
+            if (ownedWeapons.length === 0) { return "None"; }
+
+            //  Cleric Preference 1: Mace
+            let mace = ownedWeapons.find((w) => w.name.toLowerCase().includes("mace"));
+            if (mace) {
+                let shield = !mace.properties.includes("two-handed") && inventory.find((i) => i.item === "Shield");
+                if (shield) {
+                    //  TODO: Equip items
+                    return mace.name + " and Shield";
+                }
+                else {
+                    //  TODO: Equip items
+                    return mace.name;
+                }
+            }
+
+            //  Cleric Preference 1: Hammer
+            let hammer = ownedWeapons.find((w) => w.name.toLowerCase().includes("hammer"));
+            if (hammer) {
+                let shield = !hammer.properties.includes("two-handed") && inventory.find((i) => i.item === "Shield");
+                if (shield) {
+                    //  TODO: Equip items
+                    return hammer.name + " and Shield";
+                }
+                else {
+                    //  TODO: Equip items
+                    return hammer.name;
+                }
+            }
+
+            //  Cleric Preference 2: Bow
+            let bow = ownedWeapons.find((w) => w.name.toLowerCase().includes("bow"));
+            if (bow) {
+                //  TODO: Equip items
+                return bow.name;
+            }
+
+            //  TODO: Equip items
+            return ownedWeapons[0].name;
         },
     },
     Fighter: {
@@ -100,11 +158,26 @@ const CLASSES = {
         GetStartingSkillProficiencies() { return ChooseXFromList(2, ["ACROBATICS", "ANIMAL HANDLING", "ATHLETICS", "HISTORY", "INSIGHT", "INTIMIDATION", "PERCEPTION", "SURVIVAL"]); },
         GetClassHitPointsAtFirstLevel(modifiers) { return 10 + modifiers.Constitution; },
         GetClassHitPointsAfterFirstLevel(modifiers) { return DiceRoller.RollString("1d10").total + modifiers.Constitution; },
-        GetClassTraits() {
-            let fighterSkills = CLASSES.Fighter.GetStartingSkillProficiencies();
+        AssignClassTraits(character) {
+            character.HitDicePerLevel = "1d10";
+
+            if (!character.SavingThrowAdvantages) character.SavingThrowAdvantages = {};
+            Object.assign(character.SavingThrowAdvantages, CHARACTER.CreateSavingThrowAdvantageMap(["Strength", "Constitution"]));
 
             let fighterWeaponProfs = EQUIPMENT.GetEquipmentTriggerList(["SIMPLE_MELEE", "SIMPLE_RANGED", "MARTIAL_MELEE", "MARTIAL_RANGED"], []);
+            if (!character.WeaponProficiencies) character.WeaponProficiencies = {};
+            Object.assign(character.WeaponProficiencies, CHARACTER.CreateWeaponProficiencyData(fighterWeaponProfs));
+
             let fighterArmorProfs = EQUIPMENT.GetEquipmentTriggerList([], ["LIGHT_ARMOR", "MEDIUM_ARMOR", "HEAVY_ARMOR", "SHIELDS"]);
+            if (!character.ArmorProficiencies) character.ArmorProficiencies = {};
+            Object.assign(character.ArmorProficiencies, CHARACTER.CreateArmorProficiencyData(fighterArmorProfs));
+
+            if (!character.ToolProficiencies) character.ToolProficiencies = {};
+            Object.assign(character.ToolProficiencies, CHARACTER.CreateToolProficiencyData([]));
+
+            let fighterSkills = CLASSES.Fighter.GetStartingSkillProficiencies();
+            if (!character.SkillProficiencies) character.SkillProficiencies = {};
+            Object.assign(character.SkillProficiencies, CHARACTER.CreateCharacterSkillProficiencies(fighterSkills));
 
             let fightingStyles = [
                 "You gain a +2 bonus to attack rolls you make with ranged weapons.",
@@ -115,24 +188,15 @@ const CLASSES = {
                 "When you engage in two-weapon fighting, you can add your ability modifier to the damage of the second attack."
             ];
             let fightingStyleNote = fightingStyles[RandIntBetween(0, fightingStyles.length - 1)];
-
-            return {
-                HitDicePerLevel: "1d10",
-                SavingThrowAdvantages: CHARACTER.CreateSavingThrowAdvantageMap(["Strength", "Constitution"]),
-                WeaponProficiencies: CHARACTER.CreateWeaponProficiencyData(fighterWeaponProfs),
-                ArmorProficiencies: CHARACTER.CreateArmorProficiencyData(fighterArmorProfs),
-                ToolProficiencies: CHARACTER.CreateToolProficiencyData([]),
-                SkillProficiencies: CHARACTER.CreateCharacterSkillProficiencies(fighterSkills),
-                Notes: [
-                    fightingStyleNote,
-                    "On your turn, you can use a bonus action to regain hit points equal to 1d10 + your level. Must finish a short or long rest to use this ability again.",
-                ]
-            };
+            character.Notes = [
+                fightingStyleNote,
+                "On your turn, you can use a bonus action to regain hit points equal to 1d10 + your level. Must finish a short or long rest to use this ability again.",
+            ];
         },
         GetClassStartingEquipment(character) {
             let equipment = [];
 
-            if (character.AbilityScores["Strength"] > character.AbilityScores["Dexterity"]) equipment.push({ item: "Chain Mail", count: 1 });
+            if (character.AbilityScores["Strength"] >= character.AbilityScores["Dexterity"]) equipment.push({ item: "Chain Mail", count: 1 });
             else {
                 equipment.push({ item: "Leather Armor", count: 1 });
                 equipment.push({ item: "Longbow", count: 1 });
@@ -153,7 +217,7 @@ const CLASSES = {
             }
 
             if (RandIntBetween(0, 1) === 0) {
-                equipment.push({ item: "Light Crossbow", count: 1 });
+                equipment.push({ item: "Crossbow, light", count: 1 });
                 equipment.push({ item: "Bolt", count: 20 });
             }
             else equipment.push({ item: "Handaxe", count: 2 });
@@ -162,6 +226,50 @@ const CLASSES = {
             else equipment.push({ item: "Explorer's Pack", count: 1 });
 
             return equipment;
+        },
+        DetermineWeaponOfChoice(character) {
+            let allWeapons = EQUIPMENT.GetAllWeaponsInOneList();
+            let inventory = character.Inventory;
+
+            let ownedWeapons = [];
+            for (let itemIndex in inventory) {
+                let equipmentItem = allWeapons.find((w) => w.name === inventory[itemIndex].item);
+                if (equipmentItem) { ownedWeapons.push(equipmentItem); }
+            }
+            if (ownedWeapons.length === 0) { return "None"; }
+
+            //  Fighter Preference 1: Martial Melee
+            let martialM = ownedWeapons.find((w) => ["Martial Melee", "Martial Ranged"].includes(w.subtype));
+            if (martialM) {
+                let shield = !martialM.properties.includes("two-handed") && inventory.find((i) => i.item === "Shield");
+                if (shield) {
+                    //  TODO: Equip items
+                    return martialM.name + " and Shield";
+                }
+                else {
+                    let inventoryEntry = inventory.filter((i) => i.item == martialM.name);
+                    //  TODO: Equip items
+                    return ((inventoryEntry.count > 1) ? "Dual Wield " : "") + martialM.name;
+                }
+            }
+
+            //  Fighter Preference 2: Martial Ranged
+            let martialR = ownedWeapons.find((w) => ["Martial Ranged"].includes(w.subtype));
+            if (martialR) {
+                let shield = !martialR.properties.includes("two-handed") && inventory.find((i) => i.item === "Shield");
+                if (shield) {
+                    //  TODO: Equip items
+                    return martialR.name + " and Shield";
+                }
+                else {
+                    let inventoryEntry = inventory.filter((i) => i.item == martialR.name);
+                    //  TODO: Equip items
+                    return ((inventoryEntry.count > 1) ? "Dual Wield " : "") + martialR.name;
+                }
+            }
+
+            //  TODO: Equip items
+            return ownedWeapons[0].name;
         },
     },
     Rogue: {
@@ -183,21 +291,29 @@ const CLASSES = {
         GetStartingSkillProficiencies() { return ChooseXFromList(4, ["ACROBATICS", "ATHLETICS", "DECEPTION", "INSIGHT", "INTIMIDATION", "INVESTIGATION", "PERCEPTION", "PERFORMANCE", "PERSUASION", "SLEIGHT OF HAND", "STEALTH"]); },
         GetClassHitPointsAtFirstLevel(modifiers) { return 8 + modifiers.Constitution; },
         GetClassHitPointsAfterFirstLevel(modifiers) { return DiceRoller.RollString("1d8").total + modifiers.Constitution; },
-        GetClassTraits() {
-            let rogueSkills = CLASSES.Rogue.GetStartingSkillProficiencies();
+        AssignClassTraits(character) {
+            character.HitDicePerLevel = "1d8";
+
+            if (!character.SavingThrowAdvantages) character.SavingThrowAdvantages = {};
+            Object.assign(character.SavingThrowAdvantages, CHARACTER.CreateSavingThrowAdvantageMap(["Dexterity", "Intelligence"]));
 
             let rogueWeaponProfs = EQUIPMENT.GetEquipmentTriggerList(["SIMPLE_MELEE", "SIMPLE_RANGED"], []).concat(["CROSSBOW_HAND", "LONGSWORD", "RAPIER", "SHORTSWORD"]);
-            let rogueArmorProfs = EQUIPMENT.GetEquipmentTriggerList([], ["LIGHT_ARMOR"]);
+            if (!character.WeaponProficiencies) character.WeaponProficiencies = {};
+            Object.assign(character.WeaponProficiencies, CHARACTER.CreateWeaponProficiencyData(rogueWeaponProfs));
 
-            return {
-                HitDicePerLevel: "1d8",
-                SavingThrowAdvantages: CHARACTER.CreateSavingThrowAdvantageMap(["DEXTERITY", "INTELLIGENCE"]),
-                WeaponProficiencies: CHARACTER.CreateWeaponProficiencyData(rogueWeaponProfs),
-                ArmorProficiencies: CHARACTER.CreateArmorProficiencyData(rogueArmorProfs),
-                ToolProficiencies: CHARACTER.CreateToolProficiencyData("THIEVESTOOLS"),
-                SkillProficiencies: CHARACTER.CreateCharacterSkillProficiencies(rogueSkills),
-                Notes: []
-            };
+            let rogueArmorProfs = EQUIPMENT.GetEquipmentTriggerList([], ["LIGHT_ARMOR"]);
+            if (!character.ArmorProficiencies) character.ArmorProficiencies = {};
+            Object.assign(character.ArmorProficiencies, CHARACTER.CreateArmorProficiencyData(rogueArmorProfs));
+
+            if (!character.ToolProficiencies) character.ToolProficiencies = {};
+            Object.assign(character.ToolProficiencies, CHARACTER.CreateToolProficiencyData(["THIEVESTOOLS"]));
+
+            let rogueSkills = CLASSES.Rogue.GetStartingSkillProficiencies();
+            if (!character.SkillProficiencies) character.SkillProficiencies = {};
+            Object.assign(character.SkillProficiencies, CHARACTER.CreateCharacterSkillProficiencies(rogueSkills));
+
+            if (!character.Notes) character.Notes = [];
+            character.Notes.concat([]);
         },
         GetClassStartingEquipment(character) {
             let equipment = [];
@@ -220,6 +336,41 @@ const CLASSES = {
 
             return equipment;
         },
+        DetermineWeaponOfChoice(character) {
+            let allWeapons = EQUIPMENT.GetAllWeaponsInOneList();
+            let inventory = character.Inventory;
+
+            let ownedWeapons = [];
+            for (let itemIndex in inventory) {
+                let equipmentItem = allWeapons.find((w) => w.name === inventory[itemIndex].item);
+                if (equipmentItem) { ownedWeapons.push(equipmentItem); }
+            }
+            if (ownedWeapons.length === 0) { return "None"; }
+
+            //  Rogue Preference 1: Rapier or Shortsword
+            let sword = ownedWeapons.find((w) => ["Rapier", "Shortsword"].includes(w.name));
+            if (sword) {
+                let shield = !sword.properties.includes("two-handed") && inventory.find((i) => i.item === "Shield");
+                if (shield) {
+                    //  TODO: Equip items
+                    return sword.name + " and Shield";
+                }
+                else {
+                    //  TODO: Equip items
+                    return sword.name;
+                }
+            }
+
+            //  Rogue Preference 2: Bow
+            let bow = ownedWeapons.find((w) => w.name.toLowerCase().includes("bow"));
+            if (bow) {
+                //  TODO: Equip items
+                return bow.name;
+            }
+
+            //  TODO: Equip items
+            return ownedWeapons[0].name;
+        },
     },
     Wizard: {
         DetermineAbilityScores() {
@@ -240,18 +391,28 @@ const CLASSES = {
         GetStartingSkillProficiencies() { return ChooseXFromList(2, ["ARCANA", "HISTORY", "INSIGHT", "INVESTIGATION", "MEDICINE", "RELIGION"]); },
         GetClassHitPointsAtFirstLevel(modifiers) { return 8 + modifiers.Constitution; },
         GetClassHitPointsAfterFirstLevel(modifiers) { return DiceRoller.RollString("1d8").total + modifiers.Constitution; },
-        GetClassTraits() {
-            let wizardSkills = CLASSES.Wizard.GetStartingSkillProficiencies();
+        AssignClassTraits(character) {
+            character.HitDicePerLevel = "1d6";
 
-            return {
-                HitDicePerLevel: "1d6",
-                SavingThrowAdvantages: CHARACTER.CreateSavingThrowAdvantageMap(["INTELLIGENCE", "WISDOM"]),
-                WeaponProficiencies: CHARACTER.CreateWeaponProficiencyData(["DAGGER", "DART", "SLING", "QUARTERSTAFF", "CROSSBOW_LIGHT"]),
-                ArmorProficiencies: CHARACTER.CreateArmorProficiencyData([]),
-                ToolProficiencies: CHARACTER.CreateToolProficiencyData([]),
-                SkillProficiencies: CHARACTER.CreateCharacterSkillProficiencies(wizardSkills),
-                Notes: []
-            };
+            if (!character.SavingThrowAdvantages) character.SavingThrowAdvantages = {};
+            Object.assign(character.SavingThrowAdvantages, CHARACTER.CreateSavingThrowAdvantageMap(["Intelligence", "Wisdom"]));
+
+            let wizardWeaponProfs = CHARACTER.CreateWeaponProficiencyData(["DAGGER", "DART", "SLING", "QUARTERSTAFF", "CROSSBOW_LIGHT"]);
+            if (!character.WeaponProficiencies) character.WeaponProficiencies = {};
+            Object.assign(character.WeaponProficiencies, CHARACTER.CreateWeaponProficiencyData(wizardWeaponProfs));
+
+            if (!character.ArmorProficiencies) character.ArmorProficiencies = {};
+            Object.assign(character.ArmorProficiencies, CHARACTER.CreateArmorProficiencyData([]));
+
+            if (!character.ToolProficiencies) character.ToolProficiencies = {};
+            Object.assign(character.ToolProficiencies, CHARACTER.CreateToolProficiencyData([]));
+
+            let wizardSkills = CLASSES.Wizard.GetStartingSkillProficiencies();
+            if (!character.SkillProficiencies) character.SkillProficiencies = {};
+            Object.assign(character.SkillProficiencies, CHARACTER.CreateCharacterSkillProficiencies(wizardSkills));
+
+            if (!character.Notes) character.Notes = [];
+            character.Notes.concat([]);
         },
         GetClassStartingEquipment(character) {
             let equipment = [];
@@ -268,6 +429,34 @@ const CLASSES = {
             equipment.push({ item: "Spellbook", count: 1 });
 
             return equipment;
+        },
+        DetermineWeaponOfChoice(character) {
+            let allWeapons = EQUIPMENT.GetAllWeaponsInOneList();
+            let inventory = character.Inventory;
+
+            let ownedWeapons = [];
+            for (let itemIndex in inventory) {
+                let equipmentItem = allWeapons.find((w) => w.name === inventory[itemIndex].item);
+                if (equipmentItem) { ownedWeapons.push(equipmentItem); }
+            }
+            if (ownedWeapons.length === 0) { return "None"; }
+
+            //  Wizard Preference 1: Staff
+            let staff = ownedWeapons.find((w) => w.name.toLowerCase().includes("staff"));
+            if (staff) {
+                //  TODO: Equip items
+                return staff.name;
+            }
+
+            //  Wizard Preference 2: Dagger
+            let dagger = ownedWeapons.find((w) => w.name.toLowerCase().includes("dagger"));
+            if (dagger) {
+                //  TODO: Equip items
+                return dagger.name;
+            }
+
+            //  TODO: Equip items
+            return ownedWeapons[0].name;
         },
     }
 }

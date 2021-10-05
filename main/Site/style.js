@@ -91,13 +91,14 @@ module.exports = {
     textAlign: "center",
   },
   PLAYER_JOIN_CHARACTER_NAMETAG: {
-    fontSize: "18px",
+    fontSize: "14px",
     width: "282px",
     position: "absolute",
     top: "48px",
-    left: "10px",
+    left: "18px",
     lineHeight: "41px",
     textAlign: "left",
+    color: "rgb(0, 0, 0, 0.8)"
   },
   PLAYER_JOIN_CHARACTER_ABILITY_SCORE: {
     fontSize: "16px",
@@ -105,5 +106,15 @@ module.exports = {
     position: "absolute",
     lineHeight: "41px",
     textAlign: "left",
-  }
+  },
+  PLAYER_JOIN_CHARACTER_WEAPONOFCHOICE: {
+    fontSize: "14px",
+    width: "282px",
+    position: "absolute",
+    top: "178px",
+    left: "18px",
+    lineHeight: "41px",
+    textAlign: "left",
+    color: "rgb(0, 0, 0, 0.8)"
+  },
 }

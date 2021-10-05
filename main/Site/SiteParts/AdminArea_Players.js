@@ -16,6 +16,7 @@
 
 const CONFIG = require('../../config')
 const STYLE = require('../style')
+const SETTINGS = require('../settings')
 const { Container, Label, BasicButton } = require('../Components/ArcadiaJS')
 const { pxFromInt } = require('../HelperFunctions/pxFromInt')
 const { EventDispatch } = require('../Controllers/EventDispatch')
@@ -103,6 +104,8 @@ let AdminArea_Players = {
         });
         BasicButton.setOnClick(startPlayerJoinButton, () => { EventDispatch.SendEvent("Start Player Join Mode", {}); });
         container.elements.startPlayerJoinMenu.appendChild(startPlayerJoinButton);
+
+        if (SETTINGS.ADMIN_SETTINGS.AutoAllowPlayersToJoin) { setTimeout(() => { EventDispatch.SendEvent("Start Player Join Mode", {}); }, 500); }
     },
 
     createPlayerDataDisplay(container) {
@@ -283,6 +286,8 @@ let AdminArea_Players = {
         PlayerJoinRequest.setDenyCallback(player, () => { AdminArea_Players.DenyPlayerJoinRequest(container, eventData, player); });
         container.elements.playerRequestList.appendChild(player);
         container.requestUsers.push(eventData.user);
+
+        if (SETTINGS.ADMIN_SETTINGS.AutoApproveJoinRequests) { AdminArea_Players.ApprovePlayerJoinRequest(container, eventData, player); }
     },
 
     RemovePlayer(container, eventData) {

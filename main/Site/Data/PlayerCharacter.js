@@ -40,8 +40,8 @@ const PlayerCharacter =
     },
     DefineCharacter(character) {
         //  Assign the character race and class traits
-        Object.assign(character, RACES[character.Race].GetRacialTraits());
-        Object.assign(character, CLASSES[character.Class].GetClassTraits());
+        Object.assign(character, RACES[character.Race].AssignRacialTraits(character));
+        Object.assign(character, CLASSES[character.Class].AssignClassTraits(character));
 
         //  Determine the character Ability Score based on requirements of the class, and implement race adjustments
         character.AbilityScores = CLASSES[character.Class].DetermineAbilityScores();

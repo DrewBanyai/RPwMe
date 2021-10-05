@@ -20,4 +20,8 @@ module.exports = {
       USERNAME: "",
       TOKEN: ""
   },
+  ADMIN_SETTINGS: {
+    AutoAllowPlayersToJoin: false,
+    AutoApproveJoinRequests: false,
+  }
 }
