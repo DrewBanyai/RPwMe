@@ -67,10 +67,6 @@ const CLASSES = {
         GetClassStartingEquipment(character) {
             let equipment = [];
 
-            let testArray = [];
-            for (let i = 0; i < 10; ++i) testArray[i] = RandIntBetween(0, character.WeaponProficiencies["Warhammer"] ? 1 : 0);
-            console.log(testArray);
-
             let weapon = ["Mace", "Warhammer"][RandIntBetween(0, character.WeaponProficiencies["Warhammer"] ? 1 : 0)]
             equipment.push({ item: weapon, count: 1});
 
