@@ -49,7 +49,7 @@ let GameArea_PlayerJoin = {
             }
         });
 
-        container.elements = { paper: null, playerJoinCards: { 0: null, 1: null, 2: null } }
+        container.elements = { paper: null, playerJoinCards: { 0: null, 1: null, 2: null }, readyTagBox: null }
 
         container.elements.paper = Container.create({ id: "LinedPaperBackground", style: STYLE.LINED_PAPER_BACKGROUND, });
         container.appendChild(container.elements.paper);
@@ -338,6 +338,7 @@ let GameArea_PlayerJoin = {
 
         let playerJoinCard = container.elements.playerJoinCards[eventData.playerIndex];
         playerJoinCard.NameTag.setValue("Type '!join' to play");
+        playerJoinCard.elements.readyTagBox.style.display = "none";
         this.setPlayerJoinCardMode(playerJoinCard, "WaitingForJoin");
     },
 
