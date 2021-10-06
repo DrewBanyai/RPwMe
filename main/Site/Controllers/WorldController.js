@@ -19,7 +19,7 @@ var { ClearUsedLocationNames, ClearUsedPositions, GetLocationPosition } = requir
 var { GetRandomCityType, GetRandomLandmarkType } = require('../Data/LocationTypes')
 const { Container } = require('../Components/ArcadiaJS')
 const { LOCATION_DATA } = require('../Data/LocationData')
-var { CampaignController } = require('../Data/CampaignController')
+var { CampaignController } = require('../Controllers/CampaignController')
 const { InteractiveMap } = require('../Components/InteractiveMap')
 
 const WorldController = {

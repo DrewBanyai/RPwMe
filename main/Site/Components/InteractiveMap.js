@@ -16,7 +16,7 @@
 
 const STYLE = require('../style')
 const { Container, Image } = require('../Components/ArcadiaJS')
-var { CampaignController } = require('../Data/CampaignController')
+var { CampaignController } = require('../Controllers/CampaignController')
 var { MapObject } = require('../Components/MapObject')
 const { pxFromInt } = require('../HelperFunctions/pxFromInt')
 

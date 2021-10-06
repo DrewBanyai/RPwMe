@@ -16,7 +16,7 @@
 
 const { EventDispatch } = require('../Controllers/EventDispatch')
 var { TwitchControl } = require('../Twitch/TwitchControl')
-var { CampaignController } = require('../Data/CampaignController')
+var { CampaignController } = require('../Controllers/CampaignController')
 const CONFIG = require('../../config')
 
 const CommandControl = {

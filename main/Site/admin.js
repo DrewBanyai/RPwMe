@@ -19,7 +19,7 @@ const SETTINGS = require('./settings')
 const CONFIG = require('../config')
 var { TwitchControl } = require('./Twitch/TwitchControl')
 var { AdminDisplay } = require('./SiteParts/AdminDisplay')
-var { CampaignController } = require('./Data/CampaignController')
+var { CampaignController } = require('./Controllers/CampaignController')
 var { CommandControl } = require('./Controllers/CommandController')
 
 

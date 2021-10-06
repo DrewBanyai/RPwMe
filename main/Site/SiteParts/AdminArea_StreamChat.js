@@ -18,7 +18,7 @@ const CONFIG = require('../../config')
 const STYLE = require('../style')
 const { Container } = require('../Components/ArcadiaJS')
 const { pxFromInt } = require('../HelperFunctions/pxFromInt')
-var { CampaignController } = require('../Data/CampaignController')
+var { CampaignController } = require('../Controllers/CampaignController')
 var { TwitchControl } = require('../Twitch/TwitchControl')
 
 let AdminArea_StreamChat = {

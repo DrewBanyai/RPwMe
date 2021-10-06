@@ -17,7 +17,7 @@
 const { ipcRenderer } = require('electron')
 
 const { EventDispatch } = require('../Controllers/EventDispatch')
-const { CampaignController } = require('../Data/CampaignController')
+const { CampaignController } = require('../Controllers/CampaignController')
 
 const gameMessages = {
     //////////////////////////////
