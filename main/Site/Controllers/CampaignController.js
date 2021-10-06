@@ -14,9 +14,9 @@
     limitations under the License.
 */
 
-const { EventDispatch } = require('../Controllers/EventDispatch');
+const { EventDispatch } = require('./EventDispatch');
 const { RandIntBetween } = require('../HelperFunctions/Random');
-const { PlayerCharacter } = require('./PlayerCharacter')
+const { PlayerCharacter } = require('../Data/PlayerCharacter')
 
 let CAMPAIGN_DATA = {};
 
