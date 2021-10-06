@@ -312,7 +312,7 @@ let AdminArea_Players = {
             let playersListKeys = Object.keys(playersList);
             playersListKeys.forEach(k => playersReady += ((playersList[k] && playersList[k].character._READY) ? 1 : 0));
             
-            if (playersReady >= SETTINGS.PLAYERS_REQUIRED_TO_BEGIN) container.elements.beginGameButton.style.display = "inline-flex";
+            if (playersReady >= SETTINGS.ADMIN_SETTINGS.PLAYERS_REQUIRED_TO_BEGIN) container.elements.beginGameButton.style.display = "inline-flex";
             else container.elements.beginGameButton.style.display = "none";
         });
     },
