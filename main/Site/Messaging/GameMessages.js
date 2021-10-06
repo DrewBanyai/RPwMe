@@ -64,6 +64,10 @@ const gameMessages = {
         EventDispatch.SendEvent("Player Name Set", args[0]);
     },
 
+    characterReady(event, ...args) {
+        EventDispatch.SendEvent("Character Ready", args[0]);
+    },
+
     Initialize() {
         ipcRenderer.on('change-window-id', gameMessages.changeWindowID);
         ipcRenderer.on('campaign-update', gameMessages.campaignUpdate);
@@ -73,6 +77,7 @@ const gameMessages = {
         ipcRenderer.on('player-race-set', gameMessages.playerRaceSet);
         ipcRenderer.on('player-class-set', gameMessages.playerClassSet);
         ipcRenderer.on('player-name-set', gameMessages.playerNameSet);
+        ipcRenderer.on('character-ready', gameMessages.characterReady);
     }
 
     //////////////////////////////

@@ -88,7 +88,7 @@ const CampaignController = {
 
         for (let i = 0; i < 3; ++i) {
             if (!CAMPAIGN_DATA.Players[i]) {
-                CAMPAIGN_DATA.Players[i] = PlayerCharacter.CreateNewCharacter(playerUsername, i);
+                CAMPAIGN_DATA.Players[i] = PlayerCharacter.CreateNewPlayer(playerUsername, i);
                 EventDispatch.SendEvent("Player Added", { playerUsername: playerUsername, playerIndex: i });
                 return true;
             }

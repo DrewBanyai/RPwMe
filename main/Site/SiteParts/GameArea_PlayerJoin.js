@@ -16,13 +16,16 @@
 
 const CONFIG = require('../../config')
 const STYLE = require('../style')
+
 const { CLASSES } = require('../Data/OGL/Classes')
+const { MONEY } = require('../Data/OGL/Money')
+const { EQUIPMENT } = require('../Data/OGL/Equipment')
+
 const { Container, Image } = require('../Components/ArcadiaJS')
 const { pxFromInt } = require('../HelperFunctions/pxFromInt')
 const { HandwrittenNote } = require('../Components/HandwrittenNote')
 const { EventDispatch } = require('../Controllers/EventDispatch')
 const { AbilityScoreBlock } = require('../Components/AbilityScoreBlock')
-const { EQUIPMENT } = require('../Data/OGL/Equipment')
 
 const playerJoinCardPos = {
     0: { x: 226, y: 240 },
@@ -62,6 +65,7 @@ let GameArea_PlayerJoin = {
         EventDispatch.AddEventHandler("Player Race Set", (eventType, eventData) => { this.playerRaceSetCallback(eventData, container); });
         EventDispatch.AddEventHandler("Player Class Set", (eventType, eventData) => { this.playerClassSetCallback(eventData, container); });
         EventDispatch.AddEventHandler("Player Name Set", (eventType, eventData) => { this.playerNameSetCallback(eventData, container); });
+        EventDispatch.AddEventHandler("Character Ready", (eventType, eventData) => { this.characterReadyCallback(eventData, container); });
 
         return container;
     },
@@ -81,7 +85,7 @@ let GameArea_PlayerJoin = {
         })
         container.appendChild(playerJoinCard);
 
-        playerJoinCard.elements = { nameTagBox: null, remainingCard: null, };
+        playerJoinCard.elements = { nameTagBox: null, remainingCard: null, readyTagBox: null };
 
         //  Create name tag node
         playerJoinCard.elements.nameTagBox = Container.create({
@@ -104,6 +108,24 @@ let GameArea_PlayerJoin = {
         });
         playerJoinCard.appendChild(playerJoinCard.elements.remainingCard);
 
+        //  Create ready box node
+        playerJoinCard.elements.readyTagBox = Container.create({
+            id: "ReadyBox_" + playerIndex.toString(),
+            style: {
+                width: "96%",
+                height: "46px",
+                position: "absolute",
+                left: "2%",
+                top: "338px",
+                borderTop: "5px dashed rgb(130, 130, 130)",
+                backgroundColor: "rgb(255, 255, 255)",
+                textAlign: "center",
+                display: "none",
+                zIndex: 1,
+            }
+        });
+        playerJoinCard.elements.remainingCard.appendChild(playerJoinCard.elements.readyTagBox);
+
         //  Create different mode element roots
         for (var modeIndex in playerJoinCardModes) {
             let mode = playerJoinCardModes[modeIndex];
@@ -123,6 +145,14 @@ let GameArea_PlayerJoin = {
         this.createCardModeElements_ChooseYourClass(playerJoinCard);
         this.createCardModeElements_ChooseYourName(playerJoinCard);
         this.createCardModeElements_CharacterOverview(playerJoinCard);
+
+        playerJoinCard.ReadyTag = HandwrittenNote.create({
+            id: "PlayerJoinCardReadyTag_" + playerIndex.toString(),
+            style: STYLE.PLAYER_JOIN_CARD_READY_TAG,
+            attributes: { value: "READY TO BEGIN", },
+            writeDelay: 30,
+        });
+        playerJoinCard.elements.readyTagBox.appendChild(playerJoinCard.ReadyTag);
 
         this.setPlayerJoinCardMode(playerJoinCard, "WaitingForJoin");
     },
@@ -202,7 +232,7 @@ let GameArea_PlayerJoin = {
     createCardModeElements_CharacterOverview(card) {
         let container = card["CharacterOverview"];
 
-        container.elements = { charNameTag: null, charPortrait: null, charStatBlock: null, weaponOfChoice: null };
+        container.elements = { charNameTag: null, charPortrait: null, charStatBlock: null, weaponOfChoice: null, languagesKnown: null, startingMoney: null, startingAC: null };
 
         container.elements.charNameTag = HandwrittenNote.create({ style: STYLE.PLAYER_JOIN_CHARACTER_NAMETAG, writeDelay: 30, });
         container.appendChild(container.elements.charNameTag);
@@ -234,8 +264,29 @@ let GameArea_PlayerJoin = {
         });
         container.appendChild(container.elements.charStatBlock);
 
-        container.elements.weaponOfChoice = HandwrittenNote.create({ id: "WeaponOfChoice", style: STYLE.PLAYER_JOIN_CHARACTER_WEAPONOFCHOICE, writeDelay: 30, });
+        container.elements.weaponOfChoice = HandwrittenNote.create({ id: "WeaponOfChoice", style: STYLE.PLAYER_JOIN_CHARACTER_MINORINFO, writeDelay: 30, });
+        container.elements.weaponOfChoice.style.top = "178px";
         container.appendChild(container.elements.weaponOfChoice);
+
+        container.elements.languagesKnown = HandwrittenNote.create({ id: "LanguagesKnown", style: STYLE.PLAYER_JOIN_CHARACTER_MINORINFO, writeDelay: 30, });
+        container.elements.languagesKnown.style.top = "196px";
+        container.appendChild(container.elements.languagesKnown);
+
+        container.elements.startingMoney = HandwrittenNote.create({ id: "StartingMoney", style: STYLE.PLAYER_JOIN_CHARACTER_MINORINFO, writeDelay: 30, });
+        container.elements.startingMoney.style.top = "214px";
+        container.appendChild(container.elements.startingMoney);
+
+        container.elements.startingAC = HandwrittenNote.create({ id: "StartingAC", style: STYLE.PLAYER_JOIN_CHARACTER_MINORINFO, writeDelay: 30, });
+        container.elements.startingAC.style.top = "232px";
+        container.appendChild(container.elements.startingAC);
+
+        let rerollLabel = HandwrittenNote.create({ id: "RerollLabel", style: STYLE.PLAYER_JOIN_CHARACTER_REROLL_AND_READY, writeDelay: 30, attributes: { value: "Type !reroll to regenerate character" }, });
+        rerollLabel.style.top = "340px";
+        container.appendChild(rerollLabel);
+
+        let readylabel = HandwrittenNote.create({ id: "Readylabel", style: STYLE.PLAYER_JOIN_CHARACTER_REROLL_AND_READY, writeDelay: 30, attributes: { value: "Type !ready to accept character" }, });
+        readylabel.style.top = "360px";
+        container.appendChild(readylabel);
     },
 
     setPlayerJoinCardMode(card, mode) {
@@ -246,21 +297,28 @@ let GameArea_PlayerJoin = {
         card[mode].style.display = "block";
     },
 
-    setPlayerCharacterData(card, charData) {
+    setPlayerCharacterData(card, character) {
         //  DEBUG
-        console.log("CHARACTER:", charData);
+        console.log("CHARACTER:", character);
         //  DEBUG
 
         let charOverview = card["CharacterOverview"]
 
-        charOverview.elements.charNameTag.setValue(charData.Name + ", " + charData.Race + " " + charData.Class + " (level " + charData.Level.toString() + ")");
+        charOverview.elements.charNameTag.setValue(character.Name + ", " + character.Race + " " + character.Class + " (level " + character.Level.toString() + ")");
         
-        charOverview.elements.charPortrait.setValue("./Images/CharPortraits/" + charData.Race + ".png");
+        charOverview.elements.charPortrait.setValue("./Images/CharPortraits/" + character.Race + ".png");
         
-        AbilityScoreBlock.setAbilityScores(charOverview.elements.charStatBlock, charData.AbilityScores, charData.AbilityScoreModifiers);
+        AbilityScoreBlock.setAbilityScores(charOverview.elements.charStatBlock, character.AbilityScores, character.AbilityScoreModifiers);
 
-        let weaponOfChoice = CLASSES[charData.Class].DetermineWeaponOfChoice(charData);
+        let weaponOfChoice = CLASSES[character.Class].DetermineWeaponOfChoice(character);
         charOverview.elements.weaponOfChoice.setValue("Weapon of Choice: " + weaponOfChoice);
+
+        let languageList = Object.keys(character.Languages);
+        charOverview.elements.languagesKnown.setValue("Languages Known: " + languageList.join(", "));
+
+        charOverview.elements.startingMoney.setValue("Money: " + MONEY.TranslateMoneyToCoins(character.Money));
+
+        charOverview.elements.startingAC.setValue("Armor Class: " + character.ArmorClass.toString());
     },
 
     playerJoinedCallback(eventData, container) {
@@ -310,6 +368,14 @@ let GameArea_PlayerJoin = {
         this.setPlayerCharacterData(playerJoinCard, eventData.character);
         this.setPlayerJoinCardMode(playerJoinCard, "CharacterOverview");
     },
+
+    characterReadyCallback(eventData, container) {
+        if (!eventData) { console.error("Character Readying with null data. Something went wrong."); return false; }
+        if (!eventData.playerUsername || (typeof eventData.playerUsername !== 'string')) { console.error("Character Readying with improper name format."); return false; }
+
+        let playerJoinCard = container.elements.playerJoinCards[eventData.playerIndex];
+        playerJoinCard.elements.readyTagBox.style.display = "block";
+    }
 };
 
 //  Module Exports

@@ -39,8 +39,11 @@ const CHARACTER = {
         for (let i = 0; i < proficienyList.length; ++i) data[proficienyList[i]] = true;
         return data;
     },
-    CreateCharacterAttributesData(darkvision) {
-        return { DARKVISION: darkvision };
+    CreateCharacterAttributesData(attributeList) {
+        //  Fill in the given keys as true
+        let data = {};
+        for (let i = 0; i < attributeList.length; ++i) data[attributeList[i]] = true;
+        return data;
     },
     CreateCharacterSkillProficiencies(knownList) {
         //  Fill in the given keys as true

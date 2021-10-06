@@ -107,14 +107,32 @@ module.exports = {
     lineHeight: "41px",
     textAlign: "left",
   },
-  PLAYER_JOIN_CHARACTER_WEAPONOFCHOICE: {
+  PLAYER_JOIN_CHARACTER_MINORINFO: {
     fontSize: "14px",
     width: "282px",
     position: "absolute",
-    top: "178px",
     left: "18px",
     lineHeight: "41px",
     textAlign: "left",
+    color: "rgb(0, 0, 0, 0.8)"
+  },
+  PLAYER_JOIN_CHARACTER_REROLL_AND_READY: {
+    fontSize: "16px",
+    width: "282px",
+    position: "absolute",
+    left: "6px",
+    lineHeight: "41px",
+    textAlign: "center",
+    color: "rgb(0, 0, 0, 0.85)"
+  },
+  PLAYER_JOIN_CARD_READY_TAG: {
+    fontSize: "22px",
+    width: "282px",
+    position: "relative",
+    top: "8px",
+    left: "0px",
+    lineHeight: "41px",
+    textAlign: "center",
     color: "rgb(0, 0, 0, 0.8)"
   },
 }

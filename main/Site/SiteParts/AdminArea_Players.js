@@ -236,6 +236,9 @@ let AdminArea_Players = {
         EventDispatch.AddEventHandler("!rogue", (eventType, eventData) => { AdminArea_Players.SetPlayerClass(container, eventData); });
 
         EventDispatch.AddEventHandler("!name", (eventType, eventData) => { AdminArea_Players.SetPlayerName(container, eventData); });
+
+        EventDispatch.AddEventHandler("!reroll", (eventType, eventData) => { AdminArea_Players.RerollCharacter(container, eventData); });
+        EventDispatch.AddEventHandler("!ready", (eventType, eventData) => { AdminArea_Players.ReadyCharacter(container, eventData); });
     },
 
     SetupEventHandlers(container) {
@@ -258,6 +261,11 @@ let AdminArea_Players = {
         EventDispatch.AddEventHandler("Player Name Set", (eventType, eventData) => {
             PlayerCharacter.DefineCharacter(eventData.character);
             adminMessages.sendPlayerNameSetEvent(eventData);
+        });
+
+        EventDispatch.AddEventHandler("Player Character Ready", (eventType, eventData) => {
+            eventData.character._READY = true;
+            adminMessages.sendCharacterReadyEvent(eventData);
         });
     },
 
@@ -352,6 +360,32 @@ let AdminArea_Players = {
 
         player.character.Name = eventData.args.join(" ");
         EventDispatch.SendEvent("Player Name Set", { playerUsername: eventData.user, playerIndex: player.playerIndex, character: player.character });
+    },
+
+    RerollCharacter(container, eventData) {
+        if (!CampaignController.GetPlayerExists(eventData.user)) { console.warn("Attempting to reroll character of a user that is not a campaign player."); return false; }
+        if (!["!reroll"].includes(eventData.command)) { console.error("Rerolling character with an incompatible command."); return false; }
+
+        let player = CampaignController.GetPlayer(eventData.user);
+        if (player.character.Race === null) { console.warn("Player attempting to reroll without setting their race."); return false; }
+        if (player.character.Class === null) { console.warn("Player attempting to reroll without setting their class."); return false; }
+        if (player.character.Name === null) { console.warn("Player attempting to reroll without setting their name."); return false; }
+        if (player.character._READY === true) { console.warn("Player attempting to reroll after marking as ready."); return false; }
+
+        EventDispatch.SendEvent("Player Name Set", { playerUsername: eventData.user, playerIndex: player.playerIndex, character: player.character });
+    },
+
+    ReadyCharacter(container, eventData) {
+        if (!CampaignController.GetPlayerExists(eventData.user)) { console.warn("Attempting to ready character of a user that is not a campaign player."); return false; }
+        if (!["!ready"].includes(eventData.command)) { console.error("Readying character with an incompatible command."); return false; }
+
+        let player = CampaignController.GetPlayer(eventData.user);
+        if (player.character.Race === null) { console.warn("Player attempting to ready without setting their race."); return false; }
+        if (player.character.Class === null) { console.warn("Player attempting to ready without setting their class."); return false; }
+        if (player.character.Name === null) { console.warn("Player attempting to ready without setting their name."); return false; }
+        if (player.character._READY === true) { console.warn("Player attempting to ready after marking as ready."); return false; }
+
+        EventDispatch.SendEvent("Player Character Ready", { playerUsername: eventData.user, playerIndex: player.playerIndex, character: player.character });
     },
 
     ApprovePlayerJoinRequest(container, eventData, joinRequest) {

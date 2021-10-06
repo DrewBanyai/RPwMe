@@ -34,6 +34,7 @@ function setupMessageCallbacks() {
     ipcMain.on('player-race-set', (event, arg) => { passToGameWindow('player-race-set', event, arg); });
     ipcMain.on('player-class-set', (event, arg) => { passToGameWindow('player-class-set', event, arg); });
     ipcMain.on('player-name-set', (event, arg) => { passToGameWindow('player-name-set', event, arg); });
+    ipcMain.on('character-ready', (event, arg) => { passToGameWindow('character-ready', event, arg); });
 }
 
 //  Module Exports

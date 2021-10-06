@@ -38,6 +38,7 @@ const CommandControl = {
 
         "!name":            { effect: "Request to specify the given player's character name", who: { viewer: false, player: true, gm: true }, args: { min: 1, max: 10 } },
         "!reroll":          { effect: "Request to re-roll the given player's character stats", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
+        "!ready":          { effect: "Request to confirm the given player's character stats", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
     
         "!inventory":       { effect: "Request to open the given player's inventory", who: { viewer: false, player: true, gm: false }, args: { min: 0, max: 0 } },
         "!items":           { effect: "Request to open the given player's inventory", who: { viewer: false, player: true, gm: false }, args: { min: 0, max: 0 } },

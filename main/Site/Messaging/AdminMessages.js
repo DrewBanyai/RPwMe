@@ -28,6 +28,7 @@ const adminMessages = {
     sendPlayerRaceSetEvent(eventData) { ipcRenderer.send('player-race-set', eventData); },
     sendPlayerClassSetEvent(eventData) { ipcRenderer.send('player-class-set', eventData); },
     sendPlayerNameSetEvent(eventData) { ipcRenderer.send('player-name-set', eventData); },
+    sendCharacterReadyEvent(eventData) { ipcRenderer.send('character-ready', eventData); },
 }
 
 //  Module Exports

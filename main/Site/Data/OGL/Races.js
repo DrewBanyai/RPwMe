@@ -27,26 +27,26 @@ const RACES = {
         GetAbilityScoreChanges() { return ABILITY_SCORES.CreateAbilityScoreBlock(0, 0, 2, 0, 0, 0); },
         AssignRacialTraits(character) {
             if (!character.SavingThrowAdvantages) character.SavingThrowAdvantages = {};
-            Object.assign(character.SavingThrowAdvantages, CHARACTER.CreateSavingThrowAdvantageMap(["POISON"]));
+            Object.assign(character.SavingThrowAdvantages, CHARACTER.CreateSavingThrowAdvantageMap(["Poison"]));
 
             if (!character.WeaponProficiencies) character.WeaponProficiencies = {};
-            Object.assign(character.WeaponProficiencies, CHARACTER.CreateWeaponProficiencyData(["BATTLEAXE", "HANDAXE", "LIGHTHAMMER", "WARHAMMER"]));
+            Object.assign(character.WeaponProficiencies, CHARACTER.CreateWeaponProficiencyData(["Battleaxe", "Handaxe", "Light Hammer", "Warhammer"]));
 
             if (!character.ArmorProficiencies) character.ArmorProficiencies = {};
             Object.assign(character.ArmorProficiencies, CHARACTER.CreateArmorProficiencyData([]));
 
-            let toolProficiency = ["SMITHSTOOLS", "BREWERSSUPPLIES", "MASONSTOOLS"][RandIntBetween(0, 2)];
+            let toolProficiency = ["Smith's Tools", "Brewer's Supplies", "Mason's Tools"][RandIntBetween(0, 2)];
             if (!character.ToolProficiencies) character.ToolProficiencies = {};
             Object.assign(character.ToolProficiencies, CHARACTER.CreateToolProficiencyData([toolProficiency]));
 
             if (!character.Languages) character.Languages = {};
-            Object.assign(character.Languages, LANGUAGES.CreateCharacterLanguages(["COMMON", "DWARVISH"]));
+            Object.assign(character.Languages, LANGUAGES.CreateCharacterLanguages(["Common", "Dwarvish"]));
 
             if (!character.SkillProficiencies) character.SkillProficiencies = {};
             Object.assign(character.SkillProficiencies, CHARACTER.CreateCharacterSkillProficiencies([]));
 
             if (!character.Attributes) character.Attributes = {};
-            Object.assign(character.Attributes, CHARACTER.CreateCharacterAttributesData(60));
+            Object.assign(character.Attributes, CHARACTER.CreateCharacterAttributesData(["Darkvision (60)"]));
 
             character.Age = RandIntBetween(50, 200);
             character.Alignment = "Neutral";
@@ -63,7 +63,7 @@ const RACES = {
         GetAbilityScoreChanges() { return ABILITY_SCORES.CreateAbilityScoreBlock(0, 2, 0, 0, 0, 0); },
         AssignRacialTraits(character) {
             if (!character.SavingThrowAdvantages) character.SavingThrowAdvantages = {};
-            Object.assign(character.SavingThrowAdvantages, CHARACTER.CreateSavingThrowAdvantageMap(["CHARM"]));
+            Object.assign(character.SavingThrowAdvantages, CHARACTER.CreateSavingThrowAdvantageMap(["Charm"]));
 
             if (!character.WeaponProficiencies) character.WeaponProficiencies = {};
             Object.assign(character.WeaponProficiencies, CHARACTER.CreateWeaponProficiencyData([]));
@@ -75,13 +75,13 @@ const RACES = {
             Object.assign(character.ToolProficiencies, CHARACTER.CreateToolProficiencyData([]));
 
             if (!character.Languages) character.Languages = {};
-            Object.assign(character.Languages, LANGUAGES.CreateCharacterLanguages(["COMMON", "ELVISH"]));
+            Object.assign(character.Languages, LANGUAGES.CreateCharacterLanguages(["Common", "Elvish"]));
 
             if (!character.SkillProficiencies) character.SkillProficiencies = {};
-            Object.assign(character.SkillProficiencies, CHARACTER.CreateCharacterSkillProficiencies(["PERCEPTION"]));
+            Object.assign(character.SkillProficiencies, CHARACTER.CreateCharacterSkillProficiencies(["Perception"]));
 
             if (!character.Attributes) character.Attributes = {};
-            Object.assign(character.Attributes, CHARACTER.CreateCharacterAttributesData(60));
+            Object.assign(character.Attributes, CHARACTER.CreateCharacterAttributesData(["Darkvision (60)"]));
 
             character.Age = RandIntBetween(100, 500);
             character.Alignment = "Neutral";
@@ -99,7 +99,7 @@ const RACES = {
         GetAbilityScoreChanges() { return ABILITY_SCORES.CreateAbilityScoreBlock(0, 2, 0, 0, 0, 0); },
         AssignRacialTraits(character) {
             if (!character.SavingThrowAdvantages) character.SavingThrowAdvantages = {};
-            Object.assign(character.SavingThrowAdvantages, CHARACTER.CreateSavingThrowAdvantageMap(["FRIGHT"]));
+            Object.assign(character.SavingThrowAdvantages, CHARACTER.CreateSavingThrowAdvantageMap(["Fright"]));
 
             if (!character.WeaponProficiencies) character.WeaponProficiencies = {};
             Object.assign(character.WeaponProficiencies, CHARACTER.CreateWeaponProficiencyData([]));
@@ -111,13 +111,13 @@ const RACES = {
             Object.assign(character.ToolProficiencies, CHARACTER.CreateToolProficiencyData([]));
 
             if (!character.Languages) character.Languages = {};
-            Object.assign(character.Languages, LANGUAGES.CreateCharacterLanguages(["COMMON", "HALFLING"]));
+            Object.assign(character.Languages, LANGUAGES.CreateCharacterLanguages(["Common", "Halfling"]));
 
             if (!character.SkillProficiencies) character.SkillProficiencies = {};
             Object.assign(character.SkillProficiencies, CHARACTER.CreateCharacterSkillProficiencies([]));
 
             if (!character.Attributes) character.Attributes = {};
-            Object.assign(character.Attributes, CHARACTER.CreateCharacterAttributesData(0));
+            Object.assign(character.Attributes, CHARACTER.CreateCharacterAttributesData([]));
 
             character.Age = RandIntBetween(20, 150);
             character.Alignment = "Neutral";
@@ -146,16 +146,16 @@ const RACES = {
             if (!character.ToolProficiencies) character.ToolProficiencies = {};
             Object.assign(character.ToolProficiencies, CHARACTER.CreateToolProficiencyData([]));
 
-            let languageTriggers = LANGUAGES.GetLanguageTriggerList();
-            languageTriggers = languageTriggers.filter((l) => { return l !== "Common" });
+            let languageList = LANGUAGES.GetLanguageNameList();
+            languageList = languageList.filter((l) => { return l !== "Common" });
             if (!character.Languages) character.Languages = {};
-            Object.assign(character.Languages, LANGUAGES.CreateCharacterLanguages(["COMMON", ChooseXFromList(1, languageTriggers)[0]]));
+            Object.assign(character.Languages, LANGUAGES.CreateCharacterLanguages(["Common", ChooseXFromList(1, languageList)[0]]));
 
             if (!character.SkillProficiencies) character.SkillProficiencies = {};
             Object.assign(character.SkillProficiencies, CHARACTER.CreateCharacterSkillProficiencies([]));
 
             if (!character.Attributes) character.Attributes = {};
-            Object.assign(character.Attributes, CHARACTER.CreateCharacterAttributesData(0));
+            Object.assign(character.Attributes, CHARACTER.CreateCharacterAttributesData([]));
 
             character.Age = RandIntBetween(20, 50);
             character.Alignment = "Neutral";

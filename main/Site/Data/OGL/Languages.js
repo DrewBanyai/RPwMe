@@ -16,36 +16,28 @@
 
 const LANGUAGES = {
     List: [
-        { name: "Common", trigger: "COMMON", description: "Common" },
-        { name: "Dwarvish", trigger: "DWARVISH", description: "Dwarvish" },
-        { name: "Elvish", trigger: "ELVISH", description: "Elvish" },
-        { name: "Giant", trigger: "GIANT", description: "Giant" },
-        { name: "Gnomish", trigger: "GNOMISH", description: "Gnomish" },
-        { name: "Goblin", trigger: "GOBLIN", description: "Goblin" },
-        { name: "Halfling", trigger: "HALFLING", description: "Halfling" },
-        { name: "Orc", trigger: "ORC", description: "Orc" },
-        { name: "Abyssal", trigger: "ABYSSAL", description: "Abyssal" },
-        { name: "Celestial", trigger: "CELESTIAL", description: "Celestial" },
-        { name: "Draconic", trigger: "DRACONIC", description: "Draconic" },
-        { name: "Deep Speech", trigger: "DEEPSPEECH", description: "Deep Speech" },
-        { name: "Infernal", trigger: "INFERNAL", description: "Infernal" },
-        { name: "Primordial", trigger: "PRIMORDIAL", description: "Primordial" },
-        { name: "Sylvan", trigger: "SYLVAN", description: "Sylvan" },
-        { name: "Undercommon", trigger: "UNDERCOMMON", description: "Undercommon" },
+        { name: "Common", description: "Common" },
+        { name: "Dwarvish", description: "Dwarvish" },
+        { name: "Elvish", description: "Elvish" },
+        { name: "Giant", description: "Giant" },
+        { name: "Gnomish", description: "Gnomish" },
+        { name: "Goblin", description: "Goblin" },
+        { name: "Halfling", description: "Halfling" },
+        { name: "Orc", description: "Orc" },
+        { name: "Abyssal", description: "Abyssal" },
+        { name: "Celestial", description: "Celestial" },
+        { name: "Draconic", description: "Draconic" },
+        { name: "Deep Speech", description: "Deep Speech" },
+        { name: "Infernal", description: "Infernal" },
+        { name: "Primordial", description: "Primordial" },
+        { name: "Sylvan", description: "Sylvan" },
+        { name: "Undercommon", description: "Undercommon" },
     ],
     CreateCharacterLanguages(knownList) {
-        //  Create a struct with all language triggers as keys, set to false
-        let data = {};
-        for (let language in this.List) { data[this.List[language].trigger] = false; }
-        
         //  Fill in the given keys as true
+        let data = {};
         for (let i = 0; i < knownList.length; ++i) data[knownList[i]] = true;
         return data;
-    },
-    GetLanguageTriggerList() {
-        let list = [];
-        for (let i in this.List) { list.push(this.List[i].trigger); }
-        return list;
     },
     GetLanguageNameList() {
         let list = [];

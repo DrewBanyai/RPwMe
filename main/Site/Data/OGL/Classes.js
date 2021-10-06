@@ -40,7 +40,7 @@ const CLASSES = {
             ];
             return ChooseXFromList(1, abilityScoreChoices)[0];
         },
-        GetStartingSkillProficiencies() { return ChooseXFromList(2, ["HISTORY", "INSIGHT", "MEDICINE", "PERSUASION", "RELIGION"]); },
+        GetStartingSkillProficiencies() { return ChooseXFromList(2, ["History", "Insight", "Medicine", "Persuasion", "Religion"]); },
         GetClassHitPointsAtFirstLevel(modifiers) { return 8 + modifiers.Constitution; },
         GetClassHitPointsAfterFirstLevel(modifiers) { return DiceRoller.RollString("1d8").total + modifiers.Constitution; },
         AssignClassTraits(character) {
@@ -49,11 +49,11 @@ const CLASSES = {
             if (!character.SavingThrowAdvantages) character.SavingThrowAdvantages = {};
             Object.assign(character.SavingThrowAdvantages, CHARACTER.CreateSavingThrowAdvantageMap(["Wisdom", "Charisma"]));
 
-            let clericWeaponProfs = EQUIPMENT.GetEquipmentTriggerList(["SIMPLE_MELEE", "SIMPLE_RANGED"], []);
+            let clericWeaponProfs = EQUIPMENT.GetEquipmentNameList(["Simple Melee", "Simple Ranged"], []);
             if (!character.WeaponProficiencies) character.WeaponProficiencies = {};
             Object.assign(character.WeaponProficiencies, CHARACTER.CreateWeaponProficiencyData(clericWeaponProfs));
 
-            let clericArmorProfs = EQUIPMENT.GetEquipmentTriggerList([], ["LIGHT_ARMOR", "HEAVY_ARMOR", "SHIELDS"]);
+            let clericArmorProfs = EQUIPMENT.GetEquipmentNameList([], ["Light Armor", "Heavy Armor", "Shield"]);
             if (!character.ArmorProficiencies) character.ArmorProficiencies = {};
             Object.assign(character.ArmorProficiencies, CHARACTER.CreateArmorProficiencyData(clericArmorProfs));
 
@@ -68,16 +68,16 @@ const CLASSES = {
             let equipment = [];
 
             let testArray = [];
-            for (let i = 0; i < 10; ++i) testArray[i] = RandIntBetween(0, character.WeaponProficiencies["WARHAMMER"] ? 1 : 0);
+            for (let i = 0; i < 10; ++i) testArray[i] = RandIntBetween(0, character.WeaponProficiencies["Warhammer"] ? 1 : 0);
             console.log(testArray);
 
-            let weapon = ["Mace", "Warhammer"][RandIntBetween(0, character.WeaponProficiencies["WARHAMMER"] ? 1 : 0)]
+            let weapon = ["Mace", "Warhammer"][RandIntBetween(0, character.WeaponProficiencies["Warhammer"] ? 1 : 0)]
             equipment.push({ item: weapon, count: 1});
 
-            let armor = ["Scale Mail", "Leather Armor", "Chain mail"][RandIntBetween(0, character.ArmorProficiencies["CHAINMAIL"] ? 2 : 1)];
+            let armor = ["Scale Mail Armor", "Leather Armor", "Chain Mail Armor"][RandIntBetween(0, character.ArmorProficiencies["Chain Mail Armor"] ? 2 : 1)];
             equipment.push({ item: armor, count: 1 });
 
-            let extraWeapon = ["Crossbow, light", EQUIPMENT.WEAPONS.SIMPLE_MELEE[RandIntBetween(0, EQUIPMENT.WEAPONS.SIMPLE_MELEE.length - 1)].name][RandIntBetween(0, 1)];
+            let extraWeapon = ["Crossbow, light", EQUIPMENT.WEAPONS["Simple Melee"][RandIntBetween(0, EQUIPMENT.WEAPONS["Simple Melee"].length - 1)].name][RandIntBetween(0, 1)];
             equipment.push({ item: extraWeapon, count: 1 });
             if (extraWeapon === "Crossbow, light") equipment.push({ item: "Bolt", count: 20 })
 
@@ -138,6 +138,19 @@ const CLASSES = {
             //  TODO: Equip items
             return ownedWeapons[0].name;
         },
+        DetermineStartingMoneyByLevel(startingLevel) {
+            //  NOTE: Currently starting level will always be between 3 and 8
+            switch (true) {
+                case [1, 2, 3, 4].includes(startingLevel):
+                    return (DiceRoller.RollString("5d4").total * 10) * 100;
+                case [5, 6, 7, 8, 9, 10].includes(startingLevel):
+                    return (DiceRoller.RollString("1d10").total * 25 + 500) * 100;
+                case [11, 12, 13, 14, 15, 16].includes(startingLevel):
+                    return (DiceRoller.RollString("1d10").total * 250 + 500) * 100;
+                case [17, 18, 19, 20]:
+                    return (DiceRoller.RollString("1d10").total * 250 + 20000) * 100;
+            }
+        },
     },
     Fighter: {
         DetermineAbilityScores() {
@@ -155,7 +168,7 @@ const CLASSES = {
             ];
             return ChooseXFromList(1, abilityScoreChoices)[0];
         },
-        GetStartingSkillProficiencies() { return ChooseXFromList(2, ["ACROBATICS", "ANIMAL HANDLING", "ATHLETICS", "HISTORY", "INSIGHT", "INTIMIDATION", "PERCEPTION", "SURVIVAL"]); },
+        GetStartingSkillProficiencies() { return ChooseXFromList(2, ["Acrobatics", "Animal Handling", "Athletics", "History", "Insight", "Intimidation", "Perception", "Survival"]); },
         GetClassHitPointsAtFirstLevel(modifiers) { return 10 + modifiers.Constitution; },
         GetClassHitPointsAfterFirstLevel(modifiers) { return DiceRoller.RollString("1d10").total + modifiers.Constitution; },
         AssignClassTraits(character) {
@@ -164,11 +177,11 @@ const CLASSES = {
             if (!character.SavingThrowAdvantages) character.SavingThrowAdvantages = {};
             Object.assign(character.SavingThrowAdvantages, CHARACTER.CreateSavingThrowAdvantageMap(["Strength", "Constitution"]));
 
-            let fighterWeaponProfs = EQUIPMENT.GetEquipmentTriggerList(["SIMPLE_MELEE", "SIMPLE_RANGED", "MARTIAL_MELEE", "MARTIAL_RANGED"], []);
+            let fighterWeaponProfs = EQUIPMENT.GetEquipmentNameList(["Simple Melee", "Simple Ranged", "Martial Melee", "Martial Ranged"], []);
             if (!character.WeaponProficiencies) character.WeaponProficiencies = {};
             Object.assign(character.WeaponProficiencies, CHARACTER.CreateWeaponProficiencyData(fighterWeaponProfs));
 
-            let fighterArmorProfs = EQUIPMENT.GetEquipmentTriggerList([], ["LIGHT_ARMOR", "MEDIUM_ARMOR", "HEAVY_ARMOR", "SHIELDS"]);
+            let fighterArmorProfs = EQUIPMENT.GetEquipmentNameList([], ["Light Armor", "Medium Armor", "Heavy Armor", "Shield"]);
             if (!character.ArmorProficiencies) character.ArmorProficiencies = {};
             Object.assign(character.ArmorProficiencies, CHARACTER.CreateArmorProficiencyData(fighterArmorProfs));
 
@@ -196,14 +209,14 @@ const CLASSES = {
         GetClassStartingEquipment(character) {
             let equipment = [];
 
-            if (character.AbilityScores["Strength"] >= character.AbilityScores["Dexterity"]) equipment.push({ item: "Chain Mail", count: 1 });
+            if (character.AbilityScores["Strength"] >= character.AbilityScores["Dexterity"]) equipment.push({ item: "Chain Mail Armor", count: 1 });
             else {
                 equipment.push({ item: "Leather Armor", count: 1 });
                 equipment.push({ item: "Longbow", count: 1 });
                 equipment.push({ item: "Arrow", count: 20 });
             }
 
-            let martialWeapons = EQUIPMENT.GetEquipmentNameList(["MARTIAL_MELEE"], []);
+            let martialWeapons = EQUIPMENT.GetEquipmentNameList(["Martial Melee"], []);
             if (RandIntBetween(0, 1) === 0) {
                 equipment.push({ item: martialWeapons[RandIntBetween(0, martialWeapons.length - 1)], count: 1 });
                 equipment.push({ item: "Shield", count: 1 });
@@ -271,6 +284,19 @@ const CLASSES = {
             //  TODO: Equip items
             return ownedWeapons[0].name;
         },
+        DetermineStartingMoneyByLevel(startingLevel) {
+            //  NOTE: Currently starting level will always be between 3 and 8
+            switch (true) {
+                case [1, 2, 3, 4].includes(startingLevel):
+                    return (DiceRoller.RollString("5d4").total * 10) * 100;
+                case [5, 6, 7, 8, 9, 10].includes(startingLevel):
+                    return (DiceRoller.RollString("1d10").total * 25 + 500) * 100;
+                case [11, 12, 13, 14, 15, 16].includes(startingLevel):
+                    return (DiceRoller.RollString("1d10").total * 250 + 500) * 100;
+                case [17, 18, 19, 20]:
+                    return (DiceRoller.RollString("1d10").total * 250 + 20000) * 100;
+            }
+        },
     },
     Rogue: {
         DetermineAbilityScores() {
@@ -288,7 +314,7 @@ const CLASSES = {
             ];
             return ChooseXFromList(1, abilityScoreChoices)[0];
         },
-        GetStartingSkillProficiencies() { return ChooseXFromList(4, ["ACROBATICS", "ATHLETICS", "DECEPTION", "INSIGHT", "INTIMIDATION", "INVESTIGATION", "PERCEPTION", "PERFORMANCE", "PERSUASION", "SLEIGHT OF HAND", "STEALTH"]); },
+        GetStartingSkillProficiencies() { return ChooseXFromList(4, ["Acrobatics", "Athletics", "Deception", "Insight", "Intimidation", "Investigation", "Perception", "Performance", "Persuasion", "Sleight of Hand", "Stealth"]); },
         GetClassHitPointsAtFirstLevel(modifiers) { return 8 + modifiers.Constitution; },
         GetClassHitPointsAfterFirstLevel(modifiers) { return DiceRoller.RollString("1d8").total + modifiers.Constitution; },
         AssignClassTraits(character) {
@@ -297,16 +323,16 @@ const CLASSES = {
             if (!character.SavingThrowAdvantages) character.SavingThrowAdvantages = {};
             Object.assign(character.SavingThrowAdvantages, CHARACTER.CreateSavingThrowAdvantageMap(["Dexterity", "Intelligence"]));
 
-            let rogueWeaponProfs = EQUIPMENT.GetEquipmentTriggerList(["SIMPLE_MELEE", "SIMPLE_RANGED"], []).concat(["CROSSBOW_HAND", "LONGSWORD", "RAPIER", "SHORTSWORD"]);
+            let rogueWeaponProfs = EQUIPMENT.GetEquipmentNameList(["Simple Melee", "Simple Ranged"], []).concat(["Crossbow, hand", "Longsword", "Rapier", "Shortsword"]);
             if (!character.WeaponProficiencies) character.WeaponProficiencies = {};
             Object.assign(character.WeaponProficiencies, CHARACTER.CreateWeaponProficiencyData(rogueWeaponProfs));
 
-            let rogueArmorProfs = EQUIPMENT.GetEquipmentTriggerList([], ["LIGHT_ARMOR"]);
+            let rogueArmorProfs = EQUIPMENT.GetEquipmentNameList([], ["Light Armor"]);
             if (!character.ArmorProficiencies) character.ArmorProficiencies = {};
             Object.assign(character.ArmorProficiencies, CHARACTER.CreateArmorProficiencyData(rogueArmorProfs));
 
             if (!character.ToolProficiencies) character.ToolProficiencies = {};
-            Object.assign(character.ToolProficiencies, CHARACTER.CreateToolProficiencyData(["THIEVESTOOLS"]));
+            Object.assign(character.ToolProficiencies, CHARACTER.CreateToolProficiencyData(["Thieve's Tools"]));
 
             let rogueSkills = CLASSES.Rogue.GetStartingSkillProficiencies();
             if (!character.SkillProficiencies) character.SkillProficiencies = {};
@@ -371,6 +397,19 @@ const CLASSES = {
             //  TODO: Equip items
             return ownedWeapons[0].name;
         },
+        DetermineStartingMoneyByLevel(startingLevel) {
+            //  NOTE: Currently starting level will always be between 3 and 8
+            switch (true) {
+                case [1, 2, 3, 4].includes(startingLevel):
+                    return (DiceRoller.RollString("4d4").total * 10) * 100;
+                case [5, 6, 7, 8, 9, 10].includes(startingLevel):
+                    return (DiceRoller.RollString("1d10").total * 25 + 500) * 100;
+                case [11, 12, 13, 14, 15, 16].includes(startingLevel):
+                    return (DiceRoller.RollString("1d10").total * 250 + 500) * 100;
+                case [17, 18, 19, 20]:
+                    return (DiceRoller.RollString("1d10").total * 250 + 20000) * 100;
+            }
+        },
     },
     Wizard: {
         DetermineAbilityScores() {
@@ -388,7 +427,7 @@ const CLASSES = {
             ];
             return ChooseXFromList(1, abilityScoreChoices)[0];
         },
-        GetStartingSkillProficiencies() { return ChooseXFromList(2, ["ARCANA", "HISTORY", "INSIGHT", "INVESTIGATION", "MEDICINE", "RELIGION"]); },
+        GetStartingSkillProficiencies() { return ChooseXFromList(2, ["Arcana", "History", "Insight", "Investigation", "Medicine", "Religion"]); },
         GetClassHitPointsAtFirstLevel(modifiers) { return 8 + modifiers.Constitution; },
         GetClassHitPointsAfterFirstLevel(modifiers) { return DiceRoller.RollString("1d8").total + modifiers.Constitution; },
         AssignClassTraits(character) {
@@ -397,7 +436,7 @@ const CLASSES = {
             if (!character.SavingThrowAdvantages) character.SavingThrowAdvantages = {};
             Object.assign(character.SavingThrowAdvantages, CHARACTER.CreateSavingThrowAdvantageMap(["Intelligence", "Wisdom"]));
 
-            let wizardWeaponProfs = CHARACTER.CreateWeaponProficiencyData(["DAGGER", "DART", "SLING", "QUARTERSTAFF", "CROSSBOW_LIGHT"]);
+            let wizardWeaponProfs = CHARACTER.CreateWeaponProficiencyData(["Dagger", "Dart", "Sling", "Quarterstaff", "Crossbow, light"]);
             if (!character.WeaponProficiencies) character.WeaponProficiencies = {};
             Object.assign(character.WeaponProficiencies, CHARACTER.CreateWeaponProficiencyData(wizardWeaponProfs));
 
@@ -457,6 +496,19 @@ const CLASSES = {
 
             //  TODO: Equip items
             return ownedWeapons[0].name;
+        },
+        DetermineStartingMoneyByLevel(startingLevel) {
+            //  NOTE: Currently starting level will always be between 3 and 8
+            switch (true) {
+                case [1, 2, 3, 4].includes(startingLevel):
+                    return (DiceRoller.RollString("4d4").total * 10) * 100;
+                case [5, 6, 7, 8, 9, 10].includes(startingLevel):
+                    return (DiceRoller.RollString("1d10").total * 25 + 500) * 100;
+                case [11, 12, 13, 14, 15, 16].includes(startingLevel):
+                    return (DiceRoller.RollString("1d10").total * 250 + 500) * 100;
+                case [17, 18, 19, 20]:
+                    return (DiceRoller.RollString("1d10").total * 250 + 20000) * 100;
+            }
         },
     }
 }
