@@ -43,7 +43,7 @@ let AdminArea_Players = {
             }
         });
 
-        container.elements = { startPlayerJoinMenu: null, playerDataDisplay: null, playerListMenu: null, activePlayerList: null, playerRequestList: null };
+        container.elements = { startPlayerJoinMenu: null, playerDataDisplay: null, playerListMenu: null, activePlayerList: null, playerRequestList: null, beginGameButton: null };
         container.requestUsers = [];
         container.selectedPlayer = "";
 
@@ -140,7 +140,7 @@ let AdminArea_Players = {
             id: "ActivePlayerListBox",
             style: {
                 width: "100%",
-                height: "323px",
+                height: "139px",
                 display: "table",
                 backgroundColor: "rgb(40, 40, 40)",
             }
@@ -167,7 +167,7 @@ let AdminArea_Players = {
             id: "ActivePlayerListContainer",
             style: {
                 width: "228px",
-                height: "264px",
+                height: "80px",
                 borderRadius: "6px",
                 backgroundColor: "rgb(20, 20, 20)",
                 margin: "4px 4px 4px 4px",
@@ -221,6 +221,37 @@ let AdminArea_Players = {
         });
         playerRequestListBox.appendChild(container.elements.playerRequestList);
 
+        //  Begin Game Option box
+        let beginGameOptionBox = Container.create({
+            id: "BeginGameOptionBox",
+            style: {
+                width: "100%",
+                height: "184px",
+                display: "table",
+                backgroundColor: "rgb(40, 40, 40)",
+                textAlign: "center",
+            }
+        });
+        container.elements.playerListMenu.appendChild(beginGameOptionBox);
+
+        container.elements.beginGameButton = BasicButton.create({
+            id: "BeginGameButton",
+            style: {
+                width: "120px",
+                height: "24px",
+                position: "relative",
+                top: "3px",
+                margin: "0px 4px 0px 0px",
+                fontFamily: "Open Sans Condensed",
+                fontWeight: "bold",
+                fontSize: "14px",
+                display: "none",
+            }
+        });
+        BasicButton.setValue(container.elements.beginGameButton, "Begin Game");
+        BasicButton.setOnClick(container.elements.beginGameButton, () => { EventDispatch.SendEvent("Begin Campaign", {}); });
+        beginGameOptionBox.appendChild(container.elements.beginGameButton);
+
         //  Add event dispatchers for joining, leaving, selecting race, selecting class, selecting name, and approving character
         EventDispatch.AddEventHandler("!join", (eventType, eventData) => { AdminArea_Players.AddPlayerJoinRequest(container, eventData); });
         EventDispatch.AddEventHandler("!leave", (eventType, eventData) => { AdminArea_Players.RemovePlayer(container, eventData); });
@@ -253,6 +284,12 @@ let AdminArea_Players = {
             CampaignController.SetCampaignStatus("Waiting For Players");
         });
 
+        EventDispatch.AddEventHandler("Begin Campaign", (eventType, eventData) => {
+            adminMessages.sendCampaignToGameScreen(CampaignController.GetCampaignData());
+            adminMessages.sendCampaignBeginFlag();
+            CampaignController.SetCampaignStatus("Active");
+        });
+
         EventDispatch.AddEventHandler("Player Added", (eventType, eventData) => { adminMessages.sendPlayerJoinedEvent(eventData); });
         EventDispatch.AddEventHandler("Player Removed", (eventType, eventData) => { adminMessages.sendPlayerLeftEvent(eventData); });
         EventDispatch.AddEventHandler("Player Race Set", (eventType, eventData) => { adminMessages.sendPlayerRaceSetEvent(eventData); });
@@ -265,7 +302,18 @@ let AdminArea_Players = {
 
         EventDispatch.AddEventHandler("Player Character Ready", (eventType, eventData) => {
             eventData.character._READY = true;
+            EventDispatch.SendEvent("Player Ready Status Updated", eventData);
             adminMessages.sendCharacterReadyEvent(eventData);
+        });
+
+        EventDispatch.AddEventHandler("Player Ready Status Updated", (eventType, eventData) => {
+            let playersReady = 0;
+            let playersList = CampaignController.GetPlayersList();
+            let playersListKeys = Object.keys(playersList);
+            playersListKeys.forEach(k => playersReady += ((playersList[k] && playersList[k].character._READY) ? 1 : 0));
+            
+            if (playersReady >= SETTINGS.PLAYERS_REQUIRED_TO_BEGIN) container.elements.beginGameButton.style.display = "inline-flex";
+            else container.elements.beginGameButton.style.display = "none";
         });
     },
 
@@ -279,6 +327,7 @@ let AdminArea_Players = {
         ActivePlayerEntry.setRemoveCallback(player, () => {
             //  Remove the user from the campaign
             CampaignController.RemoveCampaignPlayer(eventData.user);
+            EventDispatch.SendEvent("Player Ready Status Updated", eventData);
 
             //  Remove the player join request entry from the UI
             container.elements.activePlayerList.removeChild(player);
@@ -313,6 +362,7 @@ let AdminArea_Players = {
 
         if (CampaignController.GetPlayerExists(eventData.user)) {
             CampaignController.RemoveCampaignPlayer(eventData.user);
+            EventDispatch.SendEvent("Player Ready Status Updated", eventData);
 
             let playerEntry = null;
             for (let i = 0; i < container.elements.activePlayerList.children.length; ++i)

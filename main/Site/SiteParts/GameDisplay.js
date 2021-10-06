@@ -22,6 +22,7 @@ const { EventDispatch } = require('../Controllers/EventDispatch')
 
 const { GameArea_WaitingToBegin } = require('./GameArea_WaitingToBegin')
 const { GameArea_PlayerJoin } = require('./GameArea_PlayerJoin')
+const { GameArea_Campaign } = require('./GameArea_Campaign')
 
 let GameDisplay = {
     create: () => {
@@ -61,11 +62,16 @@ let GameDisplay = {
 
         addMainEntry("WaitingToBegin", GameArea_WaitingToBegin.create());
         addMainEntry("PlayerJoin", GameArea_PlayerJoin.create());
+        addMainEntry("Campaign", GameArea_Campaign.create());
     },
 
     setupEventCallbacks: (container) => {
         EventDispatch.AddEventHandler("Player Join Allowed", (eventType, eventData) => {
             GameDisplay.showMenuScreen(container, "PlayerJoin");
+        });
+        
+        EventDispatch.AddEventHandler("Campaign Begin", (eventType, eventData) => {
+            GameDisplay.showMenuScreen(container, "Campaign");
         });
     },
 

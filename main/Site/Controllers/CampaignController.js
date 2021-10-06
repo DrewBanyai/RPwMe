@@ -23,7 +23,8 @@ let CAMPAIGN_DATA = {};
 const CAMPAIGN_STATUS_LIST = [
     "Generating Campaign Data",
     "Waiting For Campaign Start",
-    "Waiting For Players"
+    "Waiting For Players",
+    "Active",
 ];
 
 let CampaignObjectCount = 0;
