@@ -135,4 +135,45 @@ module.exports = {
     textAlign: "center",
     color: "rgb(0, 0, 0, 0.8)"
   },
+  SCREEN_TAB_POSITIONS: {
+    Journal: { x: 0, y: 16 },
+    Map: { x: 0, y: 58 },
+    Inventory: { x: 0, y: 100 },
+    Combat: { x: 0, y: 142 },
+  },
+  SCREEN_TAB_LABEL: {
+    fontSize: "20px",
+    width: "106px",
+    position: "absolute",
+    left: "10px",
+    top: "8px",
+  },
+  JOURNAL_SCREEN_TITLE: {
+    position: "relative",
+    fontFamily: "FFF Tusj",
+    fontSize: "100px",
+    margin: "25px ​144px 0px 0px",
+    color: "rgb(1, 150, 100)",
+    position: "absolute",
+    left: "234px",
+    top: "82px",
+  },
+  JOURNAL_ENTRY: {
+    fontSize: "20px",
+    height: "42px",
+    width: "800px",
+  },
+  JOURNAL_ID: {
+    fontSize: "20px",
+    width: "100px",
+    position: "absolute",
+    color: "rgb(50, 150, 50)",
+  },
+  JOURNAL_TITLE: {
+    fontSize: "20px",
+    width: "800px",
+    position: "absolute",
+    left: "110px",
+    color: "rgb(50, 50, 150)",
+  },
 }

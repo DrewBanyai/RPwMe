@@ -16,7 +16,6 @@
 
 const { Container, Label, FontawesomeButton } = require('../Components/ArcadiaJS')
 
-//  NOTE: This is similar to a Label from ArcadiaJS, but uses a certain font family and writes itself in one character at a time
 const ActivePlayerEntry = {
 	create: (options) => {
 		let container = Container.create({

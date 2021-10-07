@@ -18,7 +18,6 @@ const { HandwrittenNote } = require('../Components/HandwrittenNote')
 const STYLE = require('../style')
 const { Container } = require('../Components/ArcadiaJS')
 
-//  NOTE: This is similar to a Label from ArcadiaJS, but uses a certain font family and writes itself in one character at a time
 const AbilityScoreBlock = {
 	create: (options) => {
 		let container = Container.create({
