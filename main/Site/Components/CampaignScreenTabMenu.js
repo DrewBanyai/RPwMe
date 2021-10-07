@@ -33,12 +33,10 @@ const CampaignScreenTabMenu = {
 
         Container.applyOptions(container, options);
 
-        container.elements = { journalTab: null, mapTab: null, inventoryTab: null, combatTab: null };
+        container.elements = { tabs: {} };
 
-        CampaignScreenTabMenu.createScreenTab(container, "Journal", "!journal");
-        CampaignScreenTabMenu.createScreenTab(container, "Map", "!map");
-        CampaignScreenTabMenu.createScreenTab(container, "Inventory", "!inventory");
-        CampaignScreenTabMenu.createScreenTab(container, "Combat", "!combat");
+        for (let tabInfo in options.tabs) CampaignScreenTabMenu.createScreenTab(container, options.tabs[tabInfo].tab, options.tabs[tabInfo].command);
+        CampaignScreenTabMenu.selectTab(container, options.startingTab);
 
 		return container;
 	},
@@ -46,23 +44,22 @@ const CampaignScreenTabMenu = {
     createScreenTab(container, tabID, tabString) {
         let positionData = STYLE.SCREEN_TAB_POSITIONS[tabID];
 
-        let tabContainer = Container.create({
-            id: "ScreenTab_" + tabID,
-            style: {
-                position: "absolute",
-                width: "120px",
-                height: "38px",
-                left: pxFromInt(positionData.x),
-                top: pxFromInt(positionData.y),
-                backgroundImage: "url(Images/ScreenTabBG.png)",
-                zIndex: 1,
-            },
-        });
-        container.appendChild(tabContainer);
+        container.elements.tabs[tabID] = Container.create({ id: "ScreenTab_" + tabID, style: STYLE.SCREEN_TAB, });
+        container.elements.tabs[tabID].style.left = pxFromInt(positionData.x),
+        container.elements.tabs[tabID].style.top = pxFromInt(positionData.y),
+        container.appendChild(container.elements.tabs[tabID]);
 
         let tabLabel = HandwrittenNote.create({ id: "ScreenTabLabel_" + tabID, style: STYLE.SCREEN_TAB_LABEL, attributes: { value: tabString, }, writeDelay: 30, });
-        tabContainer.appendChild(tabLabel);
+        container.elements.tabs[tabID].appendChild(tabLabel);
     },
+
+    selectTab(container, tabID) {
+        if (!container.elements.tabs.hasOwnProperty(tabID)) { console.warning("Attempted to select a non-existant screen tab."); return; }
+
+        let tabsKeys = Object.keys(container.elements.tabs);
+        for (let key in tabsKeys) container.elements.tabs[tabsKeys[key]].style.backgroundImage = "url(Images/ScreenTabBG.png)";
+        container.elements.tabs[tabID].style.backgroundImage = "url(Images/ScreenTabSelectedBG.png)";
+    }
 };
 
 //  Module Exports

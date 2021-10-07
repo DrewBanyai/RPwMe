@@ -18,10 +18,13 @@ const CONFIG = require('../../config')
 const STYLE = require('../style')
 const { Container, Label } = require('../Components/ArcadiaJS')
 const { pxFromInt } = require('../HelperFunctions/pxFromInt')
-const { HandwrittenNote } = require('../Components/HandwrittenNote')
 const { CampaignScreenTabMenu } = require('../Components/CampaignScreenTabMenu')
-const { GameArea_Campaign_Journal } = require('../SiteParts/GameArea_Campaign_Journal')
 const { EventDispatch } = require('../Controllers/EventDispatch')
+
+const { GameArea_Campaign_Journal } = require('../SiteParts/GameArea_Campaign_Journal')
+const { GameArea_Campaign_Map } = require('../SiteParts/GameArea_Campaign_Map')
+const { GameArea_Campaign_Inventory } = require('../SiteParts/GameArea_Campaign_Inventory')
+const { GameArea_Campaign_Combat } = require('../SiteParts/GameArea_Campaign_Combat')
 
 let GameArea_Campaign = {
     create() {
@@ -37,16 +40,31 @@ let GameArea_Campaign = {
             }
         });
 
-        container.elements = { paper: null, screenTabMenu: null, journalScreen: null }
+        container.elements = { paper: null, screenTabMenu: null, screens: {}, }
 
         container.elements.paper = Container.create({ id: "LinedPaperBackground", style: STYLE.LINED_PAPER_BACKGROUND, });
         container.appendChild(container.elements.paper);
 
-        container.elements.screenTabMenu = CampaignScreenTabMenu.create({});
+        let screenTabs = [
+            { tab: "Journal", command: "!journal" },
+            { tab: "Map", command: "!map" },
+            { tab: "Inventory", command: "!inventory" },
+            { tab: "Combat", command: "!combat" },
+        ];
+        container.elements.screenTabMenu = CampaignScreenTabMenu.create({ tabs: screenTabs, startingTab: "Journal" });
         container.appendChild(container.elements.screenTabMenu);
 
-        container.elements.journalScreen = GameArea_Campaign_Journal.create({});
-        container.appendChild(container.elements.journalScreen);
+        container.elements.screens["Journal"] = GameArea_Campaign_Journal.create({ style: { display: STYLE.GAME_WINDOW_MENU_DISPLAY_TYPE }});
+        container.appendChild(container.elements.screens["Journal"]);
+
+        container.elements.screens["Map"] = GameArea_Campaign_Map.create({});
+        container.appendChild(container.elements.screens["Map"]);
+
+        container.elements.screens["Inventory"] = GameArea_Campaign_Inventory.create({});
+        container.appendChild(container.elements.screens["Inventory"]);
+
+        container.elements.screens["Combat"] = GameArea_Campaign_Combat.create({});
+        container.appendChild(container.elements.screens["Combat"]);
 
         setTimeout(() => { EventDispatch.SendEvent("Add Journal", { title: "A new adventure begins today. We seek glory, treasure, and honor.", contents: "You've struck out on your own to find a grand adventure and hopefully some gold for your trouble. Along the way, you've met a few companions that have traveled with you for a bit, and are looking to make some money and a name for themselves as well. You find yourself in a tavern in the small village of Rofhaven, drinking and eating with your new friends." }); }, 100);
         setTimeout(() => { EventDispatch.SendEvent("Add Journal", { title: "You are in control. Decide what actions you and your teammates should take.", contents: "You are in control now. Type !commands for a link to all player commands. If you don't know the command to use for what you want to do, just use !request SPECIFICS and the Game Master will do their best to help you complete the action." }); }, 200);

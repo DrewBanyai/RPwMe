@@ -141,6 +141,16 @@ module.exports = {
     Inventory: { x: 0, y: 100 },
     Combat: { x: 0, y: 142 },
   },
+  SCREEN_TAB: {
+    position: "absolute",
+    width: "120px",
+    height: "38px",
+    backgroundImage: "url(Images/ScreenTabBG.png)",
+    zIndex: 1,
+    pointerEvents: "none",
+  },
+  SCREEN_TAB_COLOR_SELECTED: "rgb(200, 255, 200)",
+  SCREEN_TAB_COLOR_UNSELECTED: "rgb(255, 255, 255)",
   SCREEN_TAB_LABEL: {
     fontSize: "20px",
     width: "106px",
@@ -175,5 +185,11 @@ module.exports = {
     position: "absolute",
     left: "110px",
     color: "rgb(50, 50, 150)",
+  },
+  GAME_AREA_CAMPAIGN_SUBMENU: {
+    display: "none",
+    justifyContent: "center",
+    overflow: "hidden",
+    position: "absolute",
   },
 }

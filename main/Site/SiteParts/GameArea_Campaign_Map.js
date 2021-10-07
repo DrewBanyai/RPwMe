@@ -18,25 +18,21 @@ const CONFIG = require('../../config')
 const STYLE = require('../style')
 const { Container, Label } = require('../Components/ArcadiaJS')
 const { pxFromInt } = require('../HelperFunctions/pxFromInt')
-const { JournalList } = require('../Components/JournalList')
 
-let GameArea_Campaign_Journal = {
+let GameArea_Campaign_Map = {
     create() {
-        let container = Container.create({ id: "GameArea_Campaign_Journal", style: STYLE.GAME_AREA_CAMPAIGN_SUBMENU, });
+        let container = Container.create({ id: "GameArea_Campaign_Map", style: STYLE.GAME_AREA_CAMPAIGN_SUBMENU, });
         container.style.width = pxFromInt(CONFIG.WINDOW_WIDTH);
         container.style.height = pxFromInt(CONFIG.WINDOW_HEIGHT);
 
-        container.elements = { screenTitle: null, journalList: null }
+        container.elements = { screenTitle: null, }
 
-        container.elements.screenTitle = Label.create({ id: "ScreenTitle", style: STYLE.JOURNAL_SCREEN_TITLE, attributes: { value: "Journal" } });
+        container.elements.screenTitle = Label.create({ id: "ScreenTitle", style: STYLE.JOURNAL_SCREEN_TITLE, attributes: { value: "Map" } });
         container.appendChild(container.elements.screenTitle);
-
-        container.elements.journalList = JournalList.create({});
-        container.appendChild(container.elements.journalList);
 
         return container;
     },
 };
 
 //  Module Exports
-module.exports = { GameArea_Campaign_Journal }
+module.exports = { GameArea_Campaign_Map }
