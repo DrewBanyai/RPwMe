@@ -25,7 +25,10 @@ let GameArea_Campaign_Map = {
         container.style.width = pxFromInt(CONFIG.WINDOW_WIDTH);
         container.style.height = pxFromInt(CONFIG.WINDOW_HEIGHT);
 
-        container.elements = { screenTitle: null, }
+        container.elements = { paper: null, screenTitle: null, }
+
+        container.elements.paper = Container.create({ id: "LinedPaperBackground", style: STYLE.LINED_PAPER_BACKGROUND, });
+        container.appendChild(container.elements.paper);
 
         container.elements.screenTitle = Label.create({ id: "ScreenTitle", style: STYLE.JOURNAL_SCREEN_TITLE, attributes: { value: "Map" } });
         container.appendChild(container.elements.screenTitle);

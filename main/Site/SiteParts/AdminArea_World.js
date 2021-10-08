@@ -16,11 +16,12 @@
 
 const CONFIG = require('../../config')
 const STYLE = require('../style')
-const { Container } = require('../Components/ArcadiaJS')
+const { Container, BasicButton } = require('../Components/ArcadiaJS')
 const { WorldController } = require('../Controllers/WorldController')
 const { InteractiveMap } = require('../Components/InteractiveMap')
 const { EventDispatch } = require('../Controllers/EventDispatch')
 const { pxFromInt } = require('../HelperFunctions/pxFromInt')
+const { adminMessages } = require('../Messaging/AdminMessages')
 
 let AdminArea_World = {
     create() {
@@ -34,10 +35,23 @@ let AdminArea_World = {
             }
         });
 
-        container.elements = { worldContainer: null, worldDisplay: null, infoBoxWorld: null };
+        container.elements = { worldContainer: null, worldDisplay: null, infoBoxWorld: null, showMapButton: null };
 
         AdminArea_World.createWorldDisplay(container, Date.now());
         AdminArea_World.createWorldInfoBox(container);
+
+        container.elements.showMapButton = BasicButton.create({
+            id: "ShowMapButton",
+            style: {
+                fontFamily: "Vesper Libre",
+                fontSize: "18px",
+                margin: "0px 100px 0px 0px",
+                display: "inline-flex",
+            },
+            attributes: { value: "Show Map", },
+        });
+        container.appendChild(container.elements.showMapButton);
+        BasicButton.setOnClick(container.elements.showMapButton, () => { adminMessages.sendShowCampaignScreenEvent({ screenID: "Map", }); });
 
         EventDispatch.AddEventHandler("Map Create", (eventType, eventData) => { AdminArea_World.createWorldDisplay(container, eventData.seed); });
 

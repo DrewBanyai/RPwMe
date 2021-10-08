@@ -36,6 +36,7 @@ function setupMessageCallbacks() {
     ipcMain.on('player-name-set', (event, arg) => { passToGameWindow('player-name-set', event, arg); });
     ipcMain.on('character-ready', (event, arg) => { passToGameWindow('character-ready', event, arg); });
     ipcMain.on('campaign-begin', (event, arg) => { passToGameWindow('campaign-begin', event, arg); });
+    ipcMain.on('show-campaign-screen', (event, arg) => { passToGameWindow('show-campaign-screen', event, arg); });
 }
 
 //  Module Exports

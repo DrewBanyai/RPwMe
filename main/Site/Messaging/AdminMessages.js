@@ -30,6 +30,7 @@ const adminMessages = {
     sendPlayerNameSetEvent(eventData) { ipcRenderer.send('player-name-set', eventData); },
     sendCharacterReadyEvent(eventData) { ipcRenderer.send('character-ready', eventData); },
     sendCampaignBeginFlag(eventData) { ipcRenderer.send('campaign-begin', eventData); },
+    sendShowCampaignScreenEvent(eventData) { ipcRenderer.send('show-campaign-screen', eventData); },
 }
 
 //  Module Exports

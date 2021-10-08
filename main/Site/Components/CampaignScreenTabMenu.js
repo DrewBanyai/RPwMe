@@ -22,26 +22,23 @@ const { HandwrittenNote } = require('../Components/HandwrittenNote')
 
 const CampaignScreenTabMenu = {
 	create: (options) => {
-		let container = Container.create({
-            id: "CampaignScreenTabMenu",
-            style: {
-                width: pxFromInt(CONFIG.WINDOW_WIDTH),
-                height: pxFromInt(CONFIG.WINDOW_HEIGHT),
-                position: "absolute",
-            },
-        });
+		let container = Container.create({ id: "CampaignScreenTabMenu", style: { width: pxFromInt(CONFIG.WINDOW_WIDTH), height: pxFromInt(CONFIG.WINDOW_HEIGHT), position: "absolute", }, });
 
         Container.applyOptions(container, options);
 
         container.elements = { tabs: {} };
 
+        //  Create the screen tabs, as described in the options.tabs value
         for (let tabInfo in options.tabs) CampaignScreenTabMenu.createScreenTab(container, options.tabs[tabInfo].tab, options.tabs[tabInfo].command);
-        CampaignScreenTabMenu.selectTab(container, options.startingTab);
+
+        //  Create a function we can use to highlight a specific tab by its ID
+        container.highlightTab = (tabID) => { CampaignScreenTabMenu.highlightTab(container, tabID); }
 
 		return container;
 	},
 
     createScreenTab(container, tabID, tabString) {
+        if (!STYLE.SCREEN_TAB_POSITIONS.hasOwnProperty(tabID)) { console.warning("Attempted to create a tab (" + tabID + ") that does not have position data"); return; }
         let positionData = STYLE.SCREEN_TAB_POSITIONS[tabID];
 
         container.elements.tabs[tabID] = Container.create({ id: "ScreenTab_" + tabID, style: STYLE.SCREEN_TAB, });
@@ -53,7 +50,7 @@ const CampaignScreenTabMenu = {
         container.elements.tabs[tabID].appendChild(tabLabel);
     },
 
-    selectTab(container, tabID) {
+    highlightTab(container, tabID) {
         if (!container.elements.tabs.hasOwnProperty(tabID)) { console.warning("Attempted to select a non-existant screen tab."); return; }
 
         let tabsKeys = Object.keys(container.elements.tabs);

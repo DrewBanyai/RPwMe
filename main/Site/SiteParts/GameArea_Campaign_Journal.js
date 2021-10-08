@@ -26,7 +26,10 @@ let GameArea_Campaign_Journal = {
         container.style.width = pxFromInt(CONFIG.WINDOW_WIDTH);
         container.style.height = pxFromInt(CONFIG.WINDOW_HEIGHT);
 
-        container.elements = { screenTitle: null, journalList: null }
+        container.elements = { paper: null, screenTitle: null, journalList: null }
+
+        container.elements.paper = Container.create({ id: "LinedPaperBackground", style: STYLE.LINED_PAPER_BACKGROUND, });
+        container.appendChild(container.elements.paper);
 
         container.elements.screenTitle = Label.create({ id: "ScreenTitle", style: STYLE.JOURNAL_SCREEN_TITLE, attributes: { value: "Journal" } });
         container.appendChild(container.elements.screenTitle);

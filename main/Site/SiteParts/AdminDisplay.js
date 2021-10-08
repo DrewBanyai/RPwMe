@@ -27,6 +27,7 @@ const { AdminArea_Location } = require('./AdminArea_Location')
 const { AdminArea_Players } = require('./AdminArea_Players')
 const { AdminArea_NPCs } = require('./AdminArea_NPCs')
 const { AdminArea_Journal } = require('./AdminArea_Journal')
+const { AdminArea_Combat } = require('./AdminArea_Combat')
 const { AdminArea_Requests } = require('./AdminArea_Requests')
 const { AdminArea_StreamChat } = require('./AdminArea_StreamChat')
 const { AdminArea_Settings } = require('./AdminArea_Settings')
@@ -79,6 +80,7 @@ let AdminDisplay = {
         addMainEntry("Players", AdminArea_Players.create({}));
         addMainEntry("NPCs", AdminArea_NPCs.create({}));
         addMainEntry("Journal", AdminArea_Journal.create({}));
+        addMainEntry("Combat", AdminArea_Combat.create({}));
         addMainEntry("Requests", AdminArea_Requests.create({}));
         addMainEntry("Stream Chat", AdminArea_StreamChat.create({}));
         addMainEntry("Settings", AdminArea_Settings.create({}));
@@ -96,6 +98,7 @@ let AdminDisplay = {
             makeButton("fas fa-users", "Players"),
             makeButton("fas fa-user-tag", "NPCs"),
             makeButton("fas fa-book", "Journal"),
+            makeButton("fas fa-shield-alt", "Combat"),
             makeButton("fas fa-exclamation-circle", "Requests"),
             makeButton("fas fa-comments", "Stream Chat"),
             makeButton("fas fa-cogs", "Settings"),

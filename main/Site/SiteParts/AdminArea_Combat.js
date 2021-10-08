@@ -22,10 +22,10 @@ const { adminMessages } = require('../Messaging/AdminMessages')
 
 "use strict"
 
-let AdminArea_Journal = {
+let AdminArea_Combat = {
     create() {
         let container = Container.create({
-            id: "AdminArea_Journal",
+            id: "AdminArea_Combat",
             style: {
                 width: pxFromInt(CONFIG.WINDOW_WIDTH),
                 height: pxFromInt(CONFIG.WINDOW_HEIGHT - 1 - STYLE.ADMIN_WINDOW_BUTTON_HEIGHT),
@@ -34,24 +34,24 @@ let AdminArea_Journal = {
             }
         });
 
-        container.elements = { showJournalButton: null, };
+        container.elements = { showCombatButton: null, };
 
-        container.elements.showJournalButton = BasicButton.create({
-            id: "ShowJournalButton",
+        container.elements.showCombatButton = BasicButton.create({
+            id: "ShowCombatButton",
             style: {
                 fontFamily: "Vesper Libre",
                 fontSize: "18px",
                 margin: "0px 100px 0px 0px",
                 display: "inline-flex",
             },
-            attributes: { value: "Show Journal", },
+            attributes: { value: "Show Combat", },
         });
-        container.appendChild(container.elements.showJournalButton);
-        BasicButton.setOnClick(container.elements.showJournalButton, () => { adminMessages.sendShowCampaignScreenEvent({ screenID: "Journal", }); });
+        container.appendChild(container.elements.showCombatButton);
+        BasicButton.setOnClick(container.elements.showCombatButton, () => { adminMessages.sendShowCampaignScreenEvent({ screenID: "Combat", }); });
 
         return container;
     },
 };
 
 //  Module Exports
-module.exports = { AdminArea_Journal }
+module.exports = { AdminArea_Combat }

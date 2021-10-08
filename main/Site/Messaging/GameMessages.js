@@ -72,6 +72,10 @@ const gameMessages = {
         EventDispatch.SendEvent("Campaign Begin", args[0]);
     },
 
+    showCampaignScreen(event, ...args) {
+        EventDispatch.SendEvent("Show Campaign Screen", args[0]);
+    },
+
     Initialize() {
         ipcRenderer.on('change-window-id', gameMessages.changeWindowID);
         ipcRenderer.on('campaign-update', gameMessages.campaignUpdate);
@@ -83,6 +87,7 @@ const gameMessages = {
         ipcRenderer.on('player-name-set', gameMessages.playerNameSet);
         ipcRenderer.on('character-ready', gameMessages.characterReady);
         ipcRenderer.on('campaign-begin', gameMessages.campaignBegin);
+        ipcRenderer.on('show-campaign-screen', gameMessages.showCampaignScreen);
     }
 
     //////////////////////////////

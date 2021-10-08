@@ -40,18 +40,10 @@ let GameArea_Campaign = {
             }
         });
 
-        container.elements = { paper: null, screenTabMenu: null, screens: {}, }
+        container.elements = { screenTabMenu: null, screens: {}, }
 
-        container.elements.paper = Container.create({ id: "LinedPaperBackground", style: STYLE.LINED_PAPER_BACKGROUND, });
-        container.appendChild(container.elements.paper);
-
-        let screenTabs = [
-            { tab: "Journal", command: "!journal" },
-            { tab: "Map", command: "!map" },
-            { tab: "Inventory", command: "!inventory" },
-            { tab: "Combat", command: "!combat" },
-        ];
-        container.elements.screenTabMenu = CampaignScreenTabMenu.create({ tabs: screenTabs, startingTab: "Journal" });
+        let screenTabs = [ { tab: "Journal", command: "!journal" }, { tab: "Map", command: "!map" }, { tab: "Inventory", command: "!inventory" }, { tab: "Combat", command: "!combat" }, ];
+        container.elements.screenTabMenu = CampaignScreenTabMenu.create({ tabs: screenTabs });
         container.appendChild(container.elements.screenTabMenu);
 
         container.elements.screens["Journal"] = GameArea_Campaign_Journal.create({ style: { display: STYLE.GAME_WINDOW_MENU_DISPLAY_TYPE }});
@@ -69,8 +61,21 @@ let GameArea_Campaign = {
         setTimeout(() => { EventDispatch.SendEvent("Add Journal", { title: "A new adventure begins today. We seek glory, treasure, and honor.", contents: "You've struck out on your own to find a grand adventure and hopefully some gold for your trouble. Along the way, you've met a few companions that have traveled with you for a bit, and are looking to make some money and a name for themselves as well. You find yourself in a tavern in the small village of Rofhaven, drinking and eating with your new friends." }); }, 100);
         setTimeout(() => { EventDispatch.SendEvent("Add Journal", { title: "You are in control. Decide what actions you and your teammates should take.", contents: "You are in control now. Type !commands for a link to all player commands. If you don't know the command to use for what you want to do, just use !request SPECIFICS and the Game Master will do their best to help you complete the action." }); }, 200);
 
+        EventDispatch.AddEventHandler("Show Campaign Screen", (eventType, eventData) => {
+            container.elements.screenTabMenu.highlightTab(eventData.screenID);
+            GameArea_Campaign.showSubscreen(container, eventData.screenID);
+        });
+
         return container;
     },
+
+    showSubscreen(container, screenID) {
+        if (!container.elements.screens.hasOwnProperty(screenID)) { console.warning("Attempted to show a non-existant sub-screen."); return; }
+
+        let keys = Object.keys(container.elements.screens);
+        for (let k in keys) container.elements.screens[keys[k]].style.display = "none";
+        container.elements.screens[screenID].style.display = "flex";
+    }
 };
 
 //  Module Exports

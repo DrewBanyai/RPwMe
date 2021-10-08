@@ -63,6 +63,8 @@ let GameDisplay = {
         addMainEntry("WaitingToBegin", GameArea_WaitingToBegin.create());
         addMainEntry("PlayerJoin", GameArea_PlayerJoin.create());
         addMainEntry("Campaign", GameArea_Campaign.create());
+
+        EventDispatch.SendEvent("Show Campaign Screen", { screenID: "Journal" });
     },
 
     setupEventCallbacks: (container) => {
