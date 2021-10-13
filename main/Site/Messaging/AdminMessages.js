@@ -31,6 +31,7 @@ const adminMessages = {
     sendCharacterReadyEvent(eventData) { ipcRenderer.send('character-ready', eventData); },
     sendCampaignBeginFlag(eventData) { ipcRenderer.send('campaign-begin', eventData); },
     sendShowCampaignScreenEvent(eventData) { ipcRenderer.send('show-campaign-screen', eventData); },
+    sendGameScreenOpenEvent(eventData) { ipcRenderer.send('open-game-screen', eventData); }
 }
 
 //  Module Exports

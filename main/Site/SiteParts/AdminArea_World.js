@@ -40,18 +40,20 @@ let AdminArea_World = {
         AdminArea_World.createWorldDisplay(container, Date.now());
         AdminArea_World.createWorldInfoBox(container);
 
-        container.elements.showMapButton = BasicButton.create({
-            id: "ShowMapButton",
-            style: {
-                fontFamily: "Vesper Libre",
-                fontSize: "18px",
-                margin: "0px 100px 0px 0px",
-                display: "inline-flex",
-            },
-            attributes: { value: "Show Map", },
-        });
-        container.appendChild(container.elements.showMapButton);
-        BasicButton.setOnClick(container.elements.showMapButton, () => { adminMessages.sendShowCampaignScreenEvent({ screenID: "Map", }); });
+        if (CONFIG.DEBUG.includes("SCREEN BUTTONS")) {
+            container.elements.showMapButton = BasicButton.create({
+                id: "ShowMapButton",
+                style: {
+                    fontFamily: "Vesper Libre",
+                    fontSize: "18px",
+                    margin: "0px 100px 0px 0px",
+                    display: "inline-flex",
+                },
+                attributes: { value: "Show Map", },
+            });
+            container.appendChild(container.elements.showMapButton);
+            BasicButton.setOnClick(container.elements.showMapButton, () => { adminMessages.sendShowCampaignScreenEvent({ screenID: "Map", }); });
+        }
 
         EventDispatch.AddEventHandler("Map Create", (eventType, eventData) => { AdminArea_World.createWorldDisplay(container, eventData.seed); });
 

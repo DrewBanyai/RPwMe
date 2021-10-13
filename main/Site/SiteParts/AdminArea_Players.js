@@ -252,18 +252,20 @@ let AdminArea_Players = {
         BasicButton.setOnClick(container.elements.beginGameButton, () => { EventDispatch.SendEvent("Begin Campaign", {}); });
         beginGameOptionBox.appendChild(container.elements.beginGameButton);
 
-        container.elements.showInventoryButton = BasicButton.create({
-            id: "ShowInventoryButton",
-            style: {
-                fontFamily: "Vesper Libre",
-                fontSize: "18px",
-                margin: "0px 100px 0px 0px",
-                display: "inline-flex",
-            },
-            attributes: { value: "Show Inventory", },
-        });
-        container.appendChild(container.elements.showInventoryButton);
-        BasicButton.setOnClick(container.elements.showInventoryButton, () => { adminMessages.sendShowCampaignScreenEvent({ screenID: "Inventory", }); });
+        if (CONFIG.DEBUG.includes("SCREEN BUTTONS")) {
+            container.elements.showInventoryButton = BasicButton.create({
+                id: "ShowInventoryButton",
+                style: {
+                    fontFamily: "Vesper Libre",
+                    fontSize: "18px",
+                    margin: "0px 100px 0px 0px",
+                    display: "inline-flex",
+                },
+                attributes: { value: "Show Inventory", },
+            });
+            container.appendChild(container.elements.showInventoryButton);
+            BasicButton.setOnClick(container.elements.showInventoryButton, () => { adminMessages.sendShowCampaignScreenEvent({ screenID: "Inventory", }); });
+        }
 
         //  Add event dispatchers for joining, leaving, selecting race, selecting class, selecting name, and approving character
         EventDispatch.AddEventHandler("!join", (eventType, eventData) => { AdminArea_Players.AddPlayerJoinRequest(container, eventData); });

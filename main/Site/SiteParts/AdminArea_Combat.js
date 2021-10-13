@@ -36,18 +36,20 @@ let AdminArea_Combat = {
 
         container.elements = { showCombatButton: null, };
 
-        container.elements.showCombatButton = BasicButton.create({
-            id: "ShowCombatButton",
-            style: {
-                fontFamily: "Vesper Libre",
-                fontSize: "18px",
-                margin: "0px 100px 0px 0px",
-                display: "inline-flex",
-            },
-            attributes: { value: "Show Combat", },
-        });
-        container.appendChild(container.elements.showCombatButton);
-        BasicButton.setOnClick(container.elements.showCombatButton, () => { adminMessages.sendShowCampaignScreenEvent({ screenID: "Combat", }); });
+        if (CONFIG.DEBUG.includes("SCREEN BUTTONS")) {
+            container.elements.showCombatButton = BasicButton.create({
+                id: "ShowCombatButton",
+                style: {
+                    fontFamily: "Vesper Libre",
+                    fontSize: "18px",
+                    margin: "0px 100px 0px 0px",
+                    display: "inline-flex",
+                },
+                attributes: { value: "Show Combat", },
+            });
+            container.appendChild(container.elements.showCombatButton);
+            BasicButton.setOnClick(container.elements.showCombatButton, () => { adminMessages.sendShowCampaignScreenEvent({ screenID: "Combat", }); });
+        }
 
         return container;
     },

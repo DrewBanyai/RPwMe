@@ -18,6 +18,8 @@ const CONFIG = require('../../config')
 const STYLE = require('../style')
 const { Container } = require('../Components/ArcadiaJS')
 const { pxFromInt } = require('../HelperFunctions/pxFromInt')
+const { EventDispatch } = require('../Controllers/EventDispatch')
+const { adminMessages } = require('../Messaging/AdminMessages')
 
 "use strict"
 
@@ -35,7 +37,16 @@ let AdminArea_Requests = {
 
         container.elements = {};
 
+        AdminArea_Requests.setupChatCommands();
+
         return container;
+    },
+
+    setupChatCommands() {
+        EventDispatch.AddEventHandler("!journal", (eventType, eventData) => { adminMessages.sendShowCampaignScreenEvent({ screenID: "Journal" }); });
+        EventDispatch.AddEventHandler("!map", (eventType, eventData) => { adminMessages.sendShowCampaignScreenEvent({ screenID: "Map" }); });
+        EventDispatch.AddEventHandler("!inventory", (eventType, eventData) => { adminMessages.sendShowCampaignScreenEvent({ screenID: "Inventory" }); });
+        EventDispatch.AddEventHandler("!combat", (eventType, eventData) => { adminMessages.sendShowCampaignScreenEvent({ screenID: "Combat", }); });
     },
 };
 

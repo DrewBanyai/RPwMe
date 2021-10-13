@@ -33,16 +33,17 @@ const CommandControl = {
     
         "!cleric":          { effect: "Specify your player class as Cleric", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
         "!fighter":         { effect: "Specify your player class as Fighter", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
-        "!wizard":            { effect: "Specify your player class as Wizard", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
+        "!wizard":          { effect: "Specify your player class as Wizard", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
         "!rogue":           { effect: "Specify your player class as Rogue", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
 
         "!name":            { effect: "Request to specify the given player's character name", who: { viewer: false, player: true, gm: true }, args: { min: 1, max: 10 } },
         "!reroll":          { effect: "Request to re-roll the given player's character stats", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
-        "!ready":          { effect: "Request to confirm the given player's character stats", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
-    
-        "!inventory":       { effect: "Request to open the given player's inventory", who: { viewer: false, player: true, gm: false }, args: { min: 0, max: 0 } },
-        "!items":           { effect: "Request to open the given player's inventory", who: { viewer: false, player: true, gm: false }, args: { min: 0, max: 0 } },
-        "!backpack":        { effect: "Request to open the given player's inventory", who: { viewer: false, player: true, gm: false }, args: { min: 0, max: 0 } },
+        "!ready":           { effect: "Request to confirm the given player's character stats", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
+
+        "!journal":         { effect: "Request to open the journal screen", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
+        "!map":             { effect: "Request to open the map screen", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
+        "!inventory":       { effect: "Request to open the inventory screen", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
+        "!combat":          { effect: "Request to open the combat screen", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
     
         "!investigate":     { effect: "Request to have the party investigate", who: { viewer: false, player: true, gm: false }, args: { min: 1, max: 1000 } },
         "!look":            { effect: "Request to have a closer look at a specified target", who: { viewer: false, player: true, gm: false }, args: { min: 1, max: 1000 } },
