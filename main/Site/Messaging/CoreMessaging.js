@@ -37,6 +37,7 @@ function setupMessageCallbacks() {
     ipcMain.on('character-ready', (event, arg) => { passToGameWindow('character-ready', event, arg); });
     ipcMain.on('campaign-begin', (event, arg) => { passToGameWindow('campaign-begin', event, arg); });
     ipcMain.on('show-campaign-screen', (event, arg) => { passToGameWindow('show-campaign-screen', event, arg); });
+    ipcMain.on('journal-page-turn', (event, arg) => { passToGameWindow('journal-page-turn', event, arg); });
 }
 
 //  Module Exports

@@ -19,6 +19,7 @@ const STYLE = require('../style')
 const { Container, BasicButton } = require('../Components/ArcadiaJS')
 const { pxFromInt } = require('../HelperFunctions/pxFromInt')
 const { adminMessages } = require('../Messaging/AdminMessages')
+const { EventDispatch } = require('../Controllers/EventDispatch')
 
 "use strict"
 
@@ -51,7 +52,14 @@ let AdminArea_Journal = {
             BasicButton.setOnClick(container.elements.showJournalButton, () => { adminMessages.sendShowCampaignScreenEvent({ screenID: "Journal", }); });
         }
 
+        AdminArea_Journal.setupCommandEvents();
+
         return container;
+    },
+
+    setupCommandEvents() {
+        EventDispatch.AddEventHandler("!back", (eventType, eventData) => { adminMessages.sendJournalPageTurn({ pageTurn: "back" }); });
+        EventDispatch.AddEventHandler("!forward", (eventType, eventData) => { adminMessages.sendJournalPageTurn({ pageTurn: "forward" }); });
     },
 };
 

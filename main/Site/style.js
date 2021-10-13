@@ -59,9 +59,9 @@ module.exports = {
     width: "1240px",
     height: "740px",
     position: "relative",
-    top: "6px",
+    top: "10px",
     backgroundImage: "url(Images/CollegeRuledLinedPaper.png)",
-    backgroundSize: "100%",
+    backgroundSize: "101%",
     overflow: "hidden",
   },
 
@@ -165,8 +165,15 @@ module.exports = {
     margin: "25px ​144px 0px 0px",
     color: "rgb(1, 150, 100)",
     position: "absolute",
+    left: "238px",
+    top: "90px",
+  },
+  JOURNAL_LIST: {
+    width: "984px",
+    height: "446px",
+    position: "absolute",
     left: "234px",
-    top: "82px",
+    top: "244px",
   },
   JOURNAL_ENTRY: {
     fontSize: "20px",
@@ -185,6 +192,18 @@ module.exports = {
     position: "absolute",
     left: "110px",
     color: "rgb(50, 50, 150)",
+  },
+  JOURNAL_BACK_FORWARD_PAGE_SECTION: {
+    position: "absolute",
+    left: "2px",
+    top: "417px",
+    width: "816px",
+    height: "20px",
+    display: "flex",
+  },
+  JOURNAL_BACK_FORWARD_PAGE_LABELS: {
+    fontSize: "22px",
+    width: "33%",
   },
   GAME_AREA_CAMPAIGN_SUBMENU: {
     display: "none",

@@ -76,6 +76,10 @@ const gameMessages = {
         EventDispatch.SendEvent("Show Campaign Screen", args[0]);
     },
 
+    journalPageTurn(event, ...args) {
+        EventDispatch.SendEvent("Journal Page Turn", args[0]);
+    },
+
     Initialize() {
         ipcRenderer.on('change-window-id', gameMessages.changeWindowID);
         ipcRenderer.on('campaign-update', gameMessages.campaignUpdate);
@@ -88,6 +92,7 @@ const gameMessages = {
         ipcRenderer.on('character-ready', gameMessages.characterReady);
         ipcRenderer.on('campaign-begin', gameMessages.campaignBegin);
         ipcRenderer.on('show-campaign-screen', gameMessages.showCampaignScreen);
+        ipcRenderer.on('journal-page-turn', gameMessages.journalPageTurn);
     }
 
     //////////////////////////////

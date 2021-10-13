@@ -19,6 +19,7 @@ const STYLE = require('../style')
 const { Container, Label } = require('../Components/ArcadiaJS')
 const { pxFromInt } = require('../HelperFunctions/pxFromInt')
 const { JournalList } = require('../Components/JournalList')
+const { EventDispatch } = require('../Controllers/EventDispatch')
 
 let GameArea_Campaign_Journal = {
     create() {
@@ -36,6 +37,10 @@ let GameArea_Campaign_Journal = {
 
         container.elements.journalList = JournalList.create({});
         container.appendChild(container.elements.journalList);
+        
+        EventDispatch.AddEventHandler("Journal Page Turn", (eventType, eventData) => {
+            container.elements.journalList.attemptPageTurn(container.elements.journalList, eventData.pageTurn);
+        });
 
         return container;
     },

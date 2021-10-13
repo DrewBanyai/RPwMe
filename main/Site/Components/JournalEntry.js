@@ -33,6 +33,8 @@ const JournalEntry = {
 
         container.elements.journalTitle = HandwrittenNote.create({id: "JournalTitle_" + options.index, style: STYLE.JOURNAL_TITLE, attributes: { value: options.title }, writeDelay: 30, });
         container.appendChild(container.elements.journalTitle);
+        
+        //  TODO: Track contents from options.contents
 
 		return container;
 	},

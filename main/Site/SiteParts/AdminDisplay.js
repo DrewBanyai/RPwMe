@@ -64,7 +64,7 @@ let AdminDisplay = {
     },
 
     createMainArea: (container) => {
-        container.elements.mainArea = Container.create({ id: "AdminMenuMainArea" });
+        container.elements.mainArea = Container.create({ id: "AdminScreenMainArea" });
         container.appendChild(container.elements.mainArea);
     },
 

@@ -50,7 +50,7 @@ let GameDisplay = {
     },
 
     createMainArea: (container) => {
-        container.elements.mainArea = Container.create({ id: "AdminMenuMainArea" });
+        container.elements.mainArea = Container.create({ id: "GameScreenMainArea" });
         container.appendChild(container.elements.mainArea);
     },
 
