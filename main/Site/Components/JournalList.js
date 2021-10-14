@@ -19,6 +19,7 @@ const { Container } = require('../Components/ArcadiaJS')
 const { JournalEntry } = require('../Components/JournalEntry')
 const { HandwrittenNote } = require('../Components/HandwrittenNote')
 const { EventDispatch } = require('../Controllers/EventDispatch')
+const { JournalEntryFull } = require('./JournalEntryFull')
 
 
 const JournalList = {
@@ -27,7 +28,7 @@ const JournalList = {
 
         Container.applyOptions(container, options);
 
-        container.elements = { pageIndex: 0, journalsPerPage: 10, journalList: [], journalListBox: null, backLabel: null, pageLabel: null, forwardLabel: null }
+        container.elements = { pageIndex: 0, journalsPerPage: 10, journalList: [], journalListBox: null, journalDisplay: null, backLabel: null, pageLabel: null, forwardLabel: null }
 
         container.elements.journalListBox = Container.create({id: "JournalListBox", style: {}, });
         container.appendChild(container.elements.journalListBox);
@@ -35,6 +36,8 @@ const JournalList = {
         JournalList.createBackForwardPageSection(container);
 
         EventDispatch.AddEventHandler("Add Journal", (eventType, eventData) => { JournalList.addJournalEntry(container, eventData.title, eventData.contents); });
+        EventDispatch.AddEventHandler("Read Journal", (eventType, eventData) => { JournalList.showJournalEntry(container, parseInt(eventData.args[0])); });
+        EventDispatch.AddEventHandler("Close Journal", (eventType, eventData) => { JournalList.hideJournalEntry(container); });
 
         container.attemptPageTurn = JournalList.attemptPageTurn;
 
@@ -63,7 +66,7 @@ const JournalList = {
 
     addJournalEntry(container, journalTitle, journalContents) {
         let journalEntryIndex = container.elements.journalList.length + 1;
-        let journalEntryIndexStr = journalEntryIndex.toLocaleString('en-US', { minimumIntegerDigits: 3, useGrouping: false });
+        let journalEntryIndexStr = "!read " + journalEntryIndex.toLocaleString('en-US', { minimumIntegerDigits: 3, useGrouping: false });
 
         let journalEntry = JournalEntry.create({id: "JournalEntry_" + journalEntryIndexStr, style: STYLE.JOURNAL_ENTRY, index: journalEntryIndexStr, title: journalTitle, contents: journalContents });
         container.elements.journalList.push(journalEntry);
@@ -96,6 +99,12 @@ const JournalList = {
 
     attemptPageTurn(container, pageTurn) {
         switch (pageTurn) {
+            case "begin":
+                if (container.elements.pageIndex == 0) { return; }
+                container.elements.pageIndex = 0;
+                JournalList.updateJournalDisplay(container);
+                break;
+
             case "back":
                 if (container.elements.pageIndex == 0) { return; }
                 container.elements.pageIndex -= 1;
@@ -108,7 +117,24 @@ const JournalList = {
                 JournalList.updateJournalDisplay(container);
                 break;
         }
-    }
+    },
+
+    showJournalEntry(container, journalID) {
+        if (container.elements.journalList.length < journalID) { console.warn("Attempting to read journal entry " + journalID + " which doesn't exist!"); return; }
+        
+        JournalList.hideJournalEntry(container);
+
+        let journalData = container.elements.journalList[journalID - 1];
+        container.elements.journalDisplay = JournalEntryFull.create({ title: journalData.getTitle(), contents: journalData.getContents() });
+        container.appendChild(container.elements.journalDisplay);
+    },
+
+    hideJournalEntry(container) {
+        if (container.elements.journalDisplay != null) {
+            container.removeChild(container.elements.journalDisplay);
+            container.elements.journalDisplay = null;
+        }
+    },
 };
 
 //  Module Exports

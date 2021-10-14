@@ -60,6 +60,8 @@ let AdminArea_Journal = {
     setupCommandEvents() {
         EventDispatch.AddEventHandler("!back", (eventType, eventData) => { adminMessages.sendJournalPageTurn({ pageTurn: "back" }); });
         EventDispatch.AddEventHandler("!forward", (eventType, eventData) => { adminMessages.sendJournalPageTurn({ pageTurn: "forward" }); });
+        EventDispatch.AddEventHandler("!read", (eventType, eventData) => { adminMessages.sendJournalReadEvent(eventData); });
+        EventDispatch.AddEventHandler("!close", (eventType, eventData) => { adminMessages.sendJournalCloseEvent(eventData); });
     },
 };
 

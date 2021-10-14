@@ -38,6 +38,8 @@ function setupMessageCallbacks() {
     ipcMain.on('campaign-begin', (event, arg) => { passToGameWindow('campaign-begin', event, arg); });
     ipcMain.on('show-campaign-screen', (event, arg) => { passToGameWindow('show-campaign-screen', event, arg); });
     ipcMain.on('journal-page-turn', (event, arg) => { passToGameWindow('journal-page-turn', event, arg); });
+    ipcMain.on('journal-read-event', (event, arg) => { passToGameWindow('journal-read-event', event, arg); });
+    ipcMain.on('journal-close-event', (event, arg) => { passToGameWindow('journal-close-event', event, arg); });
 }
 
 //  Module Exports

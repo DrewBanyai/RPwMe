@@ -26,10 +26,11 @@ const Container = {
 
     applyOptions: (container, options) => {
 		//  Generic options application
-		if (options && options.id) container.id = options.id;
-		if (options && options.attributes) { for (let key in options.attributes) { container[key] = options.attributes[key] } }
-        if (options && options.style) { for (let key in options.style) { container.style[key] = options.style[key] } }
-        if (options && options.events) { for (let key in options.events) { container.addEventListener(key, options.events[key]); } }
+		if (!options) { return; }
+		if (options.id) 			{ container.id = options.id; }
+		if (options.attributes) 	{ for (let key in options.attributes) { container[key] = options.attributes[key]; } }
+        if (options.style) 			{ for (let key in options.style) { container.style[key] = options.style[key]; } }
+        if (options.events) 		{ for (let key in options.events) { container.addEventListener(key, options.events[key]); } }
     }
 };
 

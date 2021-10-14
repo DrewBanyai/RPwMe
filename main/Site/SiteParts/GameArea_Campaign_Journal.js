@@ -32,7 +32,7 @@ let GameArea_Campaign_Journal = {
         container.elements.paper = Container.create({ id: "LinedPaperBackground", style: STYLE.LINED_PAPER_BACKGROUND, });
         container.appendChild(container.elements.paper);
 
-        container.elements.screenTitle = Label.create({ id: "ScreenTitle", style: STYLE.JOURNAL_SCREEN_TITLE, attributes: { value: "Journal" } });
+        container.elements.screenTitle = Label.create({ id: "ScreenTitle", style: STYLE.GAME_SCREEN_TITLE, attributes: { value: "Journal" } });
         container.appendChild(container.elements.screenTitle);
 
         container.elements.journalList = JournalList.create({});
@@ -41,6 +41,14 @@ let GameArea_Campaign_Journal = {
         EventDispatch.AddEventHandler("Journal Page Turn", (eventType, eventData) => {
             container.elements.journalList.attemptPageTurn(container.elements.journalList, eventData.pageTurn);
         });
+
+        //  Show/Hide functions
+        container.show = () => {
+            EventDispatch.SendEvent("Journal Page Turn", { pageTurn: "begin" });
+        };
+        container.hide = () => {
+            EventDispatch.SendEvent("Close Journal", {});
+        };
 
         return container;
     },

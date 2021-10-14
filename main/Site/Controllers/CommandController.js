@@ -47,6 +47,8 @@ const CommandControl = {
 
         "!back":            { effect: "Request to move back one page in the journal section", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
         "!forward":         { effect: "Request to move forward one page in the journal section", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
+        "!read":            { effect: "Request to read a specific journal entry", who: { viewer: false, player: true, gm: true }, args: { min: 1, max: 1 } },
+        "!close":           { effect: "Request to close the current journal entry", who: { viewer: false, player: true, gm: true }, args: { min: 0, max: 0 } },
     
         "!investigate":     { effect: "Request to have the party investigate", who: { viewer: false, player: true, gm: false }, args: { min: 1, max: 1000 } },
         "!look":            { effect: "Request to have a closer look at a specified target", who: { viewer: false, player: true, gm: false }, args: { min: 1, max: 1000 } },

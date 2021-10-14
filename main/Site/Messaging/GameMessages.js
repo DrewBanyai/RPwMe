@@ -80,6 +80,14 @@ const gameMessages = {
         EventDispatch.SendEvent("Journal Page Turn", args[0]);
     },
 
+    journalReadEvent(event, ...args) {
+        EventDispatch.SendEvent("Read Journal", args[0]);
+    },
+
+    journalCloseEvent(event, ...args) {
+        EventDispatch.SendEvent("Close Journal", args[0]);
+    },
+
     Initialize() {
         ipcRenderer.on('change-window-id', gameMessages.changeWindowID);
         ipcRenderer.on('campaign-update', gameMessages.campaignUpdate);
@@ -93,6 +101,8 @@ const gameMessages = {
         ipcRenderer.on('campaign-begin', gameMessages.campaignBegin);
         ipcRenderer.on('show-campaign-screen', gameMessages.showCampaignScreen);
         ipcRenderer.on('journal-page-turn', gameMessages.journalPageTurn);
+        ipcRenderer.on('journal-read-event', gameMessages.journalReadEvent);
+        ipcRenderer.on('journal-close-event', gameMessages.journalCloseEvent);
     }
 
     //////////////////////////////

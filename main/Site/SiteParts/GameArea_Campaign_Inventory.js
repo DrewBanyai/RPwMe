@@ -30,7 +30,7 @@ let GameArea_Campaign_Inventory = {
         container.elements.paper = Container.create({ id: "LinedPaperBackground", style: STYLE.LINED_PAPER_BACKGROUND, });
         container.appendChild(container.elements.paper);
 
-        container.elements.screenTitle = Label.create({ id: "ScreenTitle", style: STYLE.JOURNAL_SCREEN_TITLE, attributes: { value: "Inventory" } });
+        container.elements.screenTitle = Label.create({ id: "ScreenTitle", style: STYLE.GAME_SCREEN_TITLE, attributes: { value: "Inventory" } });
         container.appendChild(container.elements.screenTitle);
 
         return container;

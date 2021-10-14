@@ -32,6 +32,8 @@ const adminMessages = {
     sendCampaignBeginFlag(eventData) { ipcRenderer.send('campaign-begin', eventData); },
     sendShowCampaignScreenEvent(eventData) { ipcRenderer.send('show-campaign-screen', eventData); },
     sendJournalPageTurn(eventData) { ipcRenderer.send('journal-page-turn', eventData); },
+    sendJournalReadEvent(eventData) { ipcRenderer.send('journal-read-event', eventData); },
+    sendJournalCloseEvent(eventData) { ipcRenderer.send('journal-close-event', eventData); },
 }
 
 //  Module Exports

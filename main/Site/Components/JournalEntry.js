@@ -14,7 +14,6 @@
     limitations under the License.
 */
 
-const CONFIG = require('../../config')
 const STYLE = require('../style')
 const { Container } = require('../Components/ArcadiaJS')
 const { HandwrittenNote } = require('../Components/HandwrittenNote')
@@ -34,7 +33,8 @@ const JournalEntry = {
         container.elements.journalTitle = HandwrittenNote.create({id: "JournalTitle_" + options.index, style: STYLE.JOURNAL_TITLE, attributes: { value: options.title }, writeDelay: 30, });
         container.appendChild(container.elements.journalTitle);
         
-        //  TODO: Track contents from options.contents
+        container.getTitle = () => { return options.title; }
+        container.getContents = () => { return options.contents; };
 
 		return container;
 	},
