@@ -89,7 +89,6 @@ const JournalList = {
         }
 
         //  Update the back, page, and forward labels
-        console.log((container.elements.pageIndex > 0), (container.elements.pageIndex < Math.floor(container.elements.journalList.length / container.elements.journalsPerPage)), container.elements.pageIndex, Math.floor(container.elements.journalList.length / container.elements.journalsPerPage));
         container.elements.backLabel.style.visibility = (container.elements.pageIndex > 0) ? "visible" : "hidden";
         container.elements.pageLabel.setValue("page " + (container.elements.pageIndex + 1).toString());
         container.elements.forwardLabel.style.visibility = (container.elements.pageIndex < Math.floor(container.elements.journalList.length / container.elements.journalsPerPage)) ? "visible" : "hidden";
