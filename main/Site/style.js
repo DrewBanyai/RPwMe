@@ -46,7 +46,7 @@ module.exports = {
 
   WORLD_MAP_SIZE: {
     ADMIN: { x: 800, y: 600 },
-    GAME: { x: 1024, y: 768 },
+    GAME: { x: 800, y: 600 },
   },
   
   INTERACTIVE_MAP_PADDING_LEFT: 4,
@@ -252,4 +252,19 @@ module.exports = {
     overflow: "hidden",
     position: "absolute",
   },
+  CAMPAIGN_MAP_TABS: {
+    position: "absolute",
+    width: "800px",
+    height: "30px",
+    border: "2px dotted rgb(100, 100, 100)",
+    left: "228px",
+    top: "66px",
+  },
+  CAMPAIGN_INTERACTIVE_MAP: {
+    position: "absolute",
+    width: "800px",
+    height: "600px",
+    left: "230px",
+    top: "108px",
+  }
 }

@@ -48,9 +48,13 @@ const CampaignController = {
             Status: "",
             Players: { 0: null, 1: null, 2: null},
             GameMaster: "",
-            Locations: {
-                Cities: {},
-                Landmarks: {}
+            MapData: {
+                MapID: null,
+                MapImage: null,
+                Locations: {
+                    Cities: {},
+                    Landmarks: {}
+                }
             },
         };
         
@@ -69,17 +73,26 @@ const CampaignController = {
     },
     AddCampaignCity(id, locationData) {
         if (!CAMPAIGN_DATA) { console.error("CAMPAIGN_DATA is null or invalid!"); return; }
-        if (!CAMPAIGN_DATA.hasOwnProperty("Locations")) { console.error("CAMPAIGN_DATA has no Locations data!"); return; }
-        if (!CAMPAIGN_DATA.Locations.hasOwnProperty("Cities")) { console.error("CAMPAIGN_DATA has no Cities Location data!"); return; }
+        if (!CAMPAIGN_DATA.hasOwnProperty("MapData")) { console.error("CAMPAIGN_DATA has no MapData entry!"); return; }
+        if (!CAMPAIGN_DATA.MapData.hasOwnProperty("Locations")) { console.error("CAMPAIGN_DATA has no Locations entry!"); return; }
+        if (!CAMPAIGN_DATA.MapData.Locations.hasOwnProperty("Cities")) { console.error("CAMPAIGN_DATA has no Cities Location entry!"); return; }
     
-        CAMPAIGN_DATA.Locations.Cities[id] = locationData;
+        CAMPAIGN_DATA.MapData.Locations.Cities[id] = locationData;
     },
     AddCampaignLandmark(id, locationData) {
         if (!CAMPAIGN_DATA) { console.error("CAMPAIGN_DATA is null or invalid!"); return; }
-        if (!CAMPAIGN_DATA.hasOwnProperty("Locations")) { console.error("CAMPAIGN_DATA has no Locations data!"); return; }
-        if (!CAMPAIGN_DATA.Locations.hasOwnProperty("Landmarks")) { console.error("CAMPAIGN_DATA has no Landmarks Location data!"); return; }
+        if (!CAMPAIGN_DATA.hasOwnProperty("MapData")) { console.error("CAMPAIGN_DATA has no MapData entry!"); return; }
+        if (!CAMPAIGN_DATA.MapData.hasOwnProperty("Locations")) { console.error("CAMPAIGN_DATA has no Locations entry!"); return; }
+        if (!CAMPAIGN_DATA.MapData.Locations.hasOwnProperty("Landmarks")) { console.error("CAMPAIGN_DATA has no Landmarks Location entry!"); return; }
     
-        CAMPAIGN_DATA.Locations.Landmarks[id] = locationData;
+        CAMPAIGN_DATA.MapData.Locations.Landmarks[id] = locationData;
+    },
+    GetCampaignMapData() {
+        return CAMPAIGN_DATA.MapData;
+    },
+    SetCampaignMapData(mapID, mapImage) {
+        CAMPAIGN_DATA.MapData.MapID = mapID;
+        CAMPAIGN_DATA.MapData.MapImage = mapImage;
     },
     AddCampaignPlayer(playerUsername) {
         if (!CAMPAIGN_DATA) { console.error("CAMPAIGN_DATA is null or invalid!"); return false; }
@@ -148,6 +161,9 @@ const CampaignController = {
     },
     GetCampaignData() {
         return CAMPAIGN_DATA;
+    },
+    SetCampaignData(campaignData) {
+        CAMPAIGN_DATA = campaignData;
     },
     UpdateCampaignData(campaignData) {
         if (!campaignData) { console.error("Attempting to set new Campaign Data with null data entry!"); return; }

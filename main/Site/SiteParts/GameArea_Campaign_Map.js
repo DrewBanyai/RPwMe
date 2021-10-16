@@ -18,6 +18,9 @@ const CONFIG = require('../../config')
 const STYLE = require('../style')
 const { Container, Label } = require('../Components/ArcadiaJS')
 const { pxFromInt } = require('../HelperFunctions/pxFromInt')
+const { InteractiveMap } = require('../Components/InteractiveMap')
+const { EventDispatch } = require('../Controllers/EventDispatch')
+const { CampaignController } = require('../Controllers/CampaignController')
 
 let GameArea_Campaign_Map = {
     create() {
@@ -25,7 +28,7 @@ let GameArea_Campaign_Map = {
         container.style.width = pxFromInt(CONFIG.WINDOW_WIDTH);
         container.style.height = pxFromInt(CONFIG.WINDOW_HEIGHT);
 
-        container.elements = { paper: null, screenTitle: null, }
+        container.elements = { paper: null, screenTitle: null, tabMenu: null, worldMap: null }
 
         container.elements.paper = Container.create({ id: "LinedPaperBackground", style: STYLE.LINED_PAPER_BACKGROUND, });
         container.appendChild(container.elements.paper);
@@ -33,7 +36,43 @@ let GameArea_Campaign_Map = {
         container.elements.screenTitle = Label.create({ id: "ScreenTitle", style: STYLE.GAME_SCREEN_TITLE, attributes: { value: "Map" } });
         container.appendChild(container.elements.screenTitle);
 
+        container.elements.tabMenu = Container.create({ id: "CampaignMapTabs", style: STYLE.CAMPAIGN_MAP_TABS, });
+        container.appendChild(container.elements.tabMenu);
+
+        EventDispatch.AddEventHandler("Campaign Updated", (eventType, eventData) => {
+            CampaignController.SetCampaignData(eventData);
+            GameArea_Campaign_Map.createWorldMapTab(container);
+            container.show();
+        });
+
+        container.show = () => {
+            setTimeout(() => { InteractiveMap.LoadMapObjects(container.elements.worldMap); }, 10); //  TODO: Swap this out with a DOM content loaded callback?
+        };
+        container.hide = () => {
+
+        };
+
         return container;
+    },
+
+    createWorldMapTab(container) {
+        if(container.elements.worldMap) {
+            container.removeChild(container.elements.worldMap);
+            container.elements.worldMap = null;
+        }
+
+        //  Create the visual represenation of this map
+        let mapData = CampaignController.GetCampaignMapData();
+        container.elements.worldMap = InteractiveMap.create({
+            mapSelection: mapData.MapID,
+            mapImageFile: mapData.MapImage,
+            mapSizeX: "930px",
+            mapSizeY: "555px",
+            cities: mapData.Locations.Cities,
+            landmarks: mapData.Locations.Landmarks,
+            style: STYLE.CAMPAIGN_INTERACTIVE_MAP
+        });
+        container.appendChild(container.elements.worldMap);
     },
 };
 

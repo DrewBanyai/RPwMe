@@ -42,6 +42,7 @@ const InteractiveMap = {
                 overflow: "hidden",
             }
         });
+        Container.applyOptions(container, options);
         container.options = options;
         container.elements = { mapImage: null, paper: null, mapContainer: null, mapObjectContainer: null, };
         container.objectCount = 0;
@@ -54,7 +55,6 @@ const InteractiveMap = {
                 width: pxFromInt(STYLE.WORLD_MAP_SIZE[document.windowID].x),
                 height: pxFromInt(STYLE.WORLD_MAP_SIZE[document.windowID].y),
                 position: "relative",
-                top: "6px",
                 backgroundImage: "url(Images/DrawingPaper.png)",
                 backgroundSize: "100%",
                 overflow: "hidden",
@@ -94,11 +94,15 @@ const InteractiveMap = {
     },
 
     LoadMapObjects(container) {
+        if (container == null) { return; }
+        
         container.properties.mapWidth = container.elements.mapImage.clientWidth;
         container.properties.mapHeight = container.elements.mapImage.clientHeight;
         container.elements.mapObjectContainer.innerHTML = "";
 
-        container.options.cities.forEach(locationData => {
+        let cityKeys = Object.keys(container.options.cities);
+        cityKeys.forEach(key => {
+            let locationData = container.options.cities[key];
             let objPosition = {
                 X: parseInt(locationData.Position.X / container.properties.mapWidth * container.properties.size.X) + "px",
                 Y: parseInt(locationData.Position.Y / container.properties.mapHeight * container.properties.size.Y) + "px"
@@ -116,7 +120,9 @@ const InteractiveMap = {
             container.elements.mapObjectContainer.appendChild(mapObject);
         });
 
-        container.options.landmarks.forEach(locationData => {
+        let landmarkKeys = Object.keys(container.options.landmarks);
+        landmarkKeys.forEach(key => {
+            let locationData = container.options.landmarks[key];
             let objPosition = {
                 X: parseInt(locationData.Position.X / container.properties.mapWidth * container.properties.size.X) + "px",
                 Y: parseInt(locationData.Position.Y / container.properties.mapHeight * container.properties.size.Y) + "px"

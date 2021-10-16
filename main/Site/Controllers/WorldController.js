@@ -26,8 +26,6 @@ const WorldController = {
     create(worldSeed) {
         let container = Container.create({ id: "WorldController", });
         container.elements = { interactiveMap: null };
-        container.mapIdentifier = null;
-        container.mapObjects = { cities: [], landmarks: [], npcs: [], };
 
         WorldController.GenerateRandomWorld(container, worldSeed);
 
@@ -44,27 +42,27 @@ const WorldController = {
 
         //  Choose a random map identifier
         const mapList = Object.keys(LOCATION_DATA);
-        container.mapIdentifier = mapList[Math.floor(Random() * mapList.length)];
-        let mapImageFile = LOCATION_DATA[container.mapIdentifier].MapImageFile;
+        let mapID = mapList[Math.floor(Random() * mapList.length)];
+        let mapImage = LOCATION_DATA[mapID].MapImageFile;
 
         //  Generate all cities and landmarks that will populate the map
-        let cityArray = WorldController.generateCityArray(LOCATION_DATA[container.mapIdentifier]);
-        let landmarkArray = WorldController.generateLandmarkArray(LOCATION_DATA[container.mapIdentifier]);
+        let cityArray = WorldController.generateCityArray(LOCATION_DATA[mapID]);
+        let landmarkArray = WorldController.generateLandmarkArray(LOCATION_DATA[mapID]);
 
         //  Save off the map objects into an array for later use
-        cityArray.forEach((city) => { container.mapObjects.cities.push(city); });
-        landmarkArray.forEach((landmark) => { container.mapObjects.landmarks.push(landmark); });
+        CampaignController.SetCampaignMapData(mapID, mapImage);
         CampaignController.SetCampaignStatus("Waiting For Campaign Start");
         CampaignController.PrintCampaignData();
 
         //  Create the visual represenation of this map
+        let mapData = CampaignController.GetCampaignMapData();
         container.elements.interactiveMap = InteractiveMap.create({
-            mapSelection: container.mapIdentifier,
-            mapImageFile: mapImageFile,
+            mapSelection: mapData.MapID,
+            mapImageFile: mapData.MapImage,
             mapSizeX: "930px",
             mapSizeY: "555px",
-            cities: cityArray,
-            landmarks: landmarkArray
+            cities: mapData.Locations.Cities,
+            landmarks: mapData.Locations.Landmarks
         });
     },
 
