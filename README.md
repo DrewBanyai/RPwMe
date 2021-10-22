@@ -7,8 +7,9 @@
 
 **Build 0.0.1**
 
-TODO: ADD SCREENSHOT.png
-![](screenshot.png)
+![Screenshot 01](./_previews/01.png)
+![Screenshot 02](./_previews/02.png)
+![Screenshot 03](./_previews/03.png)
 
 This program is made to allow a streamer on Twitch to act as Game Master (GM) and play through a role-play game with users in chat. It utilizes a role-play system which is built-in and managed by the program in order to minimize the need for pre-planning campaign details. The tool creates a world and allows the GM to alter it to their liking, saving it for future use if desired. Players can join and contribute to the story and gameplay through chat commands, which create requests which the GM can approve or deny in cases where control is desired.
 
@@ -20,6 +21,7 @@ The program exists as a dual-window display, one window containing the Admin con
 git clone https://github.com/DrewBanyai/RPwMe.git
 cd RPwMe
 npm install
+~Setup settings.js with your channel and oauth information
 npm start
 ```
 
@@ -29,6 +31,7 @@ npm start
 git clone https://github.com/DrewBanyai/RPwMe.git
 cd RPwMe
 npm install
+~Setup settings.js with your channel and oauth information
 npm run publish
 ```
 
