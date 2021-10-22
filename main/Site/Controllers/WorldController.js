@@ -15,7 +15,7 @@
 */
 
 var { SeedRandom, RandIntBetween, Random } = require('../HelperFunctions/Random')
-var { ClearUsedLocationNames, ClearUsedPositions, GetLocationPosition } = require('../HelperFunctions/HelperFuncs')
+var { ClearUsedLocationNames, GetLocationPosition, GetLocationName } = require('../HelperFunctions/HelperFuncs')
 var { GetRandomCityType, GetRandomLandmarkType } = require('../Data/LocationTypes')
 const { Container } = require('../Components/ArcadiaJS')
 const { LOCATION_DATA } = require('../Data/LocationData')
@@ -32,50 +32,58 @@ const WorldController = {
         return container;
     },
 
-    GenerateRandomWorld: (container, worldSeed) => {
+    GenerateRandomWorld(container, worldSeed)  {
         ClearUsedLocationNames();
-        ClearUsedPositions();
-        CampaignController.ResetCampaignData();
+        CampaignController.ResetMapData();
 
-        //  Seed the world generation=
+        //  Seed the world generation
         SeedRandom(worldSeed);
 
         //  Choose a random map identifier
-        const mapList = Object.keys(LOCATION_DATA);
-        let mapID = mapList[Math.floor(Random() * mapList.length)];
-        let mapImage = LOCATION_DATA[mapID].MapImageFile;
+        const mapKeyList = Object.keys(LOCATION_DATA);
+        CampaignController.SetCampaignMapID(mapKeyList[Math.floor(Random() * mapKeyList.length)]);
 
-        //  Generate all cities and landmarks that will populate the map
-        let cityArray = WorldController.generateCityArray(LOCATION_DATA[mapID]);
-        let landmarkArray = WorldController.generateLandmarkArray(LOCATION_DATA[mapID]);
-
-        //  Save off the map objects into an array for later use
-        CampaignController.SetCampaignMapData(mapID, mapImage);
-        CampaignController.SetCampaignStatus("Waiting For Campaign Start");
-        CampaignController.PrintCampaignData();
-
-        //  Create the visual represenation of this map
         let mapData = CampaignController.GetCampaignMapData();
-        container.elements.interactiveMap = InteractiveMap.create({
-            mapSelection: mapData.MapID,
-            mapImageFile: mapData.MapImage,
-            mapSizeX: "930px",
-            mapSizeY: "555px",
-            cities: mapData.Locations.Cities,
-            landmarks: mapData.Locations.Landmarks
-        });
+        mapData = WorldController.generateMapEntry(0, LOCATION_DATA[CampaignController.GetCampaignMapID()]);
+
+        CampaignController.SetCampaignMapData(mapData);
+        container.elements.interactiveMap = InteractiveMap.create({ topLevelMapData: mapData, });
     },
 
-    generateCityArray: (mapData) => {
+    generateMapEntry(mapLevel, locationData) {
+        let mapEntry = CampaignController.GetEmptyMapEntry();
+        mapEntry.MapImage = locationData.MapImageFile;
+        mapEntry.MapLevel = mapLevel;
+
+        //  Generate all cities that populate the map within this entry
+        let cityArray = WorldController.generateCityArray(locationData);
+        cityArray.forEach(c => mapEntry.Locations.Cities[c.ObjectID] = c);
+
+        //  Generate all landmarks that populate the map within this entry
+        let landmarkArray = WorldController.generateLandmarkArray(locationData);
+        landmarkArray.forEach(l => mapEntry.Locations.Landmarks[l.ObjectID] = l);
+
+        let partitionArray = WorldController.generatePartitionArray(locationData);
+        partitionArray.forEach(p => {
+            p.MapEntry = WorldController.generateMapEntry(mapLevel + 1, p.LocationData);
+            delete p.LocationData;
+            mapEntry.Locations.Partitions[p.ObjectID] = p;
+        });
+
+        return mapEntry;
+    },
+
+    generateCityArray(locationData) {
         //  Create the number of cities randomly by generating them on the fly
         let objectArray = [];
-        let objectCount = RandIntBetween(mapData.CityCounts.Min, mapData.CityCounts.Max);
+        let objectCount = RandIntBetween(locationData.CityCounts.Min, locationData.CityCounts.Max);
+        let usedPositions = [];
         for (let i = 0; i < objectCount; ++i) {
             //  Select a city type and create the new city, then push it into the city array
-            let position = GetLocationPosition(mapData, "Cities");
+            let position = GetLocationPosition(locationData, "City", usedPositions);
             let cityType = GetRandomCityType();
             let cityData = cityType.GenerateData();
-            let cityPos = { X: position.X, Y: position.Y };
+            let cityPos = { x: position.x, y: position.y };
             let newLocation = {
                 ObjectID: CampaignController.GenerateNewObjectID(),
                 Type: cityType.LocationType,
@@ -86,22 +94,22 @@ const WorldController = {
                 Population: cityData.Population,
                 Businesses: cityData.Businesses
             }
-            CampaignController.AddCampaignCity(newLocation.ObjectID, newLocation);
             objectArray.push(newLocation);
         }
 
         return objectArray;
     },
 
-    generateLandmarkArray: (mapData) => {
+    generateLandmarkArray(locationData) {
         //  Create the number of landmarks randomly by generating them on the fly
         let objectArray = [];
-        let objectCount = RandIntBetween(mapData.LandmarkCounts.Min, mapData.LandmarkCounts.Max);
+        let objectCount = RandIntBetween(locationData.LandmarkCounts.Min, locationData.LandmarkCounts.Max);
+        let usedPositions = [];
         for (let i = 0; i < objectCount; ++i) {
             //  Select a landmark type and create the new landmark, then push it into the landmark array
-            let position = GetLocationPosition(mapData, "Landmarks");
+            let position = GetLocationPosition(locationData, "Landmark", usedPositions);
             let landmarkType = GetRandomLandmarkType();
-            let landmarkPos = { X: position.X, Y: position.Y };
+            let landmarkPos = { x: position.x, y: position.y };
             let landmarkData = landmarkType.GenerateData();
 
             let newLocation = {
@@ -114,13 +122,27 @@ const WorldController = {
                 Population: landmarkData.Population
             }
             if (landmarkData.Businesses) { newLocation.Businesses = landmarkData.Businesses; }
-            CampaignController.AddCampaignLandmark(newLocation.ObjectID, newLocation);
             objectArray.push(newLocation);
 
         }
 
         return objectArray;
-    }
+    },
+
+    generatePartitionArray(locationData) {
+        let objectArray = [];
+        locationData.Partitions.forEach(p => {
+            let newPart = {
+                ObjectID: CampaignController.GenerateNewObjectID(),
+                NamePosition: p.NamePosition,
+                Points: p.Points,
+                Name: GetLocationName(p.LocationData.LocationType, true),
+                LocationData: p.LocationData,
+            }
+            objectArray.push(newPart);
+        });
+        return objectArray;
+    },
 };
 
 //  Module Exports

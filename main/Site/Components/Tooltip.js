@@ -15,6 +15,7 @@
 */
 
 const { Container } = require('../Components/ArcadiaJS')
+const STYLE = require('../style')
 
 "use strict"
 
@@ -29,7 +30,20 @@ let Tooltip = {
 
         container.elements.tooltip = Container.create({
             id: "DetachedTooltip",
-            style: { minWidth: "100px", minHeight: "20px", maxWidth: "200px", maxHeight: "400px", backgroundColor: "rgb(64, 64, 64)", color: "rgb(255, 255, 255)", position: "absolute", opacity: "0", textAlign: "center", transition: "opacity 0.3s", pointerEvents: "none", }
+            style: {
+                minWidth: "100px",
+                minHeight: "20px",
+                maxWidth: "200px",
+                maxHeight: "400px",
+                backgroundColor: "rgb(64, 64, 64)",
+                color: "rgb(255, 255, 255)",
+                position: "absolute",
+                opacity: "0",
+                textAlign: "center",
+                transition: "opacity 0.3s",
+                pointerEvents: "none",
+                zIndex: STYLE.Z_INDEX.TOOLTIP,
+            }
         });
         container.appendChild(container.elements.tooltip);
 

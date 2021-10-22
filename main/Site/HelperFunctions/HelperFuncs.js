@@ -21,6 +21,7 @@ var { Random, RandIntBetween } = require('../HelperFunctions/Random')
 let usedLocationNames = [];
 const ClearUsedLocationNames = () => { usedLocationNames = []; }
 const GetLocationName = (locationType, unused = true) => {
+    if (!LOCATION_NAMES.hasOwnProperty(locationType)) { console.warn("Attempting to find location name for unknown type " + locationType); return "NO NAME"; }
     if (usedLocationNames.length >= LOCATION_NAMES[locationType].length) { unused = false; }
     let locationName = LOCATION_NAMES[locationType][Math.floor(Random() * LOCATION_NAMES[locationType].length)];
     if (unused) { while (usedLocationNames.includes(locationName)) { locationName = LOCATION_NAMES[locationType][Math.floor(Random() * LOCATION_NAMES[locationType].length)]; } }
@@ -29,14 +30,13 @@ const GetLocationName = (locationType, unused = true) => {
 }
 
 
-let usedPositions = [];
-const ClearUsedPositions = () => { usedPositions = []; }
-const GetLocationPosition = (mapData, locationType, unused = true) => {
-    if (usedPositions.length >= mapData.Positions[locationType].length) { unused = false; }
-    let positionIndex = Math.floor(Random() * mapData.Positions[locationType].length);
-    if (unused) { while (usedPositions.includes(positionIndex)) { positionIndex = Math.floor(Random() * mapData.Positions[locationType].length); } }
+const GetLocationPosition = (mapData, locationType, usedPositions, unused = true) => {
+    let positionList = mapData.Positions.filter(pos => pos.TypeAllowed.includes(locationType));
+    if (unused && (usedPositions.length >= positionList.length)) { console.warn("Ran out of unused locations of type " + locationType); unused = false; }
+    let positionIndex = Math.floor(Random() * positionList.length);
+    if (unused) { while (usedPositions.includes(positionIndex)) { positionIndex = Math.floor(Random() * positionList.length); } }
     usedPositions.push(positionIndex);
-    return mapData.Positions[locationType][positionIndex];
+    return positionList[positionIndex];
 }
 
 
@@ -66,4 +66,4 @@ const ChooseXFromList = (count, list) => {
 }
 
 //  Module Exports
-module.exports = { ClearUsedLocationNames, GetLocationName, ClearUsedPositions, GetLocationPosition, GenerateBusinesses, ChooseXFromList }
+module.exports = { ClearUsedLocationNames, GetLocationName, GetLocationPosition, GenerateBusinesses, ChooseXFromList }

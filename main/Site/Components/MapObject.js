@@ -18,17 +18,19 @@ const { pxFromInt } = require('../HelperFunctions/pxFromInt')
 const { Container, Image, Label } = require('../Components/ArcadiaJS')
 const { EventDispatch } = require('../Controllers/EventDispatch')
 const { Tooltip } = require('../Components/Tooltip')
+const STYLE = require('../style')
 
 const MapObject = {
     create(options) {
         let container = Container.create({
-            id: "MapObject",
+            id: (options && options.id) ? options.id : "MapObject",
             style: {
                 position: "absolute",
-                left: options.objPosition.X,
-                top: options.objPosition.Y,
+                left: options.objPosition.x,
+                top: options.objPosition.y,
                 width: pxFromInt(options.objSize.W),
-                height: pxFromInt(options.objSize.H)
+                height: pxFromInt(options.objSize.H),
+                zIndex: STYLE.Z_INDEX.MAP_OBJECT,
             }
         });
 
@@ -37,7 +39,7 @@ const MapObject = {
         container.objectID = options.objectID;
 
         container.elements.objectIcon = Image.create({
-            id: "CityIcon",
+            id: "ObjectIcon",
             style: {
                 position: "absolute",
                 top: pxFromInt(options.objSize.H / 2 * -1),

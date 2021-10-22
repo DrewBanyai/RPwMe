@@ -18,10 +18,10 @@ const CONFIG = require('../../config')
 const STYLE = require('../style')
 const { Container, BasicButton } = require('../Components/ArcadiaJS')
 const { WorldController } = require('../Controllers/WorldController')
-const { InteractiveMap } = require('../Components/InteractiveMap')
 const { EventDispatch } = require('../Controllers/EventDispatch')
 const { pxFromInt } = require('../HelperFunctions/pxFromInt')
 const { adminMessages } = require('../Messaging/AdminMessages')
+const { CampaignController } = require('../Controllers/CampaignController')
 
 let AdminArea_World = {
     create() {
@@ -40,30 +40,31 @@ let AdminArea_World = {
         AdminArea_World.createWorldDisplay(container, Date.now());
         AdminArea_World.createWorldInfoBox(container);
 
+        let debugButtonBox = Container.create({
+            id: "DebugButtonBox",
+            style: {
+
+            }
+        });
+        container.appendChild(debugButtonBox);
+
         if (CONFIG.DEBUG.includes("SCREEN BUTTONS")) {
-            container.elements.showMapButton = BasicButton.create({
-                id: "ShowMapButton",
-                style: {
-                    fontFamily: "Vesper Libre",
-                    fontSize: "18px",
-                    margin: "0px 100px 0px 0px",
-                    display: "inline-flex",
-                },
-                attributes: { value: "Show Map", },
-            });
-            container.appendChild(container.elements.showMapButton);
+            container.elements.showMapButton = BasicButton.create({ id: "ShowMapButton", style: STYLE.ADMIN_SCREEN_DEBUG_BUTTON, attributes: { value: "Show Map", }, });
+            debugButtonBox.appendChild(container.elements.showMapButton);
             BasicButton.setOnClick(container.elements.showMapButton, () => { adminMessages.sendShowCampaignScreenEvent({ screenID: "Map", }); });
         }
+        
+        container.elements.returnToWorldViewButton = BasicButton.create({ id: "ReturnToWorldViewButton", style: STYLE.ADMIN_SCREEN_DEBUG_BUTTON, attributes: { value: "Return To World View", }, });
+        debugButtonBox.appendChild(container.elements.returnToWorldViewButton);
+        BasicButton.setOnClick(container.elements.returnToWorldViewButton, () => { EventDispatch.SendEvent("Return To World View", {}); });
 
         EventDispatch.AddEventHandler("Map Create", (eventType, eventData) => { AdminArea_World.createWorldDisplay(container, eventData.seed); });
 
-        container.onShow = () => AdminArea_World.reloadMapDisplay(container);
+        container.onShow = () => {
+
+        }
 
         return container;
-    },
-
-    reloadMapDisplay(container) {
-        setTimeout(() => { InteractiveMap.LoadMapObjects(container.elements.worldDisplay.elements.interactiveMap); }, 10); //  TODO: Swap this out with a DOM content loaded callback?
     },
 
     createWorldDisplay(container, seed) {
@@ -80,9 +81,12 @@ let AdminArea_World = {
             container.appendChild(container.elements.worldContainer);
         }
 
+        CampaignController.ResetCampaignData();
         container.elements.worldDisplay = WorldController.create(seed);
         container.elements.worldContainer.innerHTML = "";
         container.elements.worldContainer.appendChild(container.elements.worldDisplay.elements.interactiveMap);
+        CampaignController.SetCampaignStatus("Waiting For Campaign Start");
+        CampaignController.PrintCampaignData();
     },
 
     createWorldInfoBox(container) {

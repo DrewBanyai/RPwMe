@@ -48,29 +48,34 @@ const CampaignController = {
             Status: "",
             Players: { 0: null, 1: null, 2: null},
             GameMaster: "",
-            MapData: {
-                MapID: null,
-                MapImage: null,
-                Locations: {
-                    Cities: {},
-                    Landmarks: {}
-                }
-            },
+            MapID: null,
         };
+        CampaignController.ResetMapData();
         
         CampaignController.ResetObjectIDs();
     
         CampaignController.SetCampaignStatus("Generating Campaign Data");
     },
-    GenerateNewObjectID() {
-        return CampaignObjectCount++;
+
+    ResetMapData() { CAMPAIGN_DATA.MapData = CampaignController.GetEmptyMapEntry(); },
+
+    GetEmptyMapEntry() {
+        return {
+            MapImage: null,
+            MapLevel: 0,
+            Locations: {
+                Cities: {},
+                Landmarks: {},
+                Partitions: {},
+            }
+        }
     },
-    ResetObjectIDs() {
-        CampaignObjectCount = 0;
-    },
-    PrintCampaignData() {
-        console.log("Campaign Data:", CAMPAIGN_DATA);
-    },
+
+    GenerateNewObjectID() { return CampaignObjectCount++; },
+    ResetObjectIDs() { CampaignObjectCount = 0; },
+
+    PrintCampaignData() { console.log("Campaign Data:", CAMPAIGN_DATA); },
+
     AddCampaignCity(id, locationData) {
         if (!CAMPAIGN_DATA) { console.error("CAMPAIGN_DATA is null or invalid!"); return; }
         if (!CAMPAIGN_DATA.hasOwnProperty("MapData")) { console.error("CAMPAIGN_DATA has no MapData entry!"); return; }
@@ -87,13 +92,9 @@ const CampaignController = {
     
         CAMPAIGN_DATA.MapData.Locations.Landmarks[id] = locationData;
     },
-    GetCampaignMapData() {
-        return CAMPAIGN_DATA.MapData;
-    },
-    SetCampaignMapData(mapID, mapImage) {
-        CAMPAIGN_DATA.MapData.MapID = mapID;
-        CAMPAIGN_DATA.MapData.MapImage = mapImage;
-    },
+    SetCampaignMapID(mapID) { CAMPAIGN_DATA.MapID = mapID; },
+    GetCampaignMapID() { return CAMPAIGN_DATA.MapID; },
+    GetCampaignMapData() { return CAMPAIGN_DATA.MapData; },
     AddCampaignPlayer(playerUsername) {
         if (!CAMPAIGN_DATA) { console.error("CAMPAIGN_DATA is null or invalid!"); return false; }
         if (!CAMPAIGN_DATA.hasOwnProperty("Players")) { console.error("CAMPAIGN_DATA has no Players data!"); return false; }
@@ -126,9 +127,7 @@ const CampaignController = {
         for (let i = 0; i < 3; ++i) count += ((CAMPAIGN_DATA.Players[i]) ? 1 : 0);
         return count;
     },
-    GetPlayersList() {
-        return CAMPAIGN_DATA.Players;
-    },
+    GetPlayersList() { return CAMPAIGN_DATA.Players; },
     GetPlayer(playerUsername) {
         if (!this.GetPlayerExists(playerUsername)) { return null; }
 
@@ -159,12 +158,9 @@ const CampaignController = {
     
         CAMPAIGN_DATA.GameMaster = gmUsername;
     },
-    GetCampaignData() {
-        return CAMPAIGN_DATA;
-    },
-    SetCampaignData(campaignData) {
-        CAMPAIGN_DATA = campaignData;
-    },
+    GetCampaignData() { return CAMPAIGN_DATA; },
+    SetCampaignData(campaignData) { CAMPAIGN_DATA = campaignData; },
+    SetCampaignMapData(mapData) { CAMPAIGN_DATA.MapData = mapData; },
     UpdateCampaignData(campaignData) {
         if (!campaignData) { console.error("Attempting to set new Campaign Data with null data entry!"); return; }
         CAMPAIGN_DATA = campaignData;

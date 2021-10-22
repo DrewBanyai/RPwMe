@@ -15,8 +15,296 @@
 */
 
 const LOCATION_DATA = {
+    "001": {
+        MapImageFile: "Images/Locations/Level_1/01.png",
+        LocationType: "World",
+        CityCounts: { Min: 0, Max: 0, },
+        LandmarkCounts: { Min: 0, Max: 0, },
+        Positions: [],
+        Partitions: [
+            {
+                //  South West Islands
+                NamePosition: { x: 596, y: 968, },
+                NameType: "Region",
+                Points: [
+                    {   x: 124,   y: 806,     },
+                    {   x: 308,   y: 1273,    },
+                    {   x: 692,   y: 1280,    },
+                    {   x: 835,   y: 1387,    },
+                    {   x: 1157,  y: 1379,    },
+                    {   x: 1113,  y: 1089,    },
+                    {   x: 826,   y: 775,     },
+                    {   x: 579,   y: 334,     },
+                ],
+                LocationData: {
+                    MapImageFile: "Images/Locations/Level_2/01_A.png",
+                    LocationType: "Region",
+                    CityCounts: { Min: 0, Max: 0, },
+                    LandmarkCounts: { Min: 0, Max: 0, },
+                    Positions: [],
+                    Partitions: [
+                        {
+                            //  North side of West Islands mainland
+                            NamePosition: { x: 1159, y: 772, },
+                            Points: [
+                                {   x: 511,     y: 161,     },
+                                {   x: 372,     y: 290,     },
+                                {   x: 430,     y: 493,     },
+                                {   x: 750,     y: 528,     },
+                                {   x: 815,     y: 566,     },
+                                {   x: 889,     y: 469,     },
+                                {   x: 823,     y: 355,     },
+                                {   x: 731,     y: 254,     },
+                            ],
+                            LocationData: {
+                                MapImageFile: "Images/Locations/Level_3/01_A_01.png",
+                                LocationType: "SubRegion",
+                                CityCounts: { Min: 1, Max: 3, },
+                                LandmarkCounts: { Min: 3, Max: 8, },
+                                Positions: [
+                                    {   x: 449,     y: 354,     TypeAllowed: [ "City" ],            Properties: [ "Temperate", "Fertile", "Near Mountains", "Near Ocean" ] },
+                                    {   x: 380,     y: 483,     TypeAllowed: [ "City" ],            Properties: [ "Temperate", "Fertile", "Near Mountains", "Near Ocean" ] },
+                                    {   x: 581,     y: 449,     TypeAllowed: [ "City" ],            Properties: [ "Temperate", "Fertile", "Near Mountains", "Near Ocean" ] },
+                                    {   x: 735,     y: 431,     TypeAllowed: [ "City" ],            Properties: [ "Temperate", "Fertile", "Near Mountains", "Near Ocean" ] },
+
+                                    {   x: 118,     y: 387,     TypeAllowed: [ "Landmark" ],        Properties: [ "Infertile", "Desolate" ] },
+                                    {   x: 167,     y: 388,     TypeAllowed: [ "Landmark" ],        Properties: [ "Infertile", "Desolate", "Near Mountains" ] },
+                                    {   x: 291,     y: 259,     TypeAllowed: [ "Landmark" ],        Properties: [ "Fertile", "Near Mountains", "Near Ocean" ] },
+                                    {   x: 397,     y: 140,     TypeAllowed: [ "Landmark" ],        Properties: [ "Infertile", "Desolate", "Swampy", "Near Ocean", "Isolated" ] },
+                                    {   x: 582,     y: 241,     TypeAllowed: [ "Landmark" ],        Properties: [ "Fertile", "Island", "Near Ocean", "Isolated" ] },
+                                    {   x: 407,     y: 408,     TypeAllowed: [ "Landmark" ],        Properties: [ "Fertile", "Island", "Near Ocean", "Isolated" ] },
+                                    {   x: 636,     y: 348,     TypeAllowed: [ "Landmark" ],        Properties: [ "Fertile", "Island", "Near Ocean", ] },
+                                    {   x: 723,     y: 372,     TypeAllowed: [ "Landmark" ],        Properties: [ "Fertile", "Island", "Near Ocean", "Near Forest" ] },
+                                    {   x: 370,     y: 546,     TypeAllowed: [ "Landmark" ],        Properties: [ "Frozen", "Near Mountains", "Near Ocean" ] },
+                                    {   x: 493,     y: 490,     TypeAllowed: [ "Landmark" ],        Properties: [ "Frozen", "Near Mountains", "Near Ocean" ] },
+                                    {   x: 659,     y: 429,     TypeAllowed: [ "Landmark" ],        Properties: [ "Fertile", "Near Mountains" ] },
+                                ],
+                                Partitions: [],
+                            }
+                        },
+                        {
+                            //  South side of West Islands mainland
+                            NamePosition: { x: 1159, y: 772, },
+                            Points: [
+                                {   x: 430,     y: 493,     },
+                                {   x: 340,     y: 529,     },
+                                {   x: 345,     y: 654,     },
+                                {   x: 425,     y: 806,     },
+                                {   x: 743,     y: 830,     },
+                                {   x: 806,     y: 682,     },
+                                {   x: 750,     y: 528,     },
+                            ],
+                            LocationData: {
+                                MapImageFile: "Images/Locations/Level_3/01_A_02.png",
+                                LocationType: "SubRegion",
+                                CityCounts: { Min: 0, Max: 1, },
+                                LandmarkCounts: { Min: 3, Max: 7, },
+                                Positions: [
+                                    {   x: 214,     y: 140,     TypeAllowed: [ "City" ],            Properties: [ "Temperate", "Fertile", "Near Mountains", "Near Ocean" ] },
+                                    {   x: 443,     y: 76,      TypeAllowed: [ "Landmark" ],        Properties: [ "Infertile", "Desolate" ] },
+                                    {   x: 521,     y: 176,     TypeAllowed: [ "Landmark" ],        Properties: [ "Infertile", "Desolate", "Near Mountains" ] },
+                                    {   x: 383,     y: 228,     TypeAllowed: [ "Landmark" ],        Properties: [ "Fertile", "Near Mountains", "Near Ocean" ] },
+                                    {   x: 238,     y: 272,     TypeAllowed: [ "Landmark" ],        Properties: [ "Infertile", "Desolate", "Swampy", "Near Ocean", "Isolated" ] },
+                                    {   x: 311,     y: 335,     TypeAllowed: [ "Landmark" ],        Properties: [ "Fertile", "Island", "Near Ocean", "Isolated" ] },
+                                    {   x: 485,     y: 336,     TypeAllowed: [ "Landmark" ],        Properties: [ "Fertile", "Island", "Near Ocean", "Isolated" ] },
+                                    {   x: 146,     y: 322,     TypeAllowed: [ "Landmark" ],        Properties: [ "Fertile", "Island", "Near Ocean", ] },
+                                    {   x: 730,     y: 190,     TypeAllowed: [ "Landmark" ],        Properties: [ "Fertile", "Island", "Near Ocean", "Near Forest" ] },
+                                    {   x: 693,     y: 317,     TypeAllowed: [ "Landmark" ],        Properties: [ "Frozen", "Near Mountains", "Near Ocean" ] },
+                                ],
+                                Partitions: [],
+                            }
+                        },
+                        {
+                            //  Eastern island cluster in West Islands
+                            NamePosition: { x: 1159, y: 772, },
+                            Points: [
+                                {   x: 806,     y: 682,     },
+                                {   x: 814,     y: 565,     },
+                                {   x: 888,     y: 469,     },
+                                {   x: 977,     y: 497,     },
+                                {   x: 1084,    y: 641,     },
+                                {   x: 1090,    y: 896,     },
+                                {   x: 963,     y: 942,     },
+                                {   x: 844,     y: 864,     },
+                            ],
+                            LocationData: {
+                                MapImageFile: "Images/Locations/Level_3/01_A_03.png",
+                                LocationType: "SubRegion",
+                                CityCounts: { Min: 0, Max: 1, },
+                                LandmarkCounts: { Min: 3, Max: 6, },
+                                Positions: [
+                                    {   x: 340,     y: 82,      TypeAllowed: [ "City" ],            Properties: [ "Temperate", "Fertile", "Near Mountains", "Near Ocean" ] },
+                                    {   x: 274,     y: 197,     TypeAllowed: [ "City" ],            Properties: [ "Temperate", "Fertile", "Near Mountains", "Near Ocean" ] },
+                                    {   x: 326,     y: 124,     TypeAllowed: [ "Landmark" ],        Properties: [ "Infertile", "Desolate" ] },
+                                    {   x: 441,     y: 167,     TypeAllowed: [ "Landmark" ],        Properties: [ "Infertile", "Desolate", "Near Mountains" ] },
+                                    {   x: 392,     y: 247,     TypeAllowed: [ "Landmark" ],        Properties: [ "Fertile", "Near Mountains", "Near Ocean" ] },
+                                    {   x: 489,     y: 250,     TypeAllowed: [ "Landmark" ],        Properties: [ "Infertile", "Desolate", "Swampy", "Near Ocean", "Isolated" ] },
+                                    {   x: 287,     y: 342,     TypeAllowed: [ "Landmark" ],        Properties: [ "Fertile", "Island", "Near Ocean", "Isolated" ] },
+                                    {   x: 426,     y: 476,     TypeAllowed: [ "Landmark" ],        Properties: [ "Fertile", "Island", "Near Ocean", "Isolated" ] },
+                                ],
+                                Partitions: [],
+                            }
+                        }
+                    ],
+                },
+            },
+            {
+                //  North East Islands
+                NamePosition: { x: 1159, y: 772, },
+                Points: [
+                    {   x: 721,     y: 461,    },
+                    {   x: 833,     y: 775,    },
+                    {   x: 1116,    y: 1068,    },
+                    {   x: 1142,    y: 1193,    },
+                    {   x: 1281,    y: 1322,    },
+                    {   x: 1600,    y: 1280,    },
+                    {   x: 1786,    y: 930,    },
+                    {   x: 1675,    y: 489,    },
+                    {   x: 1517,    y: 323,    },
+                    {   x: 1138,    y: 317,    },
+                ],
+                LocationData: {
+                    MapImageFile: "Images/Locations/Level_2/01_B.png",
+                    LocationType: "Region",
+                    CityCounts: { Min: 0, Max: 0, },
+                    LandmarkCounts: { Min: 0, Max: 0, },
+                    Positions: [],
+                    Partitions: [
+                        {
+                            //  North side of East Islands mainland
+                            NamePosition: { x: 1159, y: 772, },
+                            Points: [
+                                {   x: 344,     y: 547,     },
+                                {   x: 758,     y: 510,     },
+                                {   x: 793,     y: 445,     },
+                                {   x: 809,     y: 342,     },
+                                {   x: 728,     y: 277,     },
+                                {   x: 572,     y: 213,     },
+                                {   x: 457,     y: 108,     },
+                                {   x: 117,     y: 93,      },
+                                {   x: 152,     y: 285,     },
+                                {   x: 245,     y: 467,     },
+                            ],
+                            LocationData: {
+                                MapImageFile: "Images/Locations/Level_3/01_B_01.png",
+                                LocationType: "SubRegion",
+                                CityCounts: { Min: 2, Max: 5, },
+                                LandmarkCounts: { Min: 3, Max: 7, },
+                                Positions: [
+                                    {   x: 112,     y: 109,     TypeAllowed: [ "City" ],            Properties: [ "Temperate", "Infertile", "Near Mountains", "Near Ocean" ] },
+                                    {   x: 165,     y: 251,     TypeAllowed: [ "City" ],            Properties: [ "Temperate", "Infertile", "Near Mountains", "Near Ocean" ] },
+                                    {   x: 517,     y: 269,     TypeAllowed: [ "City" ],            Properties: [ "Temperate", "Infertile", "Near Mountains", "Near Ocean"  ] },
+                                    {   x: 654,     y: 282,     TypeAllowed: [ "City" ],            Properties: [ "Temperate", "Infertile", "Near Mountains", "Near Ocean", "Near Forest" ] },
+                                    {   x: 257,     y: 446,     TypeAllowed: [ "City" ],            Properties: [ "Temperate", "Fertile", "Near Ocean", "Near Forest" ] },
+                                    {   x: 126,     y: 157,     TypeAllowed: [ "Landmark" ],        Properties: [ "Infertile", "Desolate" ] },
+                                    {   x: 209,     y: 115,     TypeAllowed: [ "Landmark" ],        Properties: [ "Infertile", "Desolate", "Near Mountains" ] },
+                                    {   x: 308,     y: 205,     TypeAllowed: [ "Landmark" ],        Properties: [ "Fertile", "Near Mountains", "Near Ocean" ] },
+                                    {   x: 321,     y: 326,     TypeAllowed: [ "Landmark" ],        Properties: [ "Infertile", "Desolate", "Swampy", "Near Ocean", "Isolated" ] },
+                                    {   x: 454,     y: 348,     TypeAllowed: [ "Landmark" ],        Properties: [ "Fertile", "Island", "Near Ocean", "Isolated" ] },
+                                    {   x: 637,     y: 426,     TypeAllowed: [ "Landmark" ],        Properties: [ "Fertile", "Island", "Near Ocean", "Isolated" ] },
+                                    {   x: 520,     y: 502,     TypeAllowed: [ "Landmark" ],        Properties: [ "Fertile", "Island", "Near Ocean", ] },
+                                ],
+                                Partitions: [],
+                            }
+                        },
+                        {
+                            //  South side of East Islands mainland
+                            NamePosition: { x: 1159, y: 772, },
+                            Points: [
+                                {   x: 344,     y: 547,     },
+                                {   x: 758,     y: 510,     },
+                                {   x: 760,     y: 688,     },
+                                {   x: 863,     y: 790,     },
+                                {   x: 917,     y: 855,     },
+                                {   x: 859,     y: 953,     },
+                                {   x: 697,     y: 952,     },
+                                {   x: 586,     y: 938,     },
+                                {   x: 500,     y: 806,     },
+                            ],
+                            LocationData: {
+                                MapImageFile: "Images/Locations/Level_3/01_B_02.png",
+                                LocationType: "SubRegion",
+                                CityCounts: { Min: 1, Max: 3, },
+                                LandmarkCounts: { Min: 2, Max: 5, },
+                                Positions: [
+                                    {   x: 473,     y: 28,      TypeAllowed: [ "City" ],            Properties: [ "Temperate", "Fertile", "Near Ocean" ] },
+                                    {   x: 324,     y: 256,     TypeAllowed: [ "City" ],            Properties: [ "Temperate", "Fertile", "Near Ocean" ] },
+                                    {   x: 513,     y: 265,     TypeAllowed: [ "City" ],            Properties: [ "Temperate", "Fertile", "Near Ocean", "Isolated", "Island" ] },
+                                    {   x: 463,     y: 83,      TypeAllowed: [ "Landmark" ],        Properties: [ "Infertile", "Desolate" ] },
+                                    {   x: 334,     y: 60,      TypeAllowed: [ "Landmark" ],        Properties: [ "Infertile", "Desolate", "Near Mountains" ] },
+                                    {   x: 272,     y: 203,     TypeAllowed: [ "Landmark" ],        Properties: [ "Fertile", "Near Mountains", "Near Ocean" ] },
+                                    {   x: 507,     y: 178,     TypeAllowed: [ "Landmark" ],        Properties: [ "Fertile", "Near Ocean", "Isolated" ] },
+                                    {   x: 455,     y: 420,     TypeAllowed: [ "Landmark" ],        Properties: [ "Fertile", "Near Forest", "Isolated" ] },
+                                ],
+                                Partitions: [],
+                            }
+                        },
+                        {
+                            //  East tip of East Islands mainland
+                            NamePosition: { x: 1159, y: 772, },
+                            Points: [
+                                {   x: 758,     y: 510,     },
+                                {   x: 760,     y: 688,     },
+                                {   x: 863,     y: 790,     },
+                                {   x: 1084,    y: 750,     },
+                                {   x: 1123,    y: 552,     },
+                                {   x: 965,     y: 418,     },
+                                {   x: 794,     y: 445,     },
+                            ],
+                            LocationData: {
+                                MapImageFile: "Images/Locations/Level_3/01_B_03.png",
+                                LocationType: "SubRegion",
+                                CityCounts: { Min: 1, Max: 3, },
+                                LandmarkCounts: { Min: 2, Max: 5, },
+                                Positions: [
+                                    {   x: 236,     y: 459,     TypeAllowed: [ "City" ],            Properties: [ "Temperate", "Fertile", "Near Ocean" ] },
+                                    {   x: 517,     y: 462,     TypeAllowed: [ "City" ],            Properties: [ "Temperate", "Fertile", "Near Ocean" ] },
+                                    {   x: 392,     y: 151,     TypeAllowed: [ "City" ],            Properties: [ "Temperate", "Fertile", "Near Ocean", "Isolated", "Island" ] },
+                                    {   x: 299,     y: 195,     TypeAllowed: [ "Landmark" ],        Properties: [ "Infertile", "Desolate" ] },
+                                    {   x: 193,     y: 384,     TypeAllowed: [ "Landmark" ],        Properties: [ "Infertile", "Desolate", "Near Mountains" ] },
+                                    {   x: 387,     y: 501,     TypeAllowed: [ "Landmark" ],        Properties: [ "Fertile", "Near Mountains", "Near Ocean" ] },
+                                    {   x: 391,     y: 301,     TypeAllowed: [ "Landmark" ],        Properties: [ "Infertile", "Desolate", "Swampy", "Near Ocean", "Isolated" ] },
+                                    {   x: 565,     y: 240,     TypeAllowed: [ "Landmark" ],        Properties: [ "Fertile", "Island", "Near Ocean", "Isolated" ] },
+                                ],
+                                Partitions: [],
+                            }
+                        },
+                        {
+                            //  North island of East Islands group
+                            NamePosition: { x: 1159, y: 772, },
+                            Points: [
+                                {   x: 809,     y: 342,     },
+                                {   x: 728,     y: 277,     },
+                                {   x: 572,     y: 213,     },
+                                {   x: 457,     y: 108,     },
+                                {   x: 483,     y: 8,       },
+                                {   x: 694,     y: 13,      },
+                                {   x: 917,     y: 19,      },
+                                {   x: 1010,    y: 124,     },
+                                {   x: 993,     y: 304,     },
+                            ],
+                            LocationData: {
+                                MapImageFile: "Images/Locations/Level_3/01_B_04.png",
+                                LocationType: "SubRegion",
+                                CityCounts: { Min: 0, Max: 0, },
+                                LandmarkCounts: { Min: 1, Max: 4, },
+                                Positions: [
+                                    {   x: 175,     y: 206,     TypeAllowed: [ "Landmark" ],        Properties: [ "Infertile", "Frozen", "Near Mountains", "Near Ocean" ] },
+                                    {   x: 347,     y: 220,     TypeAllowed: [ "Landmark" ],        Properties: [ "Infertile", "Frozen", "Near Mountains", "Near Ocean" ] },
+                                    {   x: 547,     y: 148,     TypeAllowed: [ "Landmark" ],        Properties: [ "Infertile", "Cold", "Near Ocean" ] },
+                                    {   x: 679,     y: 421,     TypeAllowed: [ "Landmark" ],        Properties: [ "Infertile", "Frozen", "Near Ocean", "Isolated" ] },
+                                ],
+                                Partitions: [],
+                            }
+                        },
+                    ],
+                }
+            }
+        ],
+    },
+    /*
     "01": {
-        MapImageFile: "Images/Locations/Level_0/01.png",
+        MapImageFile: "Images/Locations/Level_1/01.png",
         CityCounts: { Min: 4, Max: 8 },
         LandmarkCounts: { Min: 10, Max: 20 },
         Positions: {
@@ -72,7 +360,7 @@ const LOCATION_DATA = {
         }
     },
     "02": {
-        MapImageFile: "Images/Locations/Level_0/02.png",
+        MapImageFile: "Images/Locations/Level_1/02.png",
         CityCounts: { Min: 8, Max: 12 },
         LandmarkCounts: { Min: 8, Max: 13 },
         Positions: {
@@ -114,7 +402,7 @@ const LOCATION_DATA = {
         }
     },
     "03": {
-        MapImageFile: "Images/Locations/Level_0/03.png",
+        MapImageFile: "Images/Locations/Level_1/03.png",
         CityCounts: { Min: 4, Max: 7 },
         LandmarkCounts: { Min: 5, Max: 8 },
         Positions: {
@@ -148,7 +436,7 @@ const LOCATION_DATA = {
         }
     },
     "04": {
-        MapImageFile: "Images/Locations/Level_0/04.png",
+        MapImageFile: "Images/Locations/Level_1/04.png",
         CityCounts: { Min: 6, Max: 8 },
         LandmarkCounts: { Min: 9, Max: 14 },
         Positions: {
@@ -189,6 +477,7 @@ const LOCATION_DATA = {
             ]
         }
     }
+    */
 }
 
 //  Module Exports

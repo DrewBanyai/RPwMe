@@ -46,7 +46,7 @@ let GameArea_Campaign_Map = {
         });
 
         container.show = () => {
-            setTimeout(() => { InteractiveMap.LoadMapObjects(container.elements.worldMap); }, 10); //  TODO: Swap this out with a DOM content loaded callback?
+
         };
         container.hide = () => {
 
@@ -63,15 +63,10 @@ let GameArea_Campaign_Map = {
 
         //  Create the visual represenation of this map
         let mapData = CampaignController.GetCampaignMapData();
-        container.elements.worldMap = InteractiveMap.create({
-            mapSelection: mapData.MapID,
-            mapImageFile: mapData.MapImage,
-            mapSizeX: "930px",
-            mapSizeY: "555px",
-            cities: mapData.Locations.Cities,
-            landmarks: mapData.Locations.Landmarks,
-            style: STYLE.CAMPAIGN_INTERACTIVE_MAP
-        });
+        container.elements.worldMap = InteractiveMap.create({ topLevelMapData: mapData });
+        container.elements.worldMap.style.position = "absolute";
+        container.elements.worldMap.style.left = "234px";
+        container.elements.worldMap.style.top = "108px";
         container.appendChild(container.elements.worldMap);
     },
 };

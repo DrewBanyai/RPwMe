@@ -38,16 +38,7 @@ let AdminArea_Journal = {
         container.elements = { showJournalButton: null, };
 
         if (CONFIG.DEBUG.includes("SCREEN BUTTONS")) {
-            container.elements.showJournalButton = BasicButton.create({
-                id: "ShowJournalButton",
-                style: {
-                    fontFamily: "Vesper Libre",
-                    fontSize: "18px",
-                    margin: "0px 100px 0px 0px",
-                    display: "inline-flex",
-                },
-                attributes: { value: "Show Journal", },
-            });
+            container.elements.showJournalButton = BasicButton.create({ id: "ShowJournalButton", style: STYLE.ADMIN_SCREEN_DEBUG_BUTTON, attributes: { value: "Show Journal", }, });
             container.appendChild(container.elements.showJournalButton);
             BasicButton.setOnClick(container.elements.showJournalButton, () => { adminMessages.sendShowCampaignScreenEvent({ screenID: "Journal", }); });
         }

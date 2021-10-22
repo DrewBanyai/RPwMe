@@ -19,6 +19,11 @@ module.exports = {
     ADMIN: "rgb(30, 30, 30)",
     GAME: "rgb(30, 30, 30)",
   },
+
+  Z_INDEX: {
+    MAP_OBJECT: 1,
+    TOOLTIP: 2,
+  },
   
   ADMIN_WINDOW_BUTTONS_BACKGROUND_COLOR: "rgb(33, 37, 41)",
   ADMIN_WINDOW_BUTTON_WIDTH: 72,
@@ -48,6 +53,10 @@ module.exports = {
     ADMIN: { x: 800, y: 600 },
     GAME: { x: 800, y: 600 },
   },
+
+  MAP_ICON_SIZE: { W: 48, H: 48 },
+  MAP_PARTITION_LINE_COLOR_UNSELECTED: "rgba(64, 64, 64, 0.25)",
+  MAP_PARTITION_LINE_COLOR_SELECTED: "rgba(64, 160, 64, 0.25)",
   
   INTERACTIVE_MAP_PADDING_LEFT: 4,
   INTERACTIVE_MAP_PADDING_RIGHT: 2,
@@ -55,6 +64,43 @@ module.exports = {
   INFOBOX_WORLD_PADDING_LEFT: 2,
   INFOBOX_WORLD_PADDING_RIGHT: 4,
 
+  ADMIN_SCREEN_DEBUG_BUTTON: {
+    fontFamily: "Vesper Libre",
+    fontSize: "18px",
+    margin: "0px 100px 0px 0px",
+    display: "inline-flex",
+  },
+
+  MAP_LEVEL_ENTRY: {
+    position: "relative",
+    width: "100%",
+    height: "100%",
+  },
+  MAP_PAPER_BACKGROUND: {
+    width: "100%",
+    height: "100%",
+    position: "relative",
+    backgroundImage: "url(Images/DrawingPaper.png)",
+    backgroundSize: "100%",
+    //overflow: "hidden",
+  },
+  MAP_CONTAINER: {
+    position: "absolute",
+    borderRadius: "6px",
+    width: "100%",
+    height: "100%",
+    backgroundSize: "cover",
+  },
+  MAP_PARTITION_SHAPE_CONTAINER: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+  },
+  MAP_OBJECT_CONTAINER: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+  },
   LINED_PAPER_BACKGROUND: {
     width: "1240px",
     height: "740px",
@@ -64,7 +110,6 @@ module.exports = {
     backgroundSize: "101%",
     overflow: "hidden",
   },
-
   PLAYER_JOIN_CARD_NAME_TAG: {
     fontSize: "26px",
     width: "282px",

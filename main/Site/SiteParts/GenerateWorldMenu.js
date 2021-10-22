@@ -26,7 +26,7 @@ const GenerateWorldMenu = {
             id: "GenerateWorldMenu",
             style: {
                 width: pxFromInt(STYLE.WORLD_MAP_SIZE[document.windowID].x),
-                height: pxFromInt(CONFIG.SITE_HEIGHT - 1 - STYLE.ADMIN_WINDOW_BUTTON_HEIGHT),
+                height: pxFromInt(STYLE.WORLD_MAP_SIZE[document.windowID].y),
                 backgroundColor: STYLE.ADMIN_WINDOW_AREA_COLOR,
             }
         });

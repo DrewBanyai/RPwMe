@@ -92,16 +92,7 @@ let AdminArea_Players = {
         });
         container.elements.startPlayerJoinMenu.appendChild(startPlayerJoinLabel2);
 
-        let startPlayerJoinButton = BasicButton.create({
-            id: "StartPlayerJoinButton",
-            style: {
-                fontFamily: "Vesper Libre",
-                fontSize: "18px",
-                margin: "0px 100px 0px 0px",
-                display: "inline-flex",
-            },
-            attributes: { value: "Allow Players To Join", },
-        });
+        let startPlayerJoinButton = BasicButton.create({ id: "StartPlayerJoinButton", style: STYLE.ADMIN_SCREEN_DEBUG_BUTTON, attributes: { value: "Allow Players To Join", }, });
         BasicButton.setOnClick(startPlayerJoinButton, () => { EventDispatch.SendEvent("Start Player Join Mode", {}); });
         container.elements.startPlayerJoinMenu.appendChild(startPlayerJoinButton);
 
@@ -253,16 +244,7 @@ let AdminArea_Players = {
         beginGameOptionBox.appendChild(container.elements.beginGameButton);
 
         if (CONFIG.DEBUG.includes("SCREEN BUTTONS")) {
-            container.elements.showInventoryButton = BasicButton.create({
-                id: "ShowInventoryButton",
-                style: {
-                    fontFamily: "Vesper Libre",
-                    fontSize: "18px",
-                    margin: "0px 100px 0px 0px",
-                    display: "inline-flex",
-                },
-                attributes: { value: "Show Inventory", },
-            });
+            container.elements.showInventoryButton = BasicButton.create({ id: "ShowInventoryButton", style: STYLE.ADMIN_SCREEN_DEBUG_BUTTON, attributes: { value: "Show Inventory", }, });
             container.appendChild(container.elements.showInventoryButton);
             BasicButton.setOnClick(container.elements.showInventoryButton, () => { adminMessages.sendShowCampaignScreenEvent({ screenID: "Inventory", }); });
         }
