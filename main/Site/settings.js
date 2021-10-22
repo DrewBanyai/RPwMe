@@ -16,13 +16,13 @@
 
 module.exports = {
   TWITCH_DATA: {
-    CHANNEL: "",
-    USERNAME: "",
-    TOKEN: ""
+    CHANNEL: '',
+    USERNAME: '',
+    TOKEN: ''
   },
   ADMIN_SETTINGS: {
     AutoAllowPlayersToJoin: false,
     AutoApproveJoinRequests: false,
-    PLAYERS_REQUIRED_TO_BEGIN: 3,
-  },
+    PLAYERS_REQUIRED_TO_BEGIN: 3
+  }
 }

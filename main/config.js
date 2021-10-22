@@ -15,16 +15,17 @@
 */
 
 module.exports = {
-    APP_NAME: 'RPwME',
-    WINDOW_WIDTH: 1280,
-    WINDOW_HEIGHT: 720,
-    INDEX: {
-        ADMIN: 'main/Site/admin.html',
-        GAME: 'main/Site/game.html'
-    },
-    PRELOAD: {
-        ADMIN: 'Site/admin.js',
-        GAME: 'Site/game.js'
-    },
-    DEBUG: []
+  APP_NAME: 'RPwME',
+  WINDOW_WIDTH: 1280,
+  WINDOW_HEIGHT: 720,
+  INDEX: {
+    ADMIN: 'main/Site/admin.html',
+    GAME: 'main/Site/game.html'
+  },
+  PRELOAD: {
+    ADMIN: 'Site/admin.js',
+    GAME: 'Site/game.js'
+  },
+  DEBUG: [
+  ]
 }
