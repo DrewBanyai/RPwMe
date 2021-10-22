@@ -17,23 +17,23 @@
 const { ipcRenderer } = require('electron')
 
 const adminMessages = {
-    //////////////////////////////
-    //  Send Messages
-    //////////////////////////////
-    sendTestMessage(message) { ipcRenderer.send('send-test', message); },
-    sendCampaignToGameScreen(campaignData) { ipcRenderer.send('campaign-update', campaignData); },
-    sendPlayerJoinAllowedFlag() { ipcRenderer.send('player-join-allowed', null); },
-    sendPlayerJoinedEvent(eventData) { ipcRenderer.send('player-joined', eventData); },
-    sendPlayerLeftEvent(eventData) { ipcRenderer.send('player-left', eventData); },
-    sendPlayerRaceSetEvent(eventData) { ipcRenderer.send('player-race-set', eventData); },
-    sendPlayerClassSetEvent(eventData) { ipcRenderer.send('player-class-set', eventData); },
-    sendPlayerNameSetEvent(eventData) { ipcRenderer.send('player-name-set', eventData); },
-    sendCharacterReadyEvent(eventData) { ipcRenderer.send('character-ready', eventData); },
-    sendCampaignBeginFlag(eventData) { ipcRenderer.send('campaign-begin', eventData); },
-    sendShowCampaignScreenEvent(eventData) { ipcRenderer.send('show-campaign-screen', eventData); },
-    sendJournalPageTurn(eventData) { ipcRenderer.send('journal-page-turn', eventData); },
-    sendJournalReadEvent(eventData) { ipcRenderer.send('journal-read-event', eventData); },
-    sendJournalCloseEvent(eventData) { ipcRenderer.send('journal-close-event', eventData); },
+  /// ///////////////////////////
+  //  Send Messages
+  /// ///////////////////////////
+  sendTestMessage (message) { ipcRenderer.send('send-test', message) },
+  sendCampaignToGameScreen (campaignData) { ipcRenderer.send('campaign-update', campaignData) },
+  sendPlayerJoinAllowedFlag () { ipcRenderer.send('player-join-allowed', null) },
+  sendPlayerJoinedEvent (eventData) { ipcRenderer.send('player-joined', eventData) },
+  sendPlayerLeftEvent (eventData) { ipcRenderer.send('player-left', eventData) },
+  sendPlayerRaceSetEvent (eventData) { ipcRenderer.send('player-race-set', eventData) },
+  sendPlayerClassSetEvent (eventData) { ipcRenderer.send('player-class-set', eventData) },
+  sendPlayerNameSetEvent (eventData) { ipcRenderer.send('player-name-set', eventData) },
+  sendCharacterReadyEvent (eventData) { ipcRenderer.send('character-ready', eventData) },
+  sendCampaignBeginFlag (eventData) { ipcRenderer.send('campaign-begin', eventData) },
+  sendShowCampaignScreenEvent (eventData) { ipcRenderer.send('show-campaign-screen', eventData) },
+  sendJournalPageTurn (eventData) { ipcRenderer.send('journal-page-turn', eventData) },
+  sendJournalReadEvent (eventData) { ipcRenderer.send('journal-read-event', eventData) },
+  sendJournalCloseEvent (eventData) { ipcRenderer.send('journal-close-event', eventData) }
 }
 
 //  Module Exports

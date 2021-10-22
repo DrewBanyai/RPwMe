@@ -21,57 +21,57 @@ const { Tooltip } = require('../Components/Tooltip')
 const STYLE = require('../style')
 
 const MapObject = {
-    create(options) {
-        let container = Container.create({
-            id: (options && options.id) ? options.id : "MapObject",
-            style: {
-                position: "absolute",
-                left: options.objPosition.x,
-                top: options.objPosition.y,
-                width: pxFromInt(options.objSize.W),
-                height: pxFromInt(options.objSize.H),
-                zIndex: STYLE.Z_INDEX.MAP_OBJECT,
-            }
-        });
+  create (options) {
+    const container = Container.create({
+      id: (options && options.id) ? options.id : 'MapObject',
+      style: {
+        position: 'absolute',
+        left: options.objPosition.x,
+        top: options.objPosition.y,
+        width: pxFromInt(options.objSize.W),
+        height: pxFromInt(options.objSize.H),
+        zIndex: STYLE.Z_INDEX.MAP_OBJECT
+      }
+    })
 
-        container.options = options;
-        container.elements = { objectIcon: null, tooltip: null };
-        container.objectID = options.objectID;
+    container.options = options
+    container.elements = { objectIcon: null, tooltip: null }
+    container.objectID = options.objectID
 
-        container.elements.objectIcon = Image.create({
-            id: "ObjectIcon",
-            style: {
-                position: "absolute",
-                top: pxFromInt(options.objSize.H / 2 * -1),
-                left: pxFromInt(options.objSize.W / 2 * -1),
-                width: pxFromInt(options.objSize.W),
-                height: pxFromInt(options.objSize.H),
-                cursor: "pointer",
-            }
-        });
-        container.elements.objectIcon.setValue("Images/Locations/Icons/" + options.icon + ".png");
-        container.elements.objectIcon.onclick = () => { EventDispatch.SendEvent("Select World Map Object", options.objectID); }
-        container.appendChild(container.elements.objectIcon);
+    container.elements.objectIcon = Image.create({
+      id: 'ObjectIcon',
+      style: {
+        position: 'absolute',
+        top: pxFromInt(options.objSize.H / 2 * -1),
+        left: pxFromInt(options.objSize.W / 2 * -1),
+        width: pxFromInt(options.objSize.W),
+        height: pxFromInt(options.objSize.H),
+        cursor: 'pointer'
+      }
+    })
+    container.elements.objectIcon.setValue('Images/Locations/Icons/' + options.icon + '.png')
+    container.elements.objectIcon.onclick = () => { EventDispatch.SendEvent('Select World Map Object', options.objectID) }
+    container.appendChild(container.elements.objectIcon)
 
-        container.elements.tooltip = Tooltip.create({ id: "MapObjectTooltip", });
-        container.appendChild(container.elements.tooltip);
+    container.elements.tooltip = Tooltip.create({ id: 'MapObjectTooltip' })
+    container.appendChild(container.elements.tooltip)
 
-        container.onmouseover = () => { container.elements.tooltip.setVisible(true); }
-        container.onmouseout = () => { container.elements.tooltip.setVisible(false); }
+    container.onmouseover = () => { container.elements.tooltip.setVisible(true) }
+    container.onmouseout = () => { container.elements.tooltip.setVisible(false) }
 
-        MapObject.createTooltip(container);
-        return container;
-    },
+    MapObject.createTooltip(container)
+    return container
+  },
 
-    createTooltip(container) {
-        let nameLabel = Label.create({
-            id: "MapObjectName",
-            attributes: { value: container.options.objectName, },
-            style: { margin: "2px 4px 0px 4px", cursor: "pointer", fontSize: "16px" }
-        });
-        nameLabel.onclick = () => { EventDispatch.SendEvent("Select World Map Object", container.options.objectID); }
-        container.elements.tooltip.setContent(nameLabel);
-    }
+  createTooltip (container) {
+    const nameLabel = Label.create({
+      id: 'MapObjectName',
+      attributes: { value: container.options.objectName },
+      style: { margin: '2px 4px 0px 4px', cursor: 'pointer', fontSize: '16px' }
+    })
+    nameLabel.onclick = () => { EventDispatch.SendEvent('Select World Map Object', container.options.objectID) }
+    container.elements.tooltip.setContent(nameLabel)
+  }
 }
 
 //  Module Exports

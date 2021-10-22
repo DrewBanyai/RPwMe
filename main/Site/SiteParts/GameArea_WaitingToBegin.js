@@ -20,87 +20,86 @@ const { Container, Label } = require('../Components/ArcadiaJS')
 const { pxFromInt } = require('../HelperFunctions/pxFromInt')
 const { HandwrittenNote } = require('../Components/HandwrittenNote')
 
-let GameArea_WaitingToBegin = {
-    create() {
-        let container = Container.create({
-            id: "GameArea_WaitingToBegin",
-            style: {
-                width: pxFromInt(CONFIG.WINDOW_WIDTH),
-                height: pxFromInt(CONFIG.WINDOW_HEIGHT),
-                backgroundColor: STYLE.GAME_WINDOW_AREA_COLOR,
-                display: STYLE.GAME_WINDOW_MENU_DISPLAY_TYPE,
-                justifyContent: "center",
-                overflow: "hidden",
-            }
-        });
+const GameAreaWaitingToBegin = {
+  create () {
+    const container = Container.create({
+      id: 'GameArea_WaitingToBegin',
+      style: {
+        width: pxFromInt(CONFIG.WINDOW_WIDTH),
+        height: pxFromInt(CONFIG.WINDOW_HEIGHT),
+        backgroundColor: STYLE.GAME_WINDOW_AREA_COLOR,
+        display: STYLE.GAME_WINDOW_MENU_DISPLAY_TYPE,
+        justifyContent: 'center',
+        overflow: 'hidden'
+      }
+    })
 
-        container.elements = { paper: null }
+    container.elements = { paper: null }
 
-        container.elements.paper = Container.create({ id: "LinedPaperBackground", style: STYLE.LINED_PAPER_BACKGROUND, });
-        container.appendChild(container.elements.paper);
+    container.elements.paper = Container.create({ id: 'LinedPaperBackground', style: STYLE.LINED_PAPER_BACKGROUND })
+    container.appendChild(container.elements.paper)
 
-        let programLogo = Label.create({
-            id: "ProgramLogo",
-            style: {
-                position: "relative",
-                fontFamily: "FFF Tusj",
-                fontSize: "132px",
-                margin: "25px ​144px 0px 0px",
-                color: "rgb(1, 100, 150)",
-                position: "relative",
-                left: "217px",
-                top: "50px",
-            },
-            attributes: {
-                value: "RPwMe"
-            }
-        });
-        container.elements.paper.appendChild(programLogo);
+    const programLogo = Label.create({
+      id: 'ProgramLogo',
+      style: {
+        position: 'relative',
+        fontFamily: 'FFF Tusj',
+        fontSize: '132px',
+        margin: '25px ​144px 0px 0px',
+        color: 'rgb(1, 100, 150)',
+        left: '217px',
+        top: '50px'
+      },
+      attributes: {
+        value: 'RPwMe'
+      }
+    })
+    container.elements.paper.appendChild(programLogo)
 
-        GameArea_WaitingToBegin.createProgramExplanation(container);
+    GameAreaWaitingToBegin.createProgramExplanation(container)
 
-        return container;
-    },
+    return container
+  },
 
-    createProgramExplanation(container) {
-        let programExplanation = HandwrittenNote.create({
-            id: "ProgramExplanation",
-            style: {
-                fontSize: "24px",
-                width: "630px",
-                position: "absolute",
-                left: "217px",
-                top: "233px",
-                lineHeight: "42px",
-            },
-            attributes: {
-                value: "RPwMe is a simulated Pen &amp; Paper Roleplaying system designed to allow Twitch viewers to play through a custom adventure.",
-            },
-            writeDelay: 30,
-            callback: () => { setTimeout(() => { GameArea_WaitingToBegin.createWaitingExplanation(container); }, 500); }
-        });
-        container.elements.paper.appendChild(programExplanation);
-    },
+  createProgramExplanation (container) {
+    const programExplanation = HandwrittenNote.create({
+      id: 'ProgramExplanation',
+      style: {
+        fontSize: '24px',
+        width: '630px',
+        position: 'absolute',
+        left: '217px',
+        top: '233px',
+        lineHeight: '42px'
+      },
+      attributes: {
+        value: 'RPwMe is a simulated Pen &amp; Paper Roleplaying system designed to allow Twitch viewers to play through a custom adventure.'
+      },
+      writeDelay: 30,
+      callback: () => { setTimeout(() => { GameAreaWaitingToBegin.createWaitingExplanation(container) }, 500) }
+    })
+    container.elements.paper.appendChild(programExplanation)
+  },
 
-    createWaitingExplanation(container) {
-        let waitingExplanation = HandwrittenNote.create({
-            id: "WaitingExplanation",
-            style: {
-                fontSize: "24px",
-                width: "630px",
-                position: "absolute",
-                left: "217px",
-                top: "358px",
-                lineHeight: "41px",
-            },
-            attributes: {
-                value: "The Game Master is currently setting up the world, so hold tight for a bit. If you want to read up on how the game is played, type !rpwme in the chat for an explanation.",
-            },
-            writeDelay: 30,
-        });
-        container.elements.paper.appendChild(waitingExplanation);
-    }
-};
+  createWaitingExplanation (container) {
+    const waitingExplanation = HandwrittenNote.create({
+      id: 'WaitingExplanation',
+      style: {
+        fontSize: '24px',
+        width: '630px',
+        position: 'absolute',
+        left: '217px',
+        top: '358px',
+        lineHeight: '41px'
+      },
+      attributes: {
+        value: 'The Game Master is currently setting up the world, so hold tight for a bit. If you want to read up on how the game is played, type !rpwme in the chat for an explanation.'
+      },
+      writeDelay: 30
+    })
+    container.elements.paper.appendChild(waitingExplanation)
+  }
+}
 
 //  Module Exports
-module.exports = { GameArea_WaitingToBegin }
+module.exports = { GameAreaWaitingToBegin }

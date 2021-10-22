@@ -14,108 +14,107 @@
     limitations under the License.
 */
 
-const CONFIG = require('../../config')
 const STYLE = require('../style')
 const { pxFromInt } = require('../HelperFunctions/pxFromInt')
 const { Container, Label, TextInput, BasicButton } = require('../Components/ArcadiaJS')
 const { EventDispatch } = require('../Controllers/EventDispatch')
 
 const GenerateWorldMenu = {
-    create() {
-        let container = Container.create({
-            id: "GenerateWorldMenu",
-            style: {
-                width: pxFromInt(STYLE.WORLD_MAP_SIZE[document.windowID].x),
-                height: pxFromInt(STYLE.WORLD_MAP_SIZE[document.windowID].y),
-                backgroundColor: STYLE.ADMIN_WINDOW_AREA_COLOR,
-            }
-        });
+  create () {
+    const container = Container.create({
+      id: 'GenerateWorldMenu',
+      style: {
+        width: pxFromInt(STYLE.WORLD_MAP_SIZE[document.windowID].x),
+        height: pxFromInt(STYLE.WORLD_MAP_SIZE[document.windowID].y),
+        backgroundColor: STYLE.ADMIN_WINDOW_AREA_COLOR
+      }
+    })
 
-        container.elements = { menuButtons: null, worldSeedInput: null };
-        
-        GenerateWorldMenu.createGenerateWorldMenu(container);
+    container.elements = { menuButtons: null, worldSeedInput: null }
 
-        return container;
-    },
+    GenerateWorldMenu.createGenerateWorldMenu(container)
 
-    createGenerateWorldMenu(container) {
-        container.elements.menuButtons = Container.create({
-            id: "MenuButtons",
-            style: {
-                width: "100%",
-                height: "32px",
-                display: "inline-flex",
-                padding: "4px",
-            }
-        });
-        container.appendChild(container.elements.menuButtons);
+    return container
+  },
 
-        let loadWorldButton = BasicButton.create({
-            id: "LoadWorldButton",
-            style: {
-                width: "120px",
-                height: "24px",
-                position: "relative",
-                top: "3px",
-                margin: "0px 4px 0px 0px",
-                fontFamily: "Open Sans Condensed",
-                fontWeight: "bold",
-                fontSize: "14px",
-            }
-        });
-        BasicButton.setValue(loadWorldButton, "Load World");
-        BasicButton.setOnClick(loadWorldButton, () => { GenerateWorldMenu.onLoadWorldClick(); });
-        container.elements.menuButtons.appendChild(loadWorldButton);
+  createGenerateWorldMenu (container) {
+    container.elements.menuButtons = Container.create({
+      id: 'MenuButtons',
+      style: {
+        width: '100%',
+        height: '32px',
+        display: 'inline-flex',
+        padding: '4px'
+      }
+    })
+    container.appendChild(container.elements.menuButtons)
 
-        let createWorldButton = BasicButton.create({
-            id: "CreateWorldButton",
-            style: {
-                width: "120px",
-                height: "24px",
-                position: "relative",
-                top: "3px",
-                margin: "0px 4px 0px 0px",
-                fontFamily: "Open Sans Condensed",
-                fontWeight: "bold",
-                fontSize: "14px",
-            }
-        });
-        BasicButton.setValue(createWorldButton, "Create World");
-        BasicButton.setOnClick(createWorldButton, () => { GenerateWorldMenu.onCreateWorldClick(container) });
-        container.elements.menuButtons.appendChild(createWorldButton);
+    const loadWorldButton = BasicButton.create({
+      id: 'LoadWorldButton',
+      style: {
+        width: '120px',
+        height: '24px',
+        position: 'relative',
+        top: '3px',
+        margin: '0px 4px 0px 0px',
+        fontFamily: 'Open Sans Condensed',
+        fontWeight: 'bold',
+        fontSize: '14px'
+      }
+    })
+    BasicButton.setValue(loadWorldButton, 'Load World')
+    BasicButton.setOnClick(loadWorldButton, () => { GenerateWorldMenu.onLoadWorldClick() })
+    container.elements.menuButtons.appendChild(loadWorldButton)
 
-        let worldSeedLabel = Label.create({
-            id: "WorldSeedLabel",
-            attributes: { value: "World Seed:" },
-            style: {
-                fontFamily: "Open Sans Condensed",
-                fontSize: "14px",
-                color: "rgb(255, 255, 255)",
-                padding: "6px 4px 0px 4px",
-            },
-        });
-        container.elements.menuButtons.appendChild(worldSeedLabel);
+    const createWorldButton = BasicButton.create({
+      id: 'CreateWorldButton',
+      style: {
+        width: '120px',
+        height: '24px',
+        position: 'relative',
+        top: '3px',
+        margin: '0px 4px 0px 0px',
+        fontFamily: 'Open Sans Condensed',
+        fontWeight: 'bold',
+        fontSize: '14px'
+      }
+    })
+    BasicButton.setValue(createWorldButton, 'Create World')
+    BasicButton.setOnClick(createWorldButton, () => { GenerateWorldMenu.onCreateWorldClick(container) })
+    container.elements.menuButtons.appendChild(createWorldButton)
 
-        container.elements.worldSeedInput = TextInput.create({
-            id: "WorldSeedTextInput",
-            style: {
-                fontFamily: "Open Sans Condensed",
-                fontSize: "14px",
-            },
-        });
-        container.elements.menuButtons.appendChild(container.elements.worldSeedInput);
-    },
+    const worldSeedLabel = Label.create({
+      id: 'WorldSeedLabel',
+      attributes: { value: 'World Seed:' },
+      style: {
+        fontFamily: 'Open Sans Condensed',
+        fontSize: '14px',
+        color: 'rgb(255, 255, 255)',
+        padding: '6px 4px 0px 4px'
+      }
+    })
+    container.elements.menuButtons.appendChild(worldSeedLabel)
 
-    onLoadWorldClick() {
-        console.log("TEST 1");
-    },
+    container.elements.worldSeedInput = TextInput.create({
+      id: 'WorldSeedTextInput',
+      style: {
+        fontFamily: 'Open Sans Condensed',
+        fontSize: '14px'
+      }
+    })
+    container.elements.menuButtons.appendChild(container.elements.worldSeedInput)
+  },
 
-    onCreateWorldClick(container) {
-        let seed = TextInput.getValue(container.elements.worldSeedInput);
-        if (!seed) { seed = Date.now(); }
+  onLoadWorldClick () {
+    console.log('TEST 1')
+  },
 
-        EventDispatch.SendEvent("Map Create", { seed: seed });
-    }
+  onCreateWorldClick (container) {
+    let seed = TextInput.getValue(container.elements.worldSeedInput)
+    if (!seed) { seed = Date.now() }
+
+    EventDispatch.SendEvent('Map Create', { seed: seed })
+  }
 }
 
 //  Module Exports

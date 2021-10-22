@@ -20,71 +20,71 @@ const { Container } = require('../Components/ArcadiaJS')
 const { pxFromInt } = require('../HelperFunctions/pxFromInt')
 const { EventDispatch } = require('../Controllers/EventDispatch')
 
-const { GameArea_WaitingToBegin } = require('./GameArea_WaitingToBegin')
-const { GameArea_PlayerJoin } = require('./GameArea_PlayerJoin')
-const { GameArea_Campaign } = require('./GameArea_Campaign')
+const { GameAreaWaitingToBegin } = require('./GameArea_WaitingToBegin')
+const { GameAreaPlayerJoin } = require('./GameArea_PlayerJoin')
+const { GameAreaCampaign } = require('./GameArea_Campaign')
 
-let GameDisplay = {
-    create: () => {
-        let container = Container.create({
-            id: "GameDisplay",
-            style: {
-                width: pxFromInt(CONFIG.WINDOW_WIDTH),
-                height: pxFromInt(CONFIG.WINDOW_HEIGHT),
-                backgroundColor: STYLE.WINDOW_BACKGROUND_COLOR.GAME,
-            }
-        });
+const GameDisplay = {
+  create: () => {
+    const container = Container.create({
+      id: 'GameDisplay',
+      style: {
+        width: pxFromInt(CONFIG.WINDOW_WIDTH),
+        height: pxFromInt(CONFIG.WINDOW_HEIGHT),
+        backgroundColor: STYLE.WINDOW_BACKGROUND_COLOR.GAME
+      }
+    })
 
-        //  Create the elements list for later use
-        container.elements = { mainArea: null, menuScreens: {} };
-        
-        //  Create the individual sub-menus of the display
-        GameDisplay.createMainArea(container);
+    //  Create the elements list for later use
+    container.elements = { mainArea: null, menuScreens: {} }
 
-        //  Fill in the main admin areas as well as the buttons in the top button strip
-        GameDisplay.addMainAreaEntries(container);
-        GameDisplay.showMenuScreen(container, "WaitingToBegin");
-        GameDisplay.setupEventCallbacks(container);
+    //  Create the individual sub-menus of the display
+    GameDisplay.createMainArea(container)
 
-        return container;
-    },
+    //  Fill in the main admin areas as well as the buttons in the top button strip
+    GameDisplay.addMainAreaEntries(container)
+    GameDisplay.showMenuScreen(container, 'WaitingToBegin')
+    GameDisplay.setupEventCallbacks(container)
 
-    createMainArea: (container) => {
-        container.elements.mainArea = Container.create({ id: "GameScreenMainArea" });
-        container.appendChild(container.elements.mainArea);
-    },
+    return container
+  },
 
-    addMainAreaEntries: (container) => {
-        let addMainEntry = (areaType, areaStruct) => {
-            container.elements.mainArea.appendChild(areaStruct);
-            container.elements.menuScreens[areaType] = areaStruct;
-        };
+  createMainArea: (container) => {
+    container.elements.mainArea = Container.create({ id: 'GameScreenMainArea' })
+    container.appendChild(container.elements.mainArea)
+  },
 
-        addMainEntry("WaitingToBegin", GameArea_WaitingToBegin.create());
-        addMainEntry("PlayerJoin", GameArea_PlayerJoin.create());
-        addMainEntry("Campaign", GameArea_Campaign.create());
+  addMainAreaEntries: (container) => {
+    const addMainEntry = (areaType, areaStruct) => {
+      container.elements.mainArea.appendChild(areaStruct)
+      container.elements.menuScreens[areaType] = areaStruct
+    }
 
-        EventDispatch.SendEvent("Show Campaign Screen", { screenID: "Journal" });
-    },
+    addMainEntry('WaitingToBegin', GameAreaWaitingToBegin.create())
+    addMainEntry('PlayerJoin', GameAreaPlayerJoin.create())
+    addMainEntry('Campaign', GameAreaCampaign.create())
 
-    setupEventCallbacks: (container) => {
-        EventDispatch.AddEventHandler("Player Join Allowed", (eventType, eventData) => {
-            GameDisplay.showMenuScreen(container, "PlayerJoin");
-        });
-        
-        EventDispatch.AddEventHandler("Campaign Begin", (eventType, eventData) => {
-            GameDisplay.showMenuScreen(container, "Campaign");
-        });
-    },
+    EventDispatch.SendEvent('Show Campaign Screen', { screenID: 'Journal' })
+  },
 
-    showMenuScreen: (container, menuID) => {
-        let areaKeys = Object.keys(container.elements.menuScreens);
-        areaKeys.forEach((mID) => { container.elements.menuScreens[mID].style.display = "none"; });
+  setupEventCallbacks: (container) => {
+    EventDispatch.AddEventHandler('Player Join Allowed', (eventType, eventData) => {
+      GameDisplay.showMenuScreen(container, 'PlayerJoin')
+    })
 
-        if (!container.elements.menuScreens.hasOwnProperty(menuID)) { console.warn("Attempting to show nonexistent menu '" + menuID + "'"); return; }
-        container.elements.menuScreens[menuID].style.display = STYLE.GAME_WINDOW_MENU_DISPLAY_TYPE;
-    },
-};
+    EventDispatch.AddEventHandler('Campaign Begin', (eventType, eventData) => {
+      GameDisplay.showMenuScreen(container, 'Campaign')
+    })
+  },
+
+  showMenuScreen: (container, menuID) => {
+    const areaKeys = Object.keys(container.elements.menuScreens)
+    areaKeys.forEach((mID) => { container.elements.menuScreens[mID].style.display = 'none' })
+
+    if (!container.elements.menuScreens.hasOwnProperty(menuID)) { console.warn("Attempting to show nonexistent menu '" + menuID + "'"); return }
+    container.elements.menuScreens[menuID].style.display = STYLE.GAME_WINDOW_MENU_DISPLAY_TYPE
+  }
+}
 
 //  Module Exports
 module.exports = { GameDisplay }

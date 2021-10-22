@@ -19,25 +19,23 @@ const STYLE = require('../style')
 const { Container } = require('../Components/ArcadiaJS')
 const { pxFromInt } = require('../HelperFunctions/pxFromInt')
 
-"use strict"
+const AdminAreaLocation = {
+  create () {
+    const container = Container.create({
+      id: 'AdminArea_Location',
+      style: {
+        width: pxFromInt(CONFIG.WINDOW_WIDTH),
+        height: pxFromInt(CONFIG.WINDOW_HEIGHT - 1 - STYLE.ADMIN_WINDOW_BUTTON_HEIGHT),
+        backgroundColor: STYLE.ADMIN_WINDOW_AREA_COLOR,
+        display: STYLE.ADMIN_WINDOW_MENU_DISPLAY_TYPE
+      }
+    })
 
-let AdminArea_Location = {
-    create() {
-        let container = Container.create({
-            id: "AdminArea_Location",
-            style: {
-                width: pxFromInt(CONFIG.WINDOW_WIDTH),
-                height: pxFromInt(CONFIG.WINDOW_HEIGHT - 1 - STYLE.ADMIN_WINDOW_BUTTON_HEIGHT),
-                backgroundColor: STYLE.ADMIN_WINDOW_AREA_COLOR,
-                display: STYLE.ADMIN_WINDOW_MENU_DISPLAY_TYPE,
-            }
-        });
+    container.elements = {}
 
-        container.elements = {};
-
-        return container;
-    },
-};
+    return container
+  }
+}
 
 //  Module Exports
-module.exports = { AdminArea_Location }
+module.exports = { AdminAreaLocation }

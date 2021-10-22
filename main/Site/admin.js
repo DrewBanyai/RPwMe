@@ -17,43 +17,42 @@
 const { adminMessages } = require('./Messaging/AdminMessages')
 const SETTINGS = require('./settings')
 const CONFIG = require('../config')
-var { TwitchControl } = require('./Twitch/TwitchControl')
-var { AdminDisplay } = require('./SiteParts/AdminDisplay')
-var { CampaignController } = require('./Controllers/CampaignController')
-var { CommandControl } = require('./Controllers/CommandController')
-
+const { TwitchControl } = require('./Twitch/TwitchControl')
+const { AdminDisplay } = require('./SiteParts/AdminDisplay')
+const { CampaignController } = require('./Controllers/CampaignController')
+const { CommandControl } = require('./Controllers/CommandController')
 
 window.addEventListener('DOMContentLoaded', () => {
-    document.windowID = "ADMIN";
+  document.windowID = 'ADMIN'
 
-    LoadSiteContent();
-    InitTwitchBot();
+  LoadSiteContent()
+  InitTwitchBot()
 })
 
-function LoadSiteContent() {
-    //  Create the AdminDisplay and drop it into the AdminPage div
-    var adminPage = document.querySelector('#AdminPage')
-    if (adminPage) adminPage.appendChild(AdminDisplay.create());
+function LoadSiteContent () {
+  //  Create the AdminDisplay and drop it into the AdminPage div
+  const adminPage = document.querySelector('#AdminPage')
+  if (adminPage) adminPage.appendChild(AdminDisplay.create())
 }
 
-function InitTwitchBot() {
-    //  Get the username, token, and channel from the settings data, and attempt to initialize TwitchControl
-    let username = (SETTINGS && SETTINGS.TWITCH_DATA && SETTINGS.TWITCH_DATA.USERNAME) ? SETTINGS.TWITCH_DATA.USERNAME : null
-    let token = (SETTINGS && SETTINGS.TWITCH_DATA && SETTINGS.TWITCH_DATA.TOKEN) ? SETTINGS.TWITCH_DATA.TOKEN : null;
-    let channel = (SETTINGS && SETTINGS.TWITCH_DATA && SETTINGS.TWITCH_DATA.CHANNEL) ? SETTINGS.TWITCH_DATA.CHANNEL : null;
-    TwitchControl.InitializeTwitchControl(username, token, channel, CONFIG.DEBUG.includes("TWITCH"));
-    
-    //  Set up the game master's ID in the Campaign Controller
-    CampaignController.SetCampaignGameMaster(TwitchControl.ConnectionData.Channel.toLowerCase());
+function InitTwitchBot () {
+  //  Get the username, token, and channel from the settings data, and attempt to initialize TwitchControl
+  const username = (SETTINGS && SETTINGS.TWITCH_DATA && SETTINGS.TWITCH_DATA.USERNAME) ? SETTINGS.TWITCH_DATA.USERNAME : null
+  const token = (SETTINGS && SETTINGS.TWITCH_DATA && SETTINGS.TWITCH_DATA.TOKEN) ? SETTINGS.TWITCH_DATA.TOKEN : null
+  const channel = (SETTINGS && SETTINGS.TWITCH_DATA && SETTINGS.TWITCH_DATA.CHANNEL) ? SETTINGS.TWITCH_DATA.CHANNEL : null
+  TwitchControl.InitializeTwitchControl(username, token, channel, CONFIG.DEBUG.includes('TWITCH'))
 
-    //  Set up gm, player, and viewer commands
-    CommandControl.InitCommandControl();
+  //  Set up the game master's ID in the Campaign Controller
+  CampaignController.SetCampaignGameMaster(TwitchControl.ConnectionData.Channel.toLowerCase())
 
-    //  Example of how to use the AddCommandCallback system and then process command portions (remove once 0.0.1 is ready)
-    TwitchControl.AddCommandCallback("!hello", (userstate, message) => {
-        let messageParts = message.split(" ");
-        let responseString = (messageParts.length > 1) ? messageParts.slice(1).join(" ") : "Hello there!";
-        adminMessages.sendTestMessage(responseString);
-        TwitchControl.SendChatMessage("!hello message received and processed.");
-    });
+  //  Set up gm, player, and viewer commands
+  CommandControl.InitCommandControl()
+
+  //  Example of how to use the AddCommandCallback system and then process command portions (remove once 0.0.1 is ready)
+  TwitchControl.AddCommandCallback('!hello', (userstate, message) => {
+    const messageParts = message.split(' ')
+    const responseString = (messageParts.length > 1) ? messageParts.slice(1).join(' ') : 'Hello there!'
+    adminMessages.sendTestMessage(responseString)
+    TwitchControl.SendChatMessage('!hello message received and processed.')
+  })
 }

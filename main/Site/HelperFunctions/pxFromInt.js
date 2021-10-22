@@ -14,9 +14,7 @@
     limitations under the License.
 */
 
-"use strict"
-
-const pxFromInt = (intVal) => { return parseInt(intVal) + "px"; }
+const pxFromInt = (intVal) => { return parseInt(intVal) + 'px' }
 
 //  Module Exports
 module.exports = { pxFromInt }

@@ -19,23 +19,23 @@ const STYLE = require('../style')
 const { Container, Label } = require('../Components/ArcadiaJS')
 const { pxFromInt } = require('../HelperFunctions/pxFromInt')
 
-let GameArea_Campaign_Inventory = {
-    create() {
-        let container = Container.create({ id: "GameArea_Campaign_Inventory", style: STYLE.GAME_AREA_CAMPAIGN_SUBMENU, });
-        container.style.width = pxFromInt(CONFIG.WINDOW_WIDTH);
-        container.style.height = pxFromInt(CONFIG.WINDOW_HEIGHT);
+const GameAreaCampaignInventory = {
+  create () {
+    const container = Container.create({ id: 'GameArea_Campaign_Inventory', style: STYLE.GAME_AREA_CAMPAIGN_SUBMENU })
+    container.style.width = pxFromInt(CONFIG.WINDOW_WIDTH)
+    container.style.height = pxFromInt(CONFIG.WINDOW_HEIGHT)
 
-        container.elements = { paper: null, screenTitle: null, }
+    container.elements = { paper: null, screenTitle: null }
 
-        container.elements.paper = Container.create({ id: "LinedPaperBackground", style: STYLE.LINED_PAPER_BACKGROUND, });
-        container.appendChild(container.elements.paper);
+    container.elements.paper = Container.create({ id: 'LinedPaperBackground', style: STYLE.LINED_PAPER_BACKGROUND })
+    container.appendChild(container.elements.paper)
 
-        container.elements.screenTitle = Label.create({ id: "ScreenTitle", style: STYLE.GAME_SCREEN_TITLE, attributes: { value: "Inventory" } });
-        container.appendChild(container.elements.screenTitle);
+    container.elements.screenTitle = Label.create({ id: 'ScreenTitle', style: STYLE.GAME_SCREEN_TITLE, attributes: { value: 'Inventory' } })
+    container.appendChild(container.elements.screenTitle)
 
-        return container;
-    },
-};
+    return container
+  }
+}
 
 //  Module Exports
-module.exports = { GameArea_Campaign_Inventory }
+module.exports = { GameAreaCampaignInventory }

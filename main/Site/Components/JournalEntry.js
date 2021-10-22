@@ -18,27 +18,26 @@ const STYLE = require('../style')
 const { Container } = require('../Components/ArcadiaJS')
 const { HandwrittenNote } = require('../Components/HandwrittenNote')
 
-
 const JournalEntry = {
-	create: (options) => {
-		let container = Container.create({ id: "JournalEntry", style: STYLE.JOURNAL_ENTRY });
+  create: (options) => {
+    const container = Container.create({ id: 'JournalEntry', style: STYLE.JOURNAL_ENTRY })
 
-        Container.applyOptions(container, options);
+    Container.applyOptions(container, options)
 
-        container.elements = { journalID: null, journalTitle: null, journalPopup: null, journalText: null };
+    container.elements = { journalID: null, journalTitle: null, journalPopup: null, journalText: null }
 
-        container.elements.journalID = HandwrittenNote.create({id: "JournalID_" + options.index, style: STYLE.JOURNAL_ID, attributes: { value: options.index }, writeDelay: 30, });
-        container.appendChild(container.elements.journalID);
+    container.elements.journalID = HandwrittenNote.create({ id: 'JournalID_' + options.index, style: STYLE.JOURNAL_ID, attributes: { value: options.index }, writeDelay: 30 })
+    container.appendChild(container.elements.journalID)
 
-        container.elements.journalTitle = HandwrittenNote.create({id: "JournalTitle_" + options.index, style: STYLE.JOURNAL_TITLE, attributes: { value: options.title }, writeDelay: 30, });
-        container.appendChild(container.elements.journalTitle);
-        
-        container.getTitle = () => { return options.title; }
-        container.getContents = () => { return options.contents; };
+    container.elements.journalTitle = HandwrittenNote.create({ id: 'JournalTitle_' + options.index, style: STYLE.JOURNAL_TITLE, attributes: { value: options.title }, writeDelay: 30 })
+    container.appendChild(container.elements.journalTitle)
 
-		return container;
-	},
-};
+    container.getTitle = () => { return options.title }
+    container.getContents = () => { return options.contents }
+
+    return container
+  }
+}
 
 //  Module Exports
 module.exports = { JournalEntry }

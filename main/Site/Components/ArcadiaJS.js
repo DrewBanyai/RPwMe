@@ -15,237 +15,233 @@
 */
 
 const Container = {
-    create: (options) => {
-        let containerType = (options && options.style && options.style.containerType) ? options.style.containerType : "div";
-        let container = document.createElement(containerType);
+  create: (options) => {
+    const containerType = (options && options.style && options.style.containerType) ? options.style.containerType : 'div'
+    const container = document.createElement(containerType)
 
-        Container.applyOptions(container, options);
+    Container.applyOptions(container, options)
 
-        return container;
-    },
+    return container
+  },
 
-    applyOptions: (container, options) => {
-		//  Generic options application
-		if (!options) { return; }
-		if (options.id) 			{ container.id = options.id; }
-		if (options.attributes) 	{ for (let key in options.attributes) { container[key] = options.attributes[key]; } }
-        if (options.style) 			{ for (let key in options.style) { container.style[key] = options.style[key]; } }
-        if (options.events) 		{ for (let key in options.events) { container.addEventListener(key, options.events[key]); } }
-    }
-};
-
-const Fontawesome = {
-    create: (options) => {
-        let container = Container.create({
-            id: (options && options.id) ? options.id : "Fontawesome",
-            attributes: {
-                className: (options && options.attributes && options.attributes.className) ? options.attributes.className : "far fa-question-circle",
-            },
-            style: {
-                containerType: "i",
-                userSelect: "none",
-            }
-        });
-        Container.applyOptions(container, options);
-
-        container.setSymbol = (className) => { container.className = className; }
-        
-        return container;
-    },
-};
-
-const Image = {
-	create: (options) => {
-        let container = document.createElement("img");
-		container.setValue = (text) => Image.setValue(container, text);
-
-        Container.applyOptions(container, options);
-		if (container.value) Image.setValue(container, container.value);
-
-        return container;
-	},
-	getValue: (container) => { return container.src; },
-    setValue: (container, value) => { container.src = value; }
-};
-
-const Label = {
-	create: (options) => {
-        if (!options.id) options.id = "Label";
-		let container = Container.create(options);
-
-		container.setValue = (text) => { Label.setValue(container, text); };
-
-        Container.applyOptions(container, options);
-        if (options && options.attributes && options.attributes.value) container.setValue(options.attributes.value);
-
-		return container;
-	},
-	
-	getValue(container) { return container.innerHTML; },
-	setValue(container, value) { container.innerHTML = value; },
-	setFont(container, font) { container.style.fontFamily = font; },
-	setFontSize(container, size) { container.style.fontSize = size; },
-	setColor(container, color) { container.style.color = color; },
-};
-
-const TextInput = {
-    create: (options) => {
-        if (!options.id) options.id = "TextInput";
-        if (!options.style) options.style = {};
-        options.style.containerType = "input";
-        let container = Container.create(options);
-
-        container.callbacks = { return: null };
-        let inputType = (options && options.type) ? options.type : "text";
-        container.setAttribute("type", inputType);
-        container.addEventListener("keyup", (e) => { if ((e.code === 13) && (this.callbacks.return)) { this.callbacks.return(); } })
-
-        container.style.backgroundColor = "white";
-        container.style.color = "black";
-
-        return container;
-    },
-
-    getValue: (container) => { return container.value; },
-    setValue(container, value) { container.value = value; }
-};
-
-
-const BasicButton = {
-	create: (options) => {
-        if (!options.id) options.id = "BasicButton";
-        
-		//  Create the main button, a rounded box
-        let container = Container.create({
-            id: options.id,
-			style: {
-				width: "200px",
-				height: "26px",
-				borderRadius: "6px",
-				display: "flex",
-                border: "1px solid rgb(240, 240, 240)",
-			}
-        });
-        Container.applyOptions(container, options);
-        container.elements = { bgColor: null, textLabel: null };
-
-        let bgColorNormal = "rgb(15, 157, 88)";
-        let bgColorHighlight = "rgb(11, 115, 65)";
-        let bgColorSelected = "rgb(7, 75, 44)";
-
-        //  Create the background color (to avoid border changing button size)
-		container.elements.bgColor = Container.create({
-			style: {
-				width: "100%",
-				height: "100%",
-				lineHeight: "26px",
-				borderRadius: "6px",
-				display: "flex",
-                backgroundColor: bgColorNormal,
-			}
-		});
-		container.appendChild(container.elements.bgColor);
-
-		//  Create a centered label on the button
-		container.elements.textLabel = Label.create({
-			attributes: { value: "" },
-			style: {
-				fontFamily: "'Titillium Web', sans-serif",
-				margin: "auto",
-				cursor: "default",
-				userSelect: "none",
-				textAlign: "center",
-                color: "rgb(220, 220, 220)"
-			},
-		});
-		container.elements.bgColor.appendChild(container.elements.textLabel);
-		container.elements.textLabel.setValue(container.value);
-
-		//  Set mouse reactions
-		container.onmouseover = () => { if (!container.disabled) { container.elements.bgColor.style.backgroundColor = bgColorHighlight; } }
-		container.onmouseout = () => { if (!container.disabled) { container.elements.bgColor.style.backgroundColor = bgColorNormal; } }
-		container.onmousedown = () => { if (!container.disabled) { container.elements.bgColor.style.backgroundColor = bgColorSelected; } }
-		container.onmouseup = () => { if (!container.disabled) { container.elements.bgColor.style.backgroundColor = bgColorHighlight; } }
-
-        return container;
-	},
-	
-	setValue: (container, text) => { container.elements.textLabel.setValue(text); },
-	setFont: (container, font) => { container.elements.textLabel.setFont(font); },
-	setFontSize: (container, size) => { container.elements.textLabel.setFontSize(size); },
-	
-	setOnClick: (container, callback) => { container.onclick = () => { if (container.disabled) { return; } callback(); }; },
-	
-	setEnabled: (container, enabled) => { container.disabled = (!enabled); }
+  applyOptions: (container, options) => {
+    //  Generic options application
+    if (!options) { return }
+    if (options.id) { container.id = options.id }
+    if (options.attributes) { for (const key in options.attributes) { container[key] = options.attributes[key] } }
+    if (options.style) { for (const key in options.style) { container.style[key] = options.style[key] } }
+    if (options.events) { for (const key in options.events) { container.addEventListener(key, options.events[key]) } }
+  }
 }
 
+const Fontawesome = {
+  create: (options) => {
+    const container = Container.create({
+      id: (options && options.id) ? options.id : 'Fontawesome',
+      attributes: {
+        className: (options && options.attributes && options.attributes.className) ? options.attributes.className : 'far fa-question-circle'
+      },
+      style: {
+        containerType: 'i',
+        userSelect: 'none'
+      }
+    })
+    Container.applyOptions(container, options)
+
+    container.setSymbol = (className) => { container.className = className }
+
+    return container
+  }
+}
+
+const Image = {
+  create: (options) => {
+    const container = document.createElement('img')
+    container.setValue = (text) => Image.setValue(container, text)
+
+    Container.applyOptions(container, options)
+    if (container.value) Image.setValue(container, container.value)
+
+    return container
+  },
+  getValue: (container) => { return container.src },
+  setValue: (container, value) => { container.src = value }
+}
+
+const Label = {
+  create: (options) => {
+    if (!options.id) options.id = 'Label'
+    const container = Container.create(options)
+
+    container.setValue = (text) => { Label.setValue(container, text) }
+
+    Container.applyOptions(container, options)
+    if (options && options.attributes && options.attributes.value) container.setValue(options.attributes.value)
+
+    return container
+  },
+
+  getValue (container) { return container.innerHTML },
+  setValue (container, value) { container.innerHTML = value },
+  setFont (container, font) { container.style.fontFamily = font },
+  setFontSize (container, size) { container.style.fontSize = size },
+  setColor (container, color) { container.style.color = color }
+}
+
+const TextInput = {
+  create: (options) => {
+    if (!options.id) options.id = 'TextInput'
+    if (!options.style) options.style = {}
+    options.style.containerType = 'input'
+    const container = Container.create(options)
+
+    container.callbacks = { return: null }
+    const inputType = (options && options.type) ? options.type : 'text'
+    container.setAttribute('type', inputType)
+    container.addEventListener('keyup', (e) => { if ((e.code === 13) && (this.callbacks.return)) { this.callbacks.return() } })
+
+    container.style.backgroundColor = 'white'
+    container.style.color = 'black'
+
+    return container
+  },
+
+  getValue: (container) => { return container.value },
+  setValue (container, value) { container.value = value }
+}
+
+const BasicButton = {
+  create: (options) => {
+    if (!options.id) options.id = 'BasicButton'
+
+    //  Create the main button, a rounded box
+    const container = Container.create({
+      id: options.id,
+      style: {
+        width: '200px',
+        height: '26px',
+        borderRadius: '6px',
+        display: 'flex',
+        border: '1px solid rgb(240, 240, 240)'
+      }
+    })
+    Container.applyOptions(container, options)
+    container.elements = { bgColor: null, textLabel: null }
+
+    const bgColorNormal = 'rgb(15, 157, 88)'
+    const bgColorHighlight = 'rgb(11, 115, 65)'
+    const bgColorSelected = 'rgb(7, 75, 44)'
+
+    //  Create the background color (to avoid border changing button size)
+    container.elements.bgColor = Container.create({
+      style: {
+        width: '100%',
+        height: '100%',
+        lineHeight: '26px',
+        borderRadius: '6px',
+        display: 'flex',
+        backgroundColor: bgColorNormal
+      }
+    })
+    container.appendChild(container.elements.bgColor)
+
+    //  Create a centered label on the button
+    container.elements.textLabel = Label.create({
+      attributes: { value: '' },
+      style: {
+        fontFamily: "'Titillium Web', sans-serif",
+        margin: 'auto',
+        cursor: 'default',
+        userSelect: 'none',
+        textAlign: 'center',
+        color: 'rgb(220, 220, 220)'
+      }
+    })
+    container.elements.bgColor.appendChild(container.elements.textLabel)
+    container.elements.textLabel.setValue(container.value)
+
+    //  Set mouse reactions
+    container.onmouseover = () => { if (!container.disabled) { container.elements.bgColor.style.backgroundColor = bgColorHighlight } }
+    container.onmouseout = () => { if (!container.disabled) { container.elements.bgColor.style.backgroundColor = bgColorNormal } }
+    container.onmousedown = () => { if (!container.disabled) { container.elements.bgColor.style.backgroundColor = bgColorSelected } }
+    container.onmouseup = () => { if (!container.disabled) { container.elements.bgColor.style.backgroundColor = bgColorHighlight } }
+
+    return container
+  },
+
+  setValue: (container, text) => { container.elements.textLabel.setValue(text) },
+  setFont: (container, font) => { container.elements.textLabel.setFont(font) },
+  setFontSize: (container, size) => { container.elements.textLabel.setFontSize(size) },
+
+  setOnClick: (container, callback) => { container.onclick = () => { if (container.disabled) { return } callback() } },
+
+  setEnabled: (container, enabled) => { container.disabled = (!enabled) }
+}
 
 const FontawesomeButton = {
-	create: (options) => {
-        if (!options.id) options.id = "FontawesomeButton";
-        
-		//  Create the main button, a rounded box
-        let container = Container.create({
-            id: options.id,
-			style: {
-				width: "24px",
-				height: "24px",
-				borderRadius: "6px",
-				display: "flex",
-                border: "1px solid rgb(240, 240, 240)",
-			}
-        });
-        Container.applyOptions(container, options);
-        container.elements = { bgColor: null, icon: null };
+  create: (options) => {
+    if (!options.id) options.id = 'FontawesomeButton'
 
-        let bgColorNormal = options.bgColorNormal ? options.bgColorNormal : "rgb(15, 157, 88)";
-        let bgColorHighlight = options.bgColorHighlight ? options.bgColorHighlight : "rgb(11, 115, 65)";
-        let bgColorSelected = options.bgColorSelected ? options.bgColorSelected : "rgb(7, 75, 44)";
+    //  Create the main button, a rounded box
+    const container = Container.create({
+      id: options.id,
+      style: {
+        width: '24px',
+        height: '24px',
+        borderRadius: '6px',
+        display: 'flex',
+        border: '1px solid rgb(240, 240, 240)'
+      }
+    })
+    Container.applyOptions(container, options)
+    container.elements = { bgColor: null, icon: null }
 
-        //  Create the background color (to avoid border changing button size)
-		container.elements.bgColor = Container.create({
-			style: {
-				width: "100%",
-				height: "100%",
-				lineHeight: "26px",
-				borderRadius: "6px",
-				display: "flex",
-                backgroundColor: bgColorNormal,
-				cursor: container.style.cursor,
-			}
-		});
-		container.appendChild(container.elements.bgColor);
+    const bgColorNormal = options.bgColorNormal ? options.bgColorNormal : 'rgb(15, 157, 88)'
+    const bgColorHighlight = options.bgColorHighlight ? options.bgColorHighlight : 'rgb(11, 115, 65)'
+    const bgColorSelected = options.bgColorSelected ? options.bgColorSelected : 'rgb(7, 75, 44)'
 
-		//  Create a centered label on the button
-		container.elements.icon = Fontawesome.create({
-			attributes: { className: options.icon ? options.icon : "fas fa-question" },
-			style: {
-				margin: "auto",
-				cursor: "default",
-				userSelect: "none",
-				textAlign: "center",
-                color: "rgb(220, 220, 220)",
-				userSelect: "none",
-				cursor: container.style.cursor,
-			},
-		});
-		container.elements.bgColor.appendChild(container.elements.icon);
+    //  Create the background color (to avoid border changing button size)
+    container.elements.bgColor = Container.create({
+      style: {
+        width: '100%',
+        height: '100%',
+        lineHeight: '26px',
+        borderRadius: '6px',
+        display: 'flex',
+        backgroundColor: bgColorNormal,
+        cursor: container.style.cursor
+      }
+    })
+    container.appendChild(container.elements.bgColor)
 
-		//  Set mouse reactions
-		container.onmouseover = () => { if (!container.disabled) { container.elements.bgColor.style.backgroundColor = bgColorHighlight; } }
-		container.onmouseout = () => { if (!container.disabled) { container.elements.bgColor.style.backgroundColor = bgColorNormal; } }
-		container.onmousedown = () => { if (!container.disabled) { container.elements.bgColor.style.backgroundColor = bgColorSelected; } }
-		container.onmouseup = () => { if (!container.disabled) { container.elements.bgColor.style.backgroundColor = bgColorHighlight; } }
+    //  Create a centered label on the button
+    container.elements.icon = Fontawesome.create({
+      attributes: { className: options.icon ? options.icon : 'fas fa-question' },
+      style: {
+        margin: 'auto',
+        textAlign: 'center',
+        color: 'rgb(220, 220, 220)',
+        userSelect: 'none',
+        cursor: container.style.cursor
+      }
+    })
+    container.elements.bgColor.appendChild(container.elements.icon)
 
-        return container;
-	},
-	
-	setFontSize: (container, size) => { container.elements.icon.setFontSize(size); },
-	
-	setOnClick: (container, callback) => { container.onclick = () => { if (container.disabled) { return; } callback(); }; },
-	
-	setEnabled: (container, enabled) => { container.disabled = (!enabled); }
+    //  Set mouse reactions
+    container.onmouseover = () => { if (!container.disabled) { container.elements.bgColor.style.backgroundColor = bgColorHighlight } }
+    container.onmouseout = () => { if (!container.disabled) { container.elements.bgColor.style.backgroundColor = bgColorNormal } }
+    container.onmousedown = () => { if (!container.disabled) { container.elements.bgColor.style.backgroundColor = bgColorSelected } }
+    container.onmouseup = () => { if (!container.disabled) { container.elements.bgColor.style.backgroundColor = bgColorHighlight } }
+
+    return container
+  },
+
+  setFontSize: (container, size) => { container.elements.icon.setFontSize(size) },
+
+  setOnClick: (container, callback) => { container.onclick = () => { if (container.disabled) { return } callback() } },
+
+  setEnabled: (container, enabled) => { container.disabled = (!enabled) }
 }
 
 //  Module Exports
-module.exports = { Container, Fontawesome, Image, Label, TextInput , BasicButton, FontawesomeButton }
+module.exports = { Container, Fontawesome, Image, Label, TextInput, BasicButton, FontawesomeButton }

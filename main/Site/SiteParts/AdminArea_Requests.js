@@ -21,34 +21,32 @@ const { pxFromInt } = require('../HelperFunctions/pxFromInt')
 const { EventDispatch } = require('../Controllers/EventDispatch')
 const { adminMessages } = require('../Messaging/AdminMessages')
 
-"use strict"
+const AdminAreaRequests = {
+  create () {
+    const container = Container.create({
+      id: 'AdminArea_Requests',
+      style: {
+        width: pxFromInt(CONFIG.WINDOW_WIDTH),
+        height: pxFromInt(CONFIG.WINDOW_HEIGHT - 1 - STYLE.ADMIN_WINDOW_BUTTON_HEIGHT),
+        backgroundColor: STYLE.ADMIN_WINDOW_AREA_COLOR,
+        display: STYLE.ADMIN_WINDOW_MENU_DISPLAY_TYPE
+      }
+    })
 
-let AdminArea_Requests = {
-    create() {
-        let container = Container.create({
-            id: "AdminArea_Requests",
-            style: {
-                width: pxFromInt(CONFIG.WINDOW_WIDTH),
-                height: pxFromInt(CONFIG.WINDOW_HEIGHT - 1 - STYLE.ADMIN_WINDOW_BUTTON_HEIGHT),
-                backgroundColor: STYLE.ADMIN_WINDOW_AREA_COLOR,
-                display: STYLE.ADMIN_WINDOW_MENU_DISPLAY_TYPE,
-            }
-        });
+    container.elements = {}
 
-        container.elements = {};
+    AdminAreaRequests.setupChatCommands()
 
-        AdminArea_Requests.setupChatCommands();
+    return container
+  },
 
-        return container;
-    },
-
-    setupChatCommands() {
-        EventDispatch.AddEventHandler("!journal", (eventType, eventData) => { adminMessages.sendShowCampaignScreenEvent({ screenID: "Journal" }); });
-        EventDispatch.AddEventHandler("!map", (eventType, eventData) => { adminMessages.sendShowCampaignScreenEvent({ screenID: "Map" }); });
-        EventDispatch.AddEventHandler("!inventory", (eventType, eventData) => { adminMessages.sendShowCampaignScreenEvent({ screenID: "Inventory" }); });
-        EventDispatch.AddEventHandler("!combat", (eventType, eventData) => { adminMessages.sendShowCampaignScreenEvent({ screenID: "Combat", }); });
-    },
-};
+  setupChatCommands () {
+    EventDispatch.AddEventHandler('!journal', (eventType, eventData) => { adminMessages.sendShowCampaignScreenEvent({ screenID: 'Journal' }) })
+    EventDispatch.AddEventHandler('!map', (eventType, eventData) => { adminMessages.sendShowCampaignScreenEvent({ screenID: 'Map' }) })
+    EventDispatch.AddEventHandler('!inventory', (eventType, eventData) => { adminMessages.sendShowCampaignScreenEvent({ screenID: 'Inventory' }) })
+    EventDispatch.AddEventHandler('!combat', (eventType, eventData) => { adminMessages.sendShowCampaignScreenEvent({ screenID: 'Combat' }) })
+  }
+}
 
 //  Module Exports
-module.exports = { AdminArea_Requests }
+module.exports = { AdminAreaRequests }

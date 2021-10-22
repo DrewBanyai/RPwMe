@@ -20,31 +20,29 @@ const { Container, BasicButton } = require('../Components/ArcadiaJS')
 const { pxFromInt } = require('../HelperFunctions/pxFromInt')
 const { adminMessages } = require('../Messaging/AdminMessages')
 
-"use strict"
+const AdminAreaCombat = {
+  create () {
+    const container = Container.create({
+      id: 'AdminArea_Combat',
+      style: {
+        width: pxFromInt(CONFIG.WINDOW_WIDTH),
+        height: pxFromInt(CONFIG.WINDOW_HEIGHT - 1 - STYLE.ADMIN_WINDOW_BUTTON_HEIGHT),
+        backgroundColor: STYLE.ADMIN_WINDOW_AREA_COLOR,
+        display: STYLE.ADMIN_WINDOW_MENU_DISPLAY_TYPE
+      }
+    })
 
-let AdminArea_Combat = {
-    create() {
-        let container = Container.create({
-            id: "AdminArea_Combat",
-            style: {
-                width: pxFromInt(CONFIG.WINDOW_WIDTH),
-                height: pxFromInt(CONFIG.WINDOW_HEIGHT - 1 - STYLE.ADMIN_WINDOW_BUTTON_HEIGHT),
-                backgroundColor: STYLE.ADMIN_WINDOW_AREA_COLOR,
-                display: STYLE.ADMIN_WINDOW_MENU_DISPLAY_TYPE,
-            }
-        });
+    container.elements = { showCombatButton: null }
 
-        container.elements = { showCombatButton: null, };
+    if (CONFIG.DEBUG.includes('SCREEN BUTTONS')) {
+      container.elements.showCombatButton = BasicButton.create({ id: 'ShowCombatButton', style: STYLE.ADMIN_SCREEN_DEBUG_BUTTON, attributes: { value: 'Show Combat' } })
+      container.appendChild(container.elements.showCombatButton)
+      BasicButton.setOnClick(container.elements.showCombatButton, () => { adminMessages.sendShowCampaignScreenEvent({ screenID: 'Combat' }) })
+    }
 
-        if (CONFIG.DEBUG.includes("SCREEN BUTTONS")) {
-            container.elements.showCombatButton = BasicButton.create({ id: "ShowCombatButton", style: STYLE.ADMIN_SCREEN_DEBUG_BUTTON, attributes: { value: "Show Combat", }, });
-            container.appendChild(container.elements.showCombatButton);
-            BasicButton.setOnClick(container.elements.showCombatButton, () => { adminMessages.sendShowCampaignScreenEvent({ screenID: "Combat", }); });
-        }
-
-        return container;
-    },
-};
+    return container
+  }
+}
 
 //  Module Exports
-module.exports = { AdminArea_Combat }
+module.exports = { AdminAreaCombat }

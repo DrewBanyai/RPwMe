@@ -15,17 +15,17 @@
 */
 
 const { gameMessages } = require('./Messaging/GameMessages')
-var { GameDisplay } = require('./SiteParts/GameDisplay')
+const { GameDisplay } = require('./SiteParts/GameDisplay')
 
 window.addEventListener('DOMContentLoaded', () => {
-  document.windowID = "GAME";
-  
-  gameMessages.Initialize();
-  LoadSiteContent();
+  document.windowID = 'GAME'
+
+  gameMessages.Initialize()
+  LoadSiteContent()
 })
 
 function LoadSiteContent () {
   //  Create the AdminDisplay and drop it into the AdminPage div
-  var gamePage = document.querySelector('#GamePage')
-  if (gamePage) gamePage.appendChild(GameDisplay.create());
+  const gamePage = document.querySelector('#GamePage')
+  if (gamePage) gamePage.appendChild(GameDisplay.create())
 }

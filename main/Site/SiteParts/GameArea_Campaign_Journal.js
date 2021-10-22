@@ -21,38 +21,38 @@ const { pxFromInt } = require('../HelperFunctions/pxFromInt')
 const { JournalList } = require('../Components/JournalList')
 const { EventDispatch } = require('../Controllers/EventDispatch')
 
-let GameArea_Campaign_Journal = {
-    create() {
-        let container = Container.create({ id: "GameArea_Campaign_Journal", style: STYLE.GAME_AREA_CAMPAIGN_SUBMENU, });
-        container.style.width = pxFromInt(CONFIG.WINDOW_WIDTH);
-        container.style.height = pxFromInt(CONFIG.WINDOW_HEIGHT);
+const GameAreaCampaignJournal = {
+  create () {
+    const container = Container.create({ id: 'GameArea_Campaign_Journal', style: STYLE.GAME_AREA_CAMPAIGN_SUBMENU })
+    container.style.width = pxFromInt(CONFIG.WINDOW_WIDTH)
+    container.style.height = pxFromInt(CONFIG.WINDOW_HEIGHT)
 
-        container.elements = { paper: null, screenTitle: null, journalList: null }
+    container.elements = { paper: null, screenTitle: null, journalList: null }
 
-        container.elements.paper = Container.create({ id: "LinedPaperBackground", style: STYLE.LINED_PAPER_BACKGROUND, });
-        container.appendChild(container.elements.paper);
+    container.elements.paper = Container.create({ id: 'LinedPaperBackground', style: STYLE.LINED_PAPER_BACKGROUND })
+    container.appendChild(container.elements.paper)
 
-        container.elements.screenTitle = Label.create({ id: "ScreenTitle", style: STYLE.GAME_SCREEN_TITLE, attributes: { value: "Journal" } });
-        container.appendChild(container.elements.screenTitle);
+    container.elements.screenTitle = Label.create({ id: 'ScreenTitle', style: STYLE.GAME_SCREEN_TITLE, attributes: { value: 'Journal' } })
+    container.appendChild(container.elements.screenTitle)
 
-        container.elements.journalList = JournalList.create({});
-        container.appendChild(container.elements.journalList);
-        
-        EventDispatch.AddEventHandler("Journal Page Turn", (eventType, eventData) => {
-            container.elements.journalList.attemptPageTurn(container.elements.journalList, eventData.pageTurn);
-        });
+    container.elements.journalList = JournalList.create({})
+    container.appendChild(container.elements.journalList)
 
-        //  Show/Hide functions
-        container.show = () => {
-            EventDispatch.SendEvent("Journal Page Turn", { pageTurn: "begin" });
-        };
-        container.hide = () => {
-            EventDispatch.SendEvent("Close Journal", {});
-        };
+    EventDispatch.AddEventHandler('Journal Page Turn', (eventType, eventData) => {
+      container.elements.journalList.attemptPageTurn(container.elements.journalList, eventData.pageTurn)
+    })
 
-        return container;
-    },
-};
+    //  Show/Hide functions
+    container.show = () => {
+      EventDispatch.SendEvent('Journal Page Turn', { pageTurn: 'begin' })
+    }
+    container.hide = () => {
+      EventDispatch.SendEvent('Close Journal', {})
+    }
+
+    return container
+  }
+}
 
 //  Module Exports
-module.exports = { GameArea_Campaign_Journal }
+module.exports = { GameAreaCampaignJournal }

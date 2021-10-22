@@ -14,55 +14,52 @@
     limitations under the License.
 */
 
-var { LOCATION_NAMES } = require('../Data/LocationNames')
-var { CITY_DATA, GetRandomBusinessOfType } = require('../Data/CityData')
-var { Random, RandIntBetween } = require('../HelperFunctions/Random')
+const { LOCATION_NAMES } = require('../Data/LocationNames')
+const { CITY_DATA, GetRandomBusinessOfType } = require('../Data/CityData')
+const { Random, RandIntBetween } = require('../HelperFunctions/Random')
 
-let usedLocationNames = [];
-const ClearUsedLocationNames = () => { usedLocationNames = []; }
+let usedLocationNames = []
+const ClearUsedLocationNames = () => { usedLocationNames = [] }
 const GetLocationName = (locationType, unused = true) => {
-    if (!LOCATION_NAMES.hasOwnProperty(locationType)) { console.warn("Attempting to find location name for unknown type " + locationType); return "NO NAME"; }
-    if (usedLocationNames.length >= LOCATION_NAMES[locationType].length) { unused = false; }
-    let locationName = LOCATION_NAMES[locationType][Math.floor(Random() * LOCATION_NAMES[locationType].length)];
-    if (unused) { while (usedLocationNames.includes(locationName)) { locationName = LOCATION_NAMES[locationType][Math.floor(Random() * LOCATION_NAMES[locationType].length)]; } }
-    usedLocationNames.push(locationName);
-    return locationName;
+  if (!LOCATION_NAMES.hasOwnProperty(locationType)) { console.warn('Attempting to find location name for unknown type ' + locationType); return 'NO NAME' }
+  if (usedLocationNames.length >= LOCATION_NAMES[locationType].length) { unused = false }
+  let locationName = LOCATION_NAMES[locationType][Math.floor(Random() * LOCATION_NAMES[locationType].length)]
+  if (unused) { while (usedLocationNames.includes(locationName)) { locationName = LOCATION_NAMES[locationType][Math.floor(Random() * LOCATION_NAMES[locationType].length)] } }
+  usedLocationNames.push(locationName)
+  return locationName
 }
-
 
 const GetLocationPosition = (mapData, locationType, usedPositions, unused = true) => {
-    let positionList = mapData.Positions.filter(pos => pos.TypeAllowed.includes(locationType));
-    if (unused && (usedPositions.length >= positionList.length)) { console.warn("Ran out of unused locations of type " + locationType); unused = false; }
-    let positionIndex = Math.floor(Random() * positionList.length);
-    if (unused) { while (usedPositions.includes(positionIndex)) { positionIndex = Math.floor(Random() * positionList.length); } }
-    usedPositions.push(positionIndex);
-    return positionList[positionIndex];
+  const positionList = mapData.Positions.filter(pos => pos.TypeAllowed.includes(locationType))
+  if (unused && (usedPositions.length >= positionList.length)) { console.warn('Ran out of unused locations of type ' + locationType); unused = false }
+  let positionIndex = Math.floor(Random() * positionList.length)
+  if (unused) { while (usedPositions.includes(positionIndex)) { positionIndex = Math.floor(Random() * positionList.length) } }
+  usedPositions.push(positionIndex)
+  return positionList[positionIndex]
 }
 
-
 const GenerateBusinesses = (businessTypes) => {
-    let businessList = [];
+  const businessList = []
 
-    const salesTypes = CITY_DATA.SALE_TYPES;
-    salesTypes.forEach((saleType) => {
-        if (businessTypes.hasOwnProperty(saleType))
-            businessList.push(GetRandomBusinessOfType(saleType));
-    });
+  const salesTypes = CITY_DATA.SALE_TYPES
+  salesTypes.forEach((saleType) => {
+    if (businessTypes.hasOwnProperty(saleType)) { businessList.push(GetRandomBusinessOfType(saleType)) }
+  })
 
-    return businessList;
+  return businessList
 }
 
 const ChooseXFromList = (count, list) => {
-    if (count <= 0) { console.error("Attempting to user ChooseXFromList to create an empty or negative size set!"); return []; }
-    if (count >= list.length) { console.error("Attempting to use ChooseXFromList to grab an entire list, or a set larger that the list!"); return []; }
+  if (count <= 0) { console.error('Attempting to user ChooseXFromList to create an empty or negative size set!'); return [] }
+  if (count >= list.length) { console.error('Attempting to use ChooseXFromList to grab an entire list, or a set larger that the list!'); return [] }
 
-    let returnList = [];
-    for (let i = 0; i < count; ++i) {
-        let itemIndex = RandIntBetween(0, list.length - 1);
-        while (returnList.includes(list[itemIndex])) itemIndex = RandIntBetween(0, list.length - 1);
-        returnList.push(list[itemIndex]);
-    }
-    return returnList;
+  const returnList = []
+  for (let i = 0; i < count; ++i) {
+    let itemIndex = RandIntBetween(0, list.length - 1)
+    while (returnList.includes(list[itemIndex])) itemIndex = RandIntBetween(0, list.length - 1)
+    returnList.push(list[itemIndex])
+  }
+  return returnList
 }
 
 //  Module Exports

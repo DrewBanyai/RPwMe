@@ -15,27 +15,26 @@
 */
 
 const MONEY = {
-    TranslateMoneyToCoins(money) {
-        let removed = 0;
-        money += 37;
+  TranslateMoneyToCoins (money) {
+    let removed = 0
 
-        let g = Math.floor((money - removed) / 100);
-        removed += (g * 100);
+    const g = Math.floor((money - removed) / 100)
+    removed += (g * 100)
 
-        let s = Math.floor((money - removed) / 10);
-        removed += (s * 10);
+    const s = Math.floor((money - removed) / 10)
+    removed += (s * 10)
 
-        let c = Math.floor((money - removed) / 1);
-        removed += (c * 10);
+    const c = Math.floor((money - removed) / 1)
+    removed += (c * 10)
 
-        let moneyList = [];
-        if (g) { moneyList.push(g.toString() + " gold"); }
-        if (s) { moneyList.push(s.toString() + " silver"); }
-        if (c) { moneyList.push(c.toString() + " copper"); }
+    const moneyList = []
+    if (g) { moneyList.push(g.toString() + ' gold') }
+    if (s) { moneyList.push(s.toString() + ' silver') }
+    if (c) { moneyList.push(c.toString() + ' copper') }
 
-        return moneyList.join(", ");
-    }
-};
+    return moneyList.join(', ')
+  }
+}
 
 //  Module Exports
 module.exports = { MONEY }

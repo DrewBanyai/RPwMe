@@ -20,32 +20,30 @@ const { Container } = require('../Components/ArcadiaJS')
 const { pxFromInt } = require('../HelperFunctions/pxFromInt')
 const { GenerateWorldMenu } = require('../SiteParts/GenerateWorldMenu')
 
-"use strict"
+const AdminAreaSettings = {
+  create () {
+    const container = Container.create({
+      id: 'AdminArea_Settings',
+      style: {
+        width: pxFromInt(CONFIG.WINDOW_WIDTH),
+        height: pxFromInt(CONFIG.WINDOW_HEIGHT - 1 - STYLE.ADMIN_WINDOW_BUTTON_HEIGHT),
+        backgroundColor: STYLE.ADMIN_WINDOW_AREA_COLOR,
+        display: STYLE.ADMIN_WINDOW_MENU_DISPLAY_TYPE
+      }
+    })
 
-let AdminArea_Settings = {
-    create() {
-        let container = Container.create({
-            id: "AdminArea_Settings",
-            style: {
-                width: pxFromInt(CONFIG.WINDOW_WIDTH),
-                height: pxFromInt(CONFIG.WINDOW_HEIGHT - 1 - STYLE.ADMIN_WINDOW_BUTTON_HEIGHT),
-                backgroundColor: STYLE.ADMIN_WINDOW_AREA_COLOR,
-                display: STYLE.ADMIN_WINDOW_MENU_DISPLAY_TYPE,
-            }
-        });
+    container.elements = { generateWorldMenu: null }
 
-        container.elements = { generateWorldMenu: null };
+    AdminAreaSettings.createGenerateWorldMenu(container)
 
-        AdminArea_Settings.createGenerateWorldMenu(container);
+    return container
+  },
 
-        return container;
-    },
-
-    createGenerateWorldMenu(container) {
-        container.elements.generateWorldMenu = GenerateWorldMenu.create({});
-        container.appendChild(container.elements.generateWorldMenu);
-    },
-};
+  createGenerateWorldMenu (container) {
+    container.elements.generateWorldMenu = GenerateWorldMenu.create({})
+    container.appendChild(container.elements.generateWorldMenu)
+  }
+}
 
 //  Module Exports
-module.exports = { AdminArea_Settings }
+module.exports = { AdminAreaSettings }

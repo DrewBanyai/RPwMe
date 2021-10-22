@@ -21,40 +21,38 @@ const { pxFromInt } = require('../HelperFunctions/pxFromInt')
 const { adminMessages } = require('../Messaging/AdminMessages')
 const { EventDispatch } = require('../Controllers/EventDispatch')
 
-"use strict"
+const AdminAreaJournal = {
+  create () {
+    const container = Container.create({
+      id: 'AdminArea_Journal',
+      style: {
+        width: pxFromInt(CONFIG.WINDOW_WIDTH),
+        height: pxFromInt(CONFIG.WINDOW_HEIGHT - 1 - STYLE.ADMIN_WINDOW_BUTTON_HEIGHT),
+        backgroundColor: STYLE.ADMIN_WINDOW_AREA_COLOR,
+        display: STYLE.ADMIN_WINDOW_MENU_DISPLAY_TYPE
+      }
+    })
 
-let AdminArea_Journal = {
-    create() {
-        let container = Container.create({
-            id: "AdminArea_Journal",
-            style: {
-                width: pxFromInt(CONFIG.WINDOW_WIDTH),
-                height: pxFromInt(CONFIG.WINDOW_HEIGHT - 1 - STYLE.ADMIN_WINDOW_BUTTON_HEIGHT),
-                backgroundColor: STYLE.ADMIN_WINDOW_AREA_COLOR,
-                display: STYLE.ADMIN_WINDOW_MENU_DISPLAY_TYPE,
-            }
-        });
+    container.elements = { showJournalButton: null }
 
-        container.elements = { showJournalButton: null, };
+    if (CONFIG.DEBUG.includes('SCREEN BUTTONS')) {
+      container.elements.showJournalButton = BasicButton.create({ id: 'ShowJournalButton', style: STYLE.ADMIN_SCREEN_DEBUG_BUTTON, attributes: { value: 'Show Journal' } })
+      container.appendChild(container.elements.showJournalButton)
+      BasicButton.setOnClick(container.elements.showJournalButton, () => { adminMessages.sendShowCampaignScreenEvent({ screenID: 'Journal' }) })
+    }
 
-        if (CONFIG.DEBUG.includes("SCREEN BUTTONS")) {
-            container.elements.showJournalButton = BasicButton.create({ id: "ShowJournalButton", style: STYLE.ADMIN_SCREEN_DEBUG_BUTTON, attributes: { value: "Show Journal", }, });
-            container.appendChild(container.elements.showJournalButton);
-            BasicButton.setOnClick(container.elements.showJournalButton, () => { adminMessages.sendShowCampaignScreenEvent({ screenID: "Journal", }); });
-        }
+    AdminAreaJournal.setupCommandEvents()
 
-        AdminArea_Journal.setupCommandEvents();
+    return container
+  },
 
-        return container;
-    },
-
-    setupCommandEvents() {
-        EventDispatch.AddEventHandler("!back", (eventType, eventData) => { adminMessages.sendJournalPageTurn({ pageTurn: "back" }); });
-        EventDispatch.AddEventHandler("!forward", (eventType, eventData) => { adminMessages.sendJournalPageTurn({ pageTurn: "forward" }); });
-        EventDispatch.AddEventHandler("!read", (eventType, eventData) => { adminMessages.sendJournalReadEvent(eventData); });
-        EventDispatch.AddEventHandler("!close", (eventType, eventData) => { adminMessages.sendJournalCloseEvent(eventData); });
-    },
-};
+  setupCommandEvents () {
+    EventDispatch.AddEventHandler('!back', (eventType, eventData) => { adminMessages.sendJournalPageTurn({ pageTurn: 'back' }) })
+    EventDispatch.AddEventHandler('!forward', (eventType, eventData) => { adminMessages.sendJournalPageTurn({ pageTurn: 'forward' }) })
+    EventDispatch.AddEventHandler('!read', (eventType, eventData) => { adminMessages.sendJournalReadEvent(eventData) })
+    EventDispatch.AddEventHandler('!close', (eventType, eventData) => { adminMessages.sendJournalCloseEvent(eventData) })
+  }
+}
 
 //  Module Exports
-module.exports = { AdminArea_Journal }
+module.exports = { AdminAreaJournal }

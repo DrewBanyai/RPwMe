@@ -16,19 +16,20 @@
 
 const electron = require('electron')
 const App = electron.app
+const { windowMap } = require('./main/windows')
 
 const windows = require('./main/windows')
 const core = require('./main/Site/Messaging/CoreMessaging')
 
 App.whenReady().then(() => {
-    windows.initialize()
-    core.setupMessageCallbacks();
-    
-    App.on('activate', () => {
-        if (Object.keys(windowMap).length === 0) windows.initialize()
-    })
+  windows.initialize()
+  core.setupMessageCallbacks()
+
+  App.on('activate', () => {
+    if (Object.keys(windowMap).length === 0) windows.initialize()
+  })
 })
 
 App.on('window-all-closed', function () {
-    if (process.platform !== 'darwin') App.quit()
+  if (process.platform !== 'darwin') App.quit()
 })

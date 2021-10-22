@@ -16,224 +16,222 @@
 
 const STYLE = require('../style')
 const { Container, Image } = require('../Components/ArcadiaJS')
-var { MapObject } = require('../Components/MapObject')
+const { MapObject } = require('../Components/MapObject')
 const { DrawnLine } = require('../HelperFunctions/DrawnLine')
 const { PointInPolygon } = require('../HelperFunctions/PointInPolygon')
 const { EventDispatch } = require('../Controllers/EventDispatch')
 
 const InteractiveMap = {
-    create: (options) => {
-        let container = Container.create({
-            id: "InteractiveMap",
-            style: {
-                width: InteractiveMap.GetGivenSize().x + "px",
-                height: InteractiveMap.GetGivenSize().y + "px",
-                overflow: "hidden",
-            }
-        });
+  create: (options) => {
+    const container = Container.create({
+      id: 'InteractiveMap',
+      style: {
+        width: InteractiveMap.GetGivenSize().x + 'px',
+        height: InteractiveMap.GetGivenSize().y + 'px',
+        overflow: 'hidden'
+      }
+    })
 
-        container.elements = { levels: [], currentLevel: 0 };
+    container.elements = { levels: [], currentLevel: 0 }
 
-        InteractiveMap.LoadMapEntry(container, 1, options.topLevelMapData);
+    InteractiveMap.LoadMapEntry(container, 1, options.topLevelMapData)
 
-        EventDispatch.AddEventHandler("Return To World View", (eventType, eventData) => {
-            InteractiveMap.LoadMapEntry(container, 1, options.topLevelMapData);
-        });
-        
-        return container;
-    },
+    EventDispatch.AddEventHandler('Return To World View', (eventType, eventData) => {
+      InteractiveMap.LoadMapEntry(container, 1, options.topLevelMapData)
+    })
 
-    ShowCurrentMapLevel(container) {
-        container.elements.levels.forEach((entry) => { entry.style.display = "none"; });
-        container.elements.levels[container.elements.currentLevel - 1].style.display = "flex";
-    },
+    return container
+  },
 
-    LoadMapEntry(container, levelIndex, mapData) {
-        container.childNodes.forEach((entry) => delete entry);
-        container.innerHTML = "";
+  ShowCurrentMapLevel (container) {
+    container.elements.levels.forEach((entry) => { entry.style.display = 'none' })
+    container.elements.levels[container.elements.currentLevel - 1].style.display = 'flex'
+  },
 
-        let newLevel = Container.create({ id: "MapEntry_Level_" + levelIndex, style: STYLE.MAP_PAPER_BACKGROUND });
-        container.appendChild(newLevel);
+  LoadMapEntry (container, levelIndex, mapData) {
+    container.innerHTML = ''
 
-        container.elements.levels.push(newLevel);
-        container.elements.currentLevel += 1;
-        InteractiveMap.ShowCurrentMapLevel(container);
+    const newLevel = Container.create({ id: 'MapEntry_Level_' + levelIndex, style: STYLE.MAP_PAPER_BACKGROUND })
+    container.appendChild(newLevel)
 
-        newLevel.elements = { mapImage: null, partitions: {}, shapeContainer: null, objectContainer: null, partitionSelected: null };
+    container.elements.levels.push(newLevel)
+    container.elements.currentLevel += 1
+    InteractiveMap.ShowCurrentMapLevel(container)
 
-        newLevel.elements.partitions = mapData.Locations.Partitions;
+    newLevel.elements = { mapImage: null, partitions: {}, shapeContainer: null, objectContainer: null, partitionSelected: null }
 
-        //  The MapContainer div will actually display the map (but is unable to determine image dimensions alone, so load an <img>)
-        newLevel.elements.mapImage = Container.create({ id: "MapContainer", style: STYLE.MAP_CONTAINER, });
-        newLevel.elements.mapImage.style.backgroundImage = "url(" + mapData.MapImage + ")";
-        newLevel.appendChild(newLevel.elements.mapImage);
+    newLevel.elements.partitions = mapData.Locations.Partitions
 
-        newLevel.elements.shapeContainer = Container.create({ id: "ShapeContainer", style: STYLE.MAP_PARTITION_SHAPE_CONTAINER });
-        newLevel.appendChild(newLevel.elements.shapeContainer);
+    //  The MapContainer div will actually display the map (but is unable to determine image dimensions alone, so load an <img>)
+    newLevel.elements.mapImage = Container.create({ id: 'MapContainer', style: STYLE.MAP_CONTAINER })
+    newLevel.elements.mapImage.style.backgroundImage = 'url(' + mapData.MapImage + ')'
+    newLevel.appendChild(newLevel.elements.mapImage)
 
-        newLevel.elements.objectContainer = Container.create({ id: "ObjectContainer", style: STYLE.MAP_OBJECT_CONTAINER });
-        newLevel.appendChild(newLevel.elements.objectContainer);
+    newLevel.elements.shapeContainer = Container.create({ id: 'ShapeContainer', style: STYLE.MAP_PARTITION_SHAPE_CONTAINER })
+    newLevel.appendChild(newLevel.elements.shapeContainer)
 
-        //  We can't use a Container background image to find an image file's size, so create an invisible map image and fire a callback on load
-        let imageLoadCallback = null;
-        imageLoadCallback = (mapImageInvisible) => {
-            //  If the window is minimized or hidden, this will fail, so try again every half second until we succeed
-            if (mapImageInvisible.clientWidth == 0 || mapImageInvisible.clientHeight == 0) {
-                setTimeout(() => imageLoadCallback(mapImageInvisible), 500);
-                return;
-            }
+    newLevel.elements.objectContainer = Container.create({ id: 'ObjectContainer', style: STYLE.MAP_OBJECT_CONTAINER })
+    newLevel.appendChild(newLevel.elements.objectContainer)
 
-            newLevel.properties.actualSize = { x: mapImageInvisible.clientWidth, y: mapImageInvisible.clientHeight };
+    //  We can't use a Container background image to find an image file's size, so create an invisible map image and fire a callback on load
+    let imageLoadCallback = null
+    imageLoadCallback = (mapImageInvisible) => {
+      //  If the window is minimized or hidden, this will fail, so try again every half second until we succeed
+      if (mapImageInvisible.clientWidth === 0 || mapImageInvisible.clientHeight === 0) {
+        setTimeout(() => imageLoadCallback(mapImageInvisible), 500)
+        return
+      }
 
-            InteractiveMap.LoadPartitionShapes(newLevel, mapData.Locations.Partitions);
-            InteractiveMap.LoadMapObjects(newLevel, mapData.Locations.Cities, mapData.Locations.Landmarks);
-        };
-        InteractiveMap.LoadMapImage(newLevel, mapData.MapImage, imageLoadCallback);
+      newLevel.properties.actualSize = { x: mapImageInvisible.clientWidth, y: mapImageInvisible.clientHeight }
 
-        newLevel.onmousemove = (event) => {
-            let levelRect = newLevel.getBoundingClientRect();
-            let mousePos = { x: event.clientX - levelRect.left, y: event.clientY - levelRect.top };
-            let mouseInPartition = false;
-            newLevel.elements.shapeContainer.childNodes.forEach((node) => {
-                if (PointInPolygon(mousePos, node.Points)) {
-                    InteractiveMap.SetPartitionLinesColor(node, STYLE.MAP_PARTITION_LINE_COLOR_SELECTED);
-                    newLevel.elements.partitionSelected = node;
-                    newLevel.style.cursor = "pointer";
-                    newLevel.onclick = () => { InteractiveMap.SelectMapPartition(container, newLevel, node); };
-                    mouseInPartition = true;
-                }
-                else {
-                    InteractiveMap.SetPartitionLinesColor(node, STYLE.MAP_PARTITION_LINE_COLOR_UNSELECTED);
-                    if (newLevel.elements.partitionSelected === node) newLevel.elements.partitionSelected = null;
-                }
-            });
-            if (!mouseInPartition) newLevel.style.cursor = "auto";
-        };
-    },
+      InteractiveMap.LoadPartitionShapes(newLevel, mapData.Locations.Partitions)
+      InteractiveMap.LoadMapObjects(newLevel, mapData.Locations.Cities, mapData.Locations.Landmarks)
+    }
+    InteractiveMap.LoadMapImage(newLevel, mapData.MapImage, imageLoadCallback)
 
-    SelectMapPartition(container, levelObj, partitionObj) {
-        //  TODO: Clear any levels past the one we're currently on, in case we went backwards
-
-        InteractiveMap.LoadMapEntry(container, container.elements.currentLevel + 1, levelObj.elements.partitions[partitionObj.Index].MapEntry);
-    },
-
-    LoadMapImage(levelContainer, mapImageFile, loadCallback) {
-        let mapImageInvisible = Image.create({ id: "MapImageInvisible", style: { position: "absolute", opacity: "0%", }});
-        mapImageInvisible.setValue(mapImageFile);
-        levelContainer.properties = { actualSize: { x: 1, y: 1 } };
-        levelContainer.appendChild(mapImageInvisible);
-        mapImageInvisible.onload = () => { loadCallback(mapImageInvisible); }
-    },
-
-    GetGivenSize() {
-        return { x: STYLE.WORLD_MAP_SIZE[document.windowID].x, y: STYLE.WORLD_MAP_SIZE[document.windowID].y };
-    },
-
-    GetMapScale(domObject) {
-        return {
-            x: InteractiveMap.GetGivenSize().x / domObject.properties.actualSize.x,
-            y: InteractiveMap.GetGivenSize().y / domObject.properties.actualSize.y,
-        };
-    },
-
-    LoadPartitionShapes(levelContainer, partitions) {
-        if (levelContainer == null) { console.warn("Attempting to Load Partition Shapes with no level container!"); return; }
-
-        let mapScale = InteractiveMap.GetMapScale(levelContainer);
-        
-        levelContainer.elements.shapeContainer.innerHTML = "";
-
-        for (var key in partitions) {
-            const part = partitions[key];
-
-            //  Create a container for the lines we're about to create to represent the partition
-            let partitionLines = Container.create({
-                id: "PartitionLines",
-                style: {
-                    position: "absolute",
-                    width: InteractiveMap.GetGivenSize().x + "px",
-                    height: InteractiveMap.GetGivenSize().y + "px",
-                    color: STYLE.MAP_PARTITION_LINE_COLOR_UNSELECTED,
-                }
-            });
-            partitionLines.Index = key;
-            partitionLines.Points = [];
-            for (let i = 0; i < part.Points.length; ++i) partitionLines.Points.push({ x: part.Points[i].x * mapScale.x, y: part.Points[i].y * mapScale.y, });
-            partitionLines.NamePosition = part.NamePosition;
-            levelContainer.elements.shapeContainer.appendChild(partitionLines);
-
-            let pList = partitionLines.Points;
-            for (let i = 0; i < pList.length - 1; ++i) {
-                let line = DrawnLine.create({
-                    x1: pList[i].x,
-                    y1: pList[i].y,
-                    x2: pList[i + 1].x,
-                    y2: pList[i + 1].y,
-                    color: STYLE.MAP_PARTITION_LINE_COLOR_UNSELECTED,
-                });
-                partitionLines.appendChild(line);
-            }
-            let line = DrawnLine.create({
-                x1: pList[pList.length - 1].x,
-                y1: pList[pList.length - 1].y,
-                x2: pList[0].x,
-                y2: pList[0].y,
-                color: STYLE.MAP_PARTITION_LINE_COLOR_UNSELECTED,
-            });
-            partitionLines.appendChild(line);
+    newLevel.onmousemove = (event) => {
+      const levelRect = newLevel.getBoundingClientRect()
+      const mousePos = { x: event.clientX - levelRect.left, y: event.clientY - levelRect.top }
+      let mouseInPartition = false
+      newLevel.elements.shapeContainer.childNodes.forEach((node) => {
+        if (PointInPolygon(mousePos, node.Points)) {
+          InteractiveMap.SetPartitionLinesColor(node, STYLE.MAP_PARTITION_LINE_COLOR_SELECTED)
+          newLevel.elements.partitionSelected = node
+          newLevel.style.cursor = 'pointer'
+          newLevel.onclick = () => { InteractiveMap.SelectMapPartition(container, newLevel, node) }
+          mouseInPartition = true
+        } else {
+          InteractiveMap.SetPartitionLinesColor(node, STYLE.MAP_PARTITION_LINE_COLOR_UNSELECTED)
+          if (newLevel.elements.partitionSelected === node) newLevel.elements.partitionSelected = null
         }
-    },
+      })
+      if (!mouseInPartition) newLevel.style.cursor = 'auto'
+    }
+  },
 
-    LoadMapObjects(levelContainer, cities, landmarks) {
-        if (levelContainer == null) { console.warn("Attempting to Load Map Objects with no level container!");  return; }
-        
-        let mapScale = InteractiveMap.GetMapScale(levelContainer);
-        
-        levelContainer.elements.objectContainer.innerHTML = "";
+  SelectMapPartition (container, levelObj, partitionObj) {
+    //  TODO: Clear any levels past the one we're currently on, in case we went backwards
 
-        let cityKeys = Object.keys(cities);
-        cityKeys.forEach(key => {
-            let locationData = cities[key];
-            let objPosition = {
-                x: parseInt(locationData.Position.x * mapScale.x) + "px",
-                y: parseInt(locationData.Position.y * mapScale.y) + "px"
-            };
+    InteractiveMap.LoadMapEntry(container, container.elements.currentLevel + 1, levelObj.elements.partitions[partitionObj.Index].MapEntry)
+  },
 
-            let mapObject = MapObject.create({
-                objectID: locationData.ObjectID,
-                objectType: "City",
-                objectName: locationData.Name,
-                icon: locationData.Icon,
-                objSize: STYLE.MAP_ICON_SIZE,
-                objPosition: objPosition, 
-            });
-            levelContainer.elements.objectContainer.appendChild(mapObject);
-        });
+  LoadMapImage (levelContainer, mapImageFile, loadCallback) {
+    const mapImageInvisible = Image.create({ id: 'MapImageInvisible', style: { position: 'absolute', opacity: '0%' } })
+    mapImageInvisible.setValue(mapImageFile)
+    levelContainer.properties = { actualSize: { x: 1, y: 1 } }
+    levelContainer.appendChild(mapImageInvisible)
+    mapImageInvisible.onload = () => { loadCallback(mapImageInvisible) }
+  },
 
-        let landmarkKeys = Object.keys(landmarks);
-        landmarkKeys.forEach(key => {
-            let locationData = landmarks[key];
-            let objPosition = {
-                x: parseInt(locationData.Position.x * mapScale.x) + "px",
-                y: parseInt(locationData.Position.y * mapScale.y) + "px"
-            };
+  GetGivenSize () {
+    return { x: STYLE.WORLD_MAP_SIZE[document.windowID].x, y: STYLE.WORLD_MAP_SIZE[document.windowID].y }
+  },
 
-            let mapObject = MapObject.create({
-                objectID: locationData.ObjectID,
-                objectType: "Landmark",
-                objectName: locationData.Name,
-                icon: locationData.Icon,
-                objSize: STYLE.MAP_ICON_SIZE,
-                objPosition: objPosition,
-            });
-            levelContainer.elements.objectContainer.appendChild(mapObject);
-        });
-    },
+  GetMapScale (domObject) {
+    return {
+      x: InteractiveMap.GetGivenSize().x / domObject.properties.actualSize.x,
+      y: InteractiveMap.GetGivenSize().y / domObject.properties.actualSize.y
+    }
+  },
 
-    SetPartitionLinesColor(partition, color) {
-        partition.childNodes.forEach(line => line.style.border = "1px solid " + color);
-    },
-};
+  LoadPartitionShapes (levelContainer, partitions) {
+    if (levelContainer == null) { console.warn('Attempting to Load Partition Shapes with no level container!'); return }
+
+    const mapScale = InteractiveMap.GetMapScale(levelContainer)
+
+    levelContainer.elements.shapeContainer.innerHTML = ''
+
+    for (const key in partitions) {
+      const part = partitions[key]
+
+      //  Create a container for the lines we're about to create to represent the partition
+      const partitionLines = Container.create({
+        id: 'PartitionLines',
+        style: {
+          position: 'absolute',
+          width: InteractiveMap.GetGivenSize().x + 'px',
+          height: InteractiveMap.GetGivenSize().y + 'px',
+          color: STYLE.MAP_PARTITION_LINE_COLOR_UNSELECTED
+        }
+      })
+      partitionLines.Index = key
+      partitionLines.Points = []
+      for (let i = 0; i < part.Points.length; ++i) partitionLines.Points.push({ x: part.Points[i].x * mapScale.x, y: part.Points[i].y * mapScale.y })
+      partitionLines.NamePosition = part.NamePosition
+      levelContainer.elements.shapeContainer.appendChild(partitionLines)
+
+      const pList = partitionLines.Points
+      for (let i = 0; i < pList.length - 1; ++i) {
+        const line = DrawnLine.create({
+          x1: pList[i].x,
+          y1: pList[i].y,
+          x2: pList[i + 1].x,
+          y2: pList[i + 1].y,
+          color: STYLE.MAP_PARTITION_LINE_COLOR_UNSELECTED
+        })
+        partitionLines.appendChild(line)
+      }
+      const line = DrawnLine.create({
+        x1: pList[pList.length - 1].x,
+        y1: pList[pList.length - 1].y,
+        x2: pList[0].x,
+        y2: pList[0].y,
+        color: STYLE.MAP_PARTITION_LINE_COLOR_UNSELECTED
+      })
+      partitionLines.appendChild(line)
+    }
+  },
+
+  LoadMapObjects (levelContainer, cities, landmarks) {
+    if (levelContainer == null) { console.warn('Attempting to Load Map Objects with no level container!'); return }
+
+    const mapScale = InteractiveMap.GetMapScale(levelContainer)
+
+    levelContainer.elements.objectContainer.innerHTML = ''
+
+    const cityKeys = Object.keys(cities)
+    cityKeys.forEach(key => {
+      const locationData = cities[key]
+      const objPosition = {
+        x: parseInt(locationData.Position.x * mapScale.x) + 'px',
+        y: parseInt(locationData.Position.y * mapScale.y) + 'px'
+      }
+
+      const mapObject = MapObject.create({
+        objectID: locationData.ObjectID,
+        objectType: 'City',
+        objectName: locationData.Name,
+        icon: locationData.Icon,
+        objSize: STYLE.MAP_ICON_SIZE,
+        objPosition: objPosition
+      })
+      levelContainer.elements.objectContainer.appendChild(mapObject)
+    })
+
+    const landmarkKeys = Object.keys(landmarks)
+    landmarkKeys.forEach(key => {
+      const locationData = landmarks[key]
+      const objPosition = {
+        x: parseInt(locationData.Position.x * mapScale.x) + 'px',
+        y: parseInt(locationData.Position.y * mapScale.y) + 'px'
+      }
+
+      const mapObject = MapObject.create({
+        objectID: locationData.ObjectID,
+        objectType: 'Landmark',
+        objectName: locationData.Name,
+        icon: locationData.Icon,
+        objSize: STYLE.MAP_ICON_SIZE,
+        objPosition: objPosition
+      })
+      levelContainer.elements.objectContainer.appendChild(mapObject)
+    })
+  },
+
+  SetPartitionLinesColor (partition, color) {
+    partition.childNodes.forEach(line => { line.style.border = '1px solid ' + color })
+  }
+}
 
 //  Module Exports
 module.exports = { InteractiveMap }

@@ -15,43 +15,43 @@
 */
 
 const CHARACTER = {
-    CreateSavingThrowAdvantageMap(savingThrowList) {
-        //  Fill in the given keys as true
-        let data = {};
-        for (let i = 0; i < savingThrowList.length; ++i) data[savingThrowList[i]] = true;
-        return data;
-    },
-    CreateWeaponProficiencyData(proficienyList) {
-        //  Fill in the given keys as true
-        let data = {};
-        for (let i = 0; i < proficienyList.length; ++i) data[proficienyList[i]] = true;
-        return data;
-    },
-    CreateArmorProficiencyData(proficienyList) {
-        //  Fill in the given keys as true
-        let data = {};
-        for (let i = 0; i < proficienyList.length; ++i) data[proficienyList[i]] = true;
-        return data;
-    },
-    CreateToolProficiencyData(proficienyList) {
-        //  Fill in the given keys as true
-        let data = {};
-        for (let i = 0; i < proficienyList.length; ++i) data[proficienyList[i]] = true;
-        return data;
-    },
-    CreateCharacterAttributesData(attributeList) {
-        //  Fill in the given keys as true
-        let data = {};
-        for (let i = 0; i < attributeList.length; ++i) data[attributeList[i]] = true;
-        return data;
-    },
-    CreateCharacterSkillProficiencies(knownList) {
-        //  Fill in the given keys as true
-        let data = {};
-        for (let i = 0; i < knownList.length; ++i) data[knownList[i]] = true;
-        return data;
-    }
-};
+  CreateSavingThrowAdvantageMap (savingThrowList) {
+    //  Fill in the given keys as true
+    const data = {}
+    for (let i = 0; i < savingThrowList.length; ++i) data[savingThrowList[i]] = true
+    return data
+  },
+  CreateWeaponProficiencyData (proficienyList) {
+    //  Fill in the given keys as true
+    const data = {}
+    for (let i = 0; i < proficienyList.length; ++i) data[proficienyList[i]] = true
+    return data
+  },
+  CreateArmorProficiencyData (proficienyList) {
+    //  Fill in the given keys as true
+    const data = {}
+    for (let i = 0; i < proficienyList.length; ++i) data[proficienyList[i]] = true
+    return data
+  },
+  CreateToolProficiencyData (proficienyList) {
+    //  Fill in the given keys as true
+    const data = {}
+    for (let i = 0; i < proficienyList.length; ++i) data[proficienyList[i]] = true
+    return data
+  },
+  CreateCharacterAttributesData (attributeList) {
+    //  Fill in the given keys as true
+    const data = {}
+    for (let i = 0; i < attributeList.length; ++i) data[attributeList[i]] = true
+    return data
+  },
+  CreateCharacterSkillProficiencies (knownList) {
+    //  Fill in the given keys as true
+    const data = {}
+    for (let i = 0; i < knownList.length; ++i) data[knownList[i]] = true
+    return data
+  }
+}
 
 //  Module Exports
 module.exports = { CHARACTER }

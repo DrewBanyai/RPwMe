@@ -17,50 +17,48 @@
 const { Container } = require('../Components/ArcadiaJS')
 const STYLE = require('../style')
 
-"use strict"
+const Tooltip = {
+  create (options) {
+    const container = Container.create({
+      id: (options.id ? options.id : 'Tooltip'),
+      style: { position: 'relative', zIndex: '1', pointerEvents: 'none' }
+    })
 
-let Tooltip = {
-    create(options) {
-        let container = Container.create({
-            id: (options.id ? options.id : "Tooltip"),
-            style: { position: "relative", zIndex: "1", pointerEvents: "none", }
-        });
+    container.elements = { tooltip: null }
 
-        container.elements = { tooltip: null };
+    container.elements.tooltip = Container.create({
+      id: 'DetachedTooltip',
+      style: {
+        minWidth: '100px',
+        minHeight: '20px',
+        maxWidth: '200px',
+        maxHeight: '400px',
+        backgroundColor: 'rgb(64, 64, 64)',
+        color: 'rgb(255, 255, 255)',
+        position: 'absolute',
+        opacity: '0',
+        textAlign: 'center',
+        transition: 'opacity 0.3s',
+        pointerEvents: 'none',
+        zIndex: STYLE.Z_INDEX.TOOLTIP
+      }
+    })
+    container.appendChild(container.elements.tooltip)
 
-        container.elements.tooltip = Container.create({
-            id: "DetachedTooltip",
-            style: {
-                minWidth: "100px",
-                minHeight: "20px",
-                maxWidth: "200px",
-                maxHeight: "400px",
-                backgroundColor: "rgb(64, 64, 64)",
-                color: "rgb(255, 255, 255)",
-                position: "absolute",
-                opacity: "0",
-                textAlign: "center",
-                transition: "opacity 0.3s",
-                pointerEvents: "none",
-                zIndex: STYLE.Z_INDEX.TOOLTIP,
-            }
-        });
-        container.appendChild(container.elements.tooltip);
-
-        container.setVisible = (visible) => {
-            container.elements.tooltip.style.opacity = (visible ? 1.0 : 0.0);
-            container.elements.tooltip.style.pointerEvents = (visible ? "all" : "none");
-        };
-    
-        container.setContent = (content) => {
-            while (container.elements.tooltip.firstChild) {
-                container.elements.tooltip.removeChild(container.elements.tooltip.firstChild);
-            }
-            container.elements.tooltip.appendChild(content);
-        };
-
-        return container;
+    container.setVisible = (visible) => {
+      container.elements.tooltip.style.opacity = (visible ? 1.0 : 0.0)
+      container.elements.tooltip.style.pointerEvents = (visible ? 'all' : 'none')
     }
+
+    container.setContent = (content) => {
+      while (container.elements.tooltip.firstChild) {
+        container.elements.tooltip.removeChild(container.elements.tooltip.firstChild)
+      }
+      container.elements.tooltip.appendChild(content)
+    }
+
+    return container
+  }
 }
 
 //  Module Exports

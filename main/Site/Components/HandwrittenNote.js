@@ -19,52 +19,52 @@ const STYLE = require('../style')
 
 //  NOTE: This is similar to a Label from ArcadiaJS, but uses a certain font family and writes itself in one character at a time
 const HandwrittenNote = {
-	create: (options) => {
-        if (!options.id) options.id = "Label";
-		let container = Container.create(options);
+  create: (options) => {
+    if (!options.id) options.id = 'Label'
+    const container = Container.create(options)
 
-		container.setValue = (text) => { HandwrittenNote.setValue(container, text); };
-        HandwrittenNote.SetHandwrittenStyle(options);
-        container.writeDelay = options.writeDelay;
-        container.fullValue = "";
-        container.interval = null;
-        container.callback = options.callback;
+    container.setValue = (text) => { HandwrittenNote.setValue(container, text) }
+    HandwrittenNote.SetHandwrittenStyle(options)
+    container.writeDelay = options.writeDelay
+    container.fullValue = ''
+    container.interval = null
+    container.callback = options.callback
 
-        Container.applyOptions(container, options);
-        if (options && options.attributes && options.attributes.value) container.setValue(options.attributes.value);
+    Container.applyOptions(container, options)
+    if (options && options.attributes && options.attributes.value) container.setValue(options.attributes.value)
 
-		return container;
-	},
+    return container
+  },
 
-    SetHandwrittenStyle(options) {
-        if (!options) { options = {}; }
-        if (!options.style) { options.style = {}; }
-        if (!options.style.fontFamily) { options.style.fontFamily = "Handlee"; }
-        if (!options.style.fontWeight) { options.style.fontWeight = "bold"; }
-        if (!options.style.color) { options.style.color = STYLE.GAME_WINDOW_PEN_WRITING_COLOR; }
-        if (!options.writeDelay) { options.writeDelay = 100; }
-    },
-	
-	getValue(container) { return container.innerHTML; },
-	setValue(container, value) {
-        container.innerHTML = "";
-        container.fullValue = value;
-        if (container.interval) { clearInterval(container.interval); }
-        container.interval = setInterval(() => {
-            if(container.innerHTML == container.fullValue) {
-                clearInterval(container.interval);
-                container.interval = null;
-                if (container.callback) { container.callback(); }
-                return;
-            }
-            if (!container.innerHTML) { container.innerHTML = "";}
-            container.innerHTML += container.fullValue.slice(container.innerHTML.length, container.innerHTML.length + 1);
-        }, container.writeDelay);
-    },
-	setFont(container, font) { container.style.fontFamily = font; },
-	setFontSize(container, size) { container.style.fontSize = size; },
-	setColor(container, color) { container.style.color = color; },
-};
+  SetHandwrittenStyle (options) {
+    if (!options) { options = {} }
+    if (!options.style) { options.style = {} }
+    if (!options.style.fontFamily) { options.style.fontFamily = 'Handlee' }
+    if (!options.style.fontWeight) { options.style.fontWeight = 'bold' }
+    if (!options.style.color) { options.style.color = STYLE.GAME_WINDOW_PEN_WRITING_COLOR }
+    if (!options.writeDelay) { options.writeDelay = 100 }
+  },
+
+  getValue (container) { return container.innerHTML },
+  setValue (container, value) {
+    container.innerHTML = ''
+    container.fullValue = value
+    if (container.interval) { clearInterval(container.interval) }
+    container.interval = setInterval(() => {
+      if (container.innerHTML === container.fullValue) {
+        clearInterval(container.interval)
+        container.interval = null
+        if (container.callback) { container.callback() }
+        return
+      }
+      if (!container.innerHTML) { container.innerHTML = '' }
+      container.innerHTML += container.fullValue.slice(container.innerHTML.length, container.innerHTML.length + 1)
+    }, container.writeDelay)
+  },
+  setFont (container, font) { container.style.fontFamily = font },
+  setFontSize (container, size) { container.style.fontSize = size },
+  setColor (container, color) { container.style.color = color }
+}
 
 //  Module Exports
 module.exports = { HandwrittenNote }

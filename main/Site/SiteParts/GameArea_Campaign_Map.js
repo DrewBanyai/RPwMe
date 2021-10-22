@@ -22,54 +22,54 @@ const { InteractiveMap } = require('../Components/InteractiveMap')
 const { EventDispatch } = require('../Controllers/EventDispatch')
 const { CampaignController } = require('../Controllers/CampaignController')
 
-let GameArea_Campaign_Map = {
-    create() {
-        let container = Container.create({ id: "GameArea_Campaign_Map", style: STYLE.GAME_AREA_CAMPAIGN_SUBMENU, });
-        container.style.width = pxFromInt(CONFIG.WINDOW_WIDTH);
-        container.style.height = pxFromInt(CONFIG.WINDOW_HEIGHT);
+const GameAreaCampaignMap = {
+  create () {
+    const container = Container.create({ id: 'GameArea_Campaign_Map', style: STYLE.GAME_AREA_CAMPAIGN_SUBMENU })
+    container.style.width = pxFromInt(CONFIG.WINDOW_WIDTH)
+    container.style.height = pxFromInt(CONFIG.WINDOW_HEIGHT)
 
-        container.elements = { paper: null, screenTitle: null, tabMenu: null, worldMap: null }
+    container.elements = { paper: null, screenTitle: null, tabMenu: null, worldMap: null }
 
-        container.elements.paper = Container.create({ id: "LinedPaperBackground", style: STYLE.LINED_PAPER_BACKGROUND, });
-        container.appendChild(container.elements.paper);
+    container.elements.paper = Container.create({ id: 'LinedPaperBackground', style: STYLE.LINED_PAPER_BACKGROUND })
+    container.appendChild(container.elements.paper)
 
-        container.elements.screenTitle = Label.create({ id: "ScreenTitle", style: STYLE.GAME_SCREEN_TITLE, attributes: { value: "Map" } });
-        container.appendChild(container.elements.screenTitle);
+    container.elements.screenTitle = Label.create({ id: 'ScreenTitle', style: STYLE.GAME_SCREEN_TITLE, attributes: { value: 'Map' } })
+    container.appendChild(container.elements.screenTitle)
 
-        container.elements.tabMenu = Container.create({ id: "CampaignMapTabs", style: STYLE.CAMPAIGN_MAP_TABS, });
-        container.appendChild(container.elements.tabMenu);
+    container.elements.tabMenu = Container.create({ id: 'CampaignMapTabs', style: STYLE.CAMPAIGN_MAP_TABS })
+    container.appendChild(container.elements.tabMenu)
 
-        EventDispatch.AddEventHandler("Campaign Updated", (eventType, eventData) => {
-            CampaignController.SetCampaignData(eventData);
-            GameArea_Campaign_Map.createWorldMapTab(container);
-            container.show();
-        });
+    EventDispatch.AddEventHandler('Campaign Updated', (eventType, eventData) => {
+      CampaignController.SetCampaignData(eventData)
+      GameAreaCampaignMap.createWorldMapTab(container)
+      container.show()
+    })
 
-        container.show = () => {
+    container.show = () => {
 
-        };
-        container.hide = () => {
+    }
+    container.hide = () => {
 
-        };
+    }
 
-        return container;
-    },
+    return container
+  },
 
-    createWorldMapTab(container) {
-        if(container.elements.worldMap) {
-            container.removeChild(container.elements.worldMap);
-            container.elements.worldMap = null;
-        }
+  createWorldMapTab (container) {
+    if (container.elements.worldMap) {
+      container.removeChild(container.elements.worldMap)
+      container.elements.worldMap = null
+    }
 
-        //  Create the visual represenation of this map
-        let mapData = CampaignController.GetCampaignMapData();
-        container.elements.worldMap = InteractiveMap.create({ topLevelMapData: mapData });
-        container.elements.worldMap.style.position = "absolute";
-        container.elements.worldMap.style.left = "234px";
-        container.elements.worldMap.style.top = "108px";
-        container.appendChild(container.elements.worldMap);
-    },
-};
+    //  Create the visual represenation of this map
+    const mapData = CampaignController.GetCampaignMapData()
+    container.elements.worldMap = InteractiveMap.create({ topLevelMapData: mapData })
+    container.elements.worldMap.style.position = 'absolute'
+    container.elements.worldMap.style.left = '234px'
+    container.elements.worldMap.style.top = '108px'
+    container.appendChild(container.elements.worldMap)
+  }
+}
 
 //  Module Exports
-module.exports = { GameArea_Campaign_Map }
+module.exports = { GameAreaCampaignMap }
