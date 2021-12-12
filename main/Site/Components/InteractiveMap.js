@@ -86,7 +86,7 @@ const InteractiveMap = {
       mapLevel.properties.actualSize = { x: mapImageInvisible.clientWidth, y: mapImageInvisible.clientHeight }
 
       InteractiveMap.LoadPartitionShapes(mapLevel, mapData.Locations.Partitions)
-      InteractiveMap.LoadMapObjects(mapLevel, mapData.Locations.Cities, mapData.Locations.Landmarks)
+      InteractiveMap.LoadMapObjects(mapLevel, mapData.Locations.Locations)
     }
     InteractiveMap.LoadMapImage(mapLevel, mapData.MapImage, imageLoadCallback)
 
@@ -181,16 +181,16 @@ const InteractiveMap = {
     }
   },
 
-  LoadMapObjects (mapLevel, cities, landmarks) {
+  LoadMapObjects (mapLevel, locations) {
     if (mapLevel == null) { console.warn('Attempting to Load Map Objects with no level container!'); return }
 
     const mapScale = InteractiveMap.GetMapScale(mapLevel)
 
     mapLevel.elements.objectContainer.innerHTML = ''
 
-    const cityKeys = Object.keys(cities)
-    cityKeys.forEach(key => {
-      const locationData = cities[key]
+    const locationKeys = Object.keys(locations)
+    locationKeys.forEach(key => {
+      const locationData = locations[key]
       const objPosition = {
         x: parseInt(locationData.Position.x * mapScale.x) + 'px',
         y: parseInt(locationData.Position.y * mapScale.y) + 'px'
@@ -198,27 +198,7 @@ const InteractiveMap = {
 
       const mapObject = MapObject.create({
         objectID: locationData.ObjectID,
-        objectType: 'City',
-        objectName: locationData.Name,
-        icon: locationData.Icon,
-        objSize: STYLE.MAP_ICON_SIZE,
-        objPosition: objPosition,
-        mapLevelData: locationData.mapEntry
-      })
-      mapLevel.elements.objectContainer.appendChild(mapObject)
-    })
-
-    const landmarkKeys = Object.keys(landmarks)
-    landmarkKeys.forEach(key => {
-      const locationData = landmarks[key]
-      const objPosition = {
-        x: parseInt(locationData.Position.x * mapScale.x) + 'px',
-        y: parseInt(locationData.Position.y * mapScale.y) + 'px'
-      }
-
-      const mapObject = MapObject.create({
-        objectID: locationData.ObjectID,
-        objectType: 'Landmark',
+        objectType: locationData.Type,
         objectName: locationData.Name,
         icon: locationData.Icon,
         objSize: STYLE.MAP_ICON_SIZE,

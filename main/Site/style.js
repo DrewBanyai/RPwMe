@@ -81,7 +81,8 @@ module.exports = {
     height: '100%',
     position: 'relative',
     backgroundImage: 'url(Images/DrawingPaper.png)',
-    backgroundSize: '100%'
+    backgroundSize: '100%',
+    borderRadius: '8px'
     // overflow: "hidden",
   },
   MAP_CONTAINER: {

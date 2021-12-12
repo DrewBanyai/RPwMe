@@ -58,18 +58,15 @@ const WorldController = {
     mapEntry.MapImage = locationData.MapImageFile
     mapEntry.MapLevel = mapLevel
 
-    //  Generate all cities that populate the map within this entry
-    const cityArray = WorldController.generateObjectArray(locationData, 'City')
-    cityArray.forEach(c => {
-      if (c.Location) c.mapEntry = WorldController.generateMapEntry(mapLevel + 1, c.Location)
-      mapEntry.Locations.Cities[c.ObjectID] = c
-    })
+    //  Generate all map location objects that populate the map within this entry
+    let objectArray = []
+    objectArray = objectArray.concat(WorldController.generateObjectArray(locationData, 'City'))
+    objectArray = objectArray.concat(WorldController.generateObjectArray(locationData, 'Landmark'))
 
-    //  Generate all landmarks that populate the map within this entry
-    const landmarkArray = WorldController.generateObjectArray(locationData, 'Landmark')
-    landmarkArray.forEach(l => {
-      if (l.Location) l.mapEntry = WorldController.generateMapEntry(mapLevel + 1, l.Location)
-      mapEntry.Locations.Landmarks[l.ObjectID] = l
+    //  For each map object, generate it's own map entry and set it into the current map entry as a location
+    objectArray.forEach(obj => {
+      if (obj.Location) obj.mapEntry = WorldController.generateMapEntry(mapLevel + 1, obj.Location)
+      mapEntry.Locations.Locations[obj.ObjectID] = obj
     })
 
     // Shift all partitions into the map entry

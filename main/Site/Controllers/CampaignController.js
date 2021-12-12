@@ -63,8 +63,7 @@ const CampaignController = {
       MapImage: null,
       MapLevel: 0,
       Locations: {
-        Cities: {},
-        Landmarks: {},
+        Locations: {},
         Partitions: {}
       }
     }
@@ -75,21 +74,13 @@ const CampaignController = {
 
   PrintCampaignData () { console.log('Campaign Data:', CAMPAIGN_DATA) },
 
-  AddCampaignCity (id, locationData) {
+  AddCampaignLocation (id, locationType, locationData) {
     if (!CAMPAIGN_DATA) { console.error('CAMPAIGN_DATA is null or invalid!'); return }
     if (!CAMPAIGN_DATA.hasOwnProperty('MapData')) { console.error('CAMPAIGN_DATA has no MapData entry!'); return }
     if (!CAMPAIGN_DATA.MapData.hasOwnProperty('Locations')) { console.error('CAMPAIGN_DATA has no Locations entry!'); return }
-    if (!CAMPAIGN_DATA.MapData.Locations.hasOwnProperty('Cities')) { console.error('CAMPAIGN_DATA has no Cities Location entry!'); return }
+    if (!CAMPAIGN_DATA.MapData.Locations.hasOwnProperty('Locations')) { console.error('CAMPAIGN_DATA has no Locations->Locations entry!'); return }
 
-    CAMPAIGN_DATA.MapData.Locations.Cities[id] = locationData
-  },
-  AddCampaignLandmark (id, locationData) {
-    if (!CAMPAIGN_DATA) { console.error('CAMPAIGN_DATA is null or invalid!'); return }
-    if (!CAMPAIGN_DATA.hasOwnProperty('MapData')) { console.error('CAMPAIGN_DATA has no MapData entry!'); return }
-    if (!CAMPAIGN_DATA.MapData.hasOwnProperty('Locations')) { console.error('CAMPAIGN_DATA has no Locations entry!'); return }
-    if (!CAMPAIGN_DATA.MapData.Locations.hasOwnProperty('Landmarks')) { console.error('CAMPAIGN_DATA has no Landmarks Location entry!'); return }
-
-    CAMPAIGN_DATA.MapData.Locations.Landmarks[id] = locationData
+    CAMPAIGN_DATA.MapData.Locations.Locations[id] = locationData
   },
   SetCampaignMapID (mapID) { CAMPAIGN_DATA.MapID = mapID },
   GetCampaignMapID () { return CAMPAIGN_DATA.MapID },
