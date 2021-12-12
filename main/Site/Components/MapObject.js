@@ -37,6 +37,7 @@ const MapObject = {
     container.options = options
     container.elements = { objectIcon: null, tooltip: null }
     container.objectID = options.objectID
+    container.mapLevelData = options.mapLevelData
 
     container.elements.objectIcon = Image.create({
       id: 'ObjectIcon',
@@ -50,7 +51,7 @@ const MapObject = {
       }
     })
     container.elements.objectIcon.setValue('Images/Locations/Icons/' + options.icon + '.png')
-    container.elements.objectIcon.onclick = () => { EventDispatch.SendEvent('Select World Map Object', options.objectID) }
+    container.elements.objectIcon.onclick = () => { EventDispatch.SendEvent('Select World Map Object', { mapLevelData: container.mapLevelData }) }
     container.appendChild(container.elements.objectIcon)
 
     container.elements.tooltip = Tooltip.create({ id: 'MapObjectTooltip' })
@@ -69,7 +70,7 @@ const MapObject = {
       attributes: { value: container.options.objectName },
       style: { margin: '2px 4px 0px 4px', cursor: 'pointer', fontSize: '16px' }
     })
-    nameLabel.onclick = () => { EventDispatch.SendEvent('Select World Map Object', container.options.objectID) }
+    nameLabel.onclick = () => { EventDispatch.SendEvent('Select World Map Object', { mapLevelData: container.mapLevelData }) }
     container.elements.tooltip.setContent(nameLabel)
   }
 }

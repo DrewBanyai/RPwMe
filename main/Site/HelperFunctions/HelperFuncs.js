@@ -29,8 +29,8 @@ const GetLocationName = (locationType, unused = true) => {
   return locationName
 }
 
-const GetLocationPosition = (mapData, locationType, usedPositions, unused = true) => {
-  const positionList = mapData.Positions.filter(pos => pos.TypeAllowed.includes(locationType))
+const GetLocationPosition = (locationData, locationType, usedPositions, unused = true) => {
+  const positionList = locationData.PositionsArray.filter(pos => pos.TypesAllowed.includes(locationType))
   if (unused && (usedPositions.length >= positionList.length)) { console.warn('Ran out of unused locations of type ' + locationType); unused = false }
   let positionIndex = Math.floor(Random() * positionList.length)
   if (unused) { while (usedPositions.includes(positionIndex)) { positionIndex = Math.floor(Random() * positionList.length) } }

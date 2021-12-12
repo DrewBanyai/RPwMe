@@ -23,33 +23,37 @@ const LocationTypes = [
     LocationType: 'Metropolis',
     Classification: 'City',
     Icon: 'City',
-    GenerateData: () => {
+    GenerateStats: () => {
+      const locationName = GetLocationName('City')
+      const population = RandIntBetween(100000, 1000000)
+      const businesses = GenerateBusinesses({
+        'Clothing (basic)': 1.0,
+        'Clothing (fancy)': 1.0,
+        'Armor (basic)': 1.0,
+        'Weapon (basic)': 1.0,
+        'Trinkets (basic)': 1.0,
+        'Trinkets (magic)': 1.0,
+        'Trinkets (holy)': 1.0,
+        'Adventure Supply (basic)': 1.0,
+        'Adventure Supply (magic)': 1.0,
+        Healing: 1.0,
+        'Curse Removal': 1.0,
+        'Horses / Steeds': 1.0,
+        'Animals / Monsters': 1.0,
+        Transport: 1.0,
+        'Loans / Banking': 1.0,
+        'Guild Services': 1.0,
+        'Food / Drink': 1.0,
+        Smithing: 1.0,
+        'Room & Board': 1.0,
+        Entertainment: 1.0,
+        Books: 1.0
+      })
+
       return {
-        Name: GetLocationName('City'),
-        Population: RandIntBetween(100000, 1000000),
-        Businesses: GenerateBusinesses({
-          'Clothing (basic)': 1.0,
-          'Clothing (fancy)': 1.0,
-          'Armor (basic)': 1.0,
-          'Weapon (basic)': 1.0,
-          'Trinkets (basic)': 1.0,
-          'Trinkets (magic)': 1.0,
-          'Trinkets (holy)': 1.0,
-          'Adventure Supply (basic)': 1.0,
-          'Adventure Supply (magic)': 1.0,
-          Healing: 1.0,
-          'Curse Removal': 1.0,
-          'Horses / Steeds': 1.0,
-          'Animals / Monsters': 1.0,
-          Transport: 1.0,
-          'Loans / Banking': 1.0,
-          'Guild Services': 1.0,
-          'Food / Drink': 1.0,
-          Smithing: 1.0,
-          'Room & Board': 1.0,
-          Entertainment: 1.0,
-          Books: 1.0
-        })
+        Name: locationName,
+        Population: population,
+        Businesses: businesses
       }
     }
   },
@@ -57,35 +61,39 @@ const LocationTypes = [
     LocationType: 'City',
     Classification: 'City',
     Icon: 'City',
-    GenerateData: () => {
+    GenerateStats: () => {
+      const locationName = GetLocationName('City')
+      const population = RandIntBetween(5001, 100000)
+      const businesses = GenerateBusinesses({
+        'Clothing (basic)': 1.0,
+        'Clothing (fancy)': 1.0,
+        'Armor (basic)': 1.0,
+        'Armor (magic)': 1.0,
+        'Weapon (basic)': 1.0,
+        'Weapon (magic)': 1.0,
+        'Trinkets (basic)': 1.0,
+        'Trinkets (magic)': 1.0,
+        'Trinkets (holy)': 1.0,
+        'Adventure Supply (basic)': 1.0,
+        'Adventure Supply (magic)': 1.0,
+        Healing: 1.0,
+        'Curse Removal': 1.0,
+        'Horses / Steeds': 1.0,
+        'Animals / Monsters': 1.0,
+        Transport: 1.0,
+        'Loans / Banking': 1.0,
+        'Guild Services': 1.0,
+        'Food / Drink': 1.0,
+        Smithing: 1.0,
+        'Room & Board': 1.0,
+        Entertainment: 1.0,
+        Books: 1.0
+      })
+
       return {
-        Name: GetLocationName('City'),
-        Population: RandIntBetween(5001, 100000),
-        Businesses: GenerateBusinesses({
-          'Clothing (basic)': 1.0,
-          'Clothing (fancy)': 1.0,
-          'Armor (basic)': 1.0,
-          'Armor (magic)': 1.0,
-          'Weapon (basic)': 1.0,
-          'Weapon (magic)': 1.0,
-          'Trinkets (basic)': 1.0,
-          'Trinkets (magic)': 1.0,
-          'Trinkets (holy)': 1.0,
-          'Adventure Supply (basic)': 1.0,
-          'Adventure Supply (magic)': 1.0,
-          Healing: 1.0,
-          'Curse Removal': 1.0,
-          'Horses / Steeds': 1.0,
-          'Animals / Monsters': 1.0,
-          Transport: 1.0,
-          'Loans / Banking': 1.0,
-          'Guild Services': 1.0,
-          'Food / Drink': 1.0,
-          Smithing: 1.0,
-          'Room & Board': 1.0,
-          Entertainment: 1.0,
-          Books: 1.0
-        })
+        Name: locationName,
+        Population: population,
+        Businesses: businesses
       }
     }
   },
@@ -93,26 +101,30 @@ const LocationTypes = [
     LocationType: 'Town',
     Classification: 'City',
     Icon: 'City',
-    GenerateData: () => {
+    GenerateStats: () => {
+      const locationName = GetLocationName('City')
+      const population = RandIntBetween(2001, 5000)
+      const businesses = GenerateBusinesses({
+        'Clothing (basic)': 1.0,
+        'Armor (basic)': 1.0,
+        'Weapon (basic)': 1.0,
+        'Trinkets (basic)': 1.0,
+        'Adventure Supply (basic)': 1.0,
+        'Adventure Supply (magic)': 1.0,
+        Healing: 1.0,
+        'Horses / Steeds': 1.0,
+        Transport: 1.0,
+        'Food / Drink': 1.0,
+        Smithing: 1.0,
+        'Room & Board': 1.0,
+        Entertainment: 1.0,
+        Books: 1.0
+      })
+
       return {
-        Name: GetLocationName('City'),
-        Population: RandIntBetween(2001, 5000),
-        Businesses: GenerateBusinesses({
-          'Clothing (basic)': 1.0,
-          'Armor (basic)': 1.0,
-          'Weapon (basic)': 1.0,
-          'Trinkets (basic)': 1.0,
-          'Adventure Supply (basic)': 1.0,
-          'Adventure Supply (magic)': 1.0,
-          Healing: 1.0,
-          'Horses / Steeds': 1.0,
-          Transport: 1.0,
-          'Food / Drink': 1.0,
-          Smithing: 1.0,
-          'Room & Board': 1.0,
-          Entertainment: 1.0,
-          Books: 1.0
-        })
+        Name: locationName,
+        Population: population,
+        Businesses: businesses
       }
     }
   },
@@ -120,7 +132,7 @@ const LocationTypes = [
     LocationType: 'Village',
     Classification: 'City',
     Icon: 'City',
-    GenerateData: () => {
+    GenerateStats: () => {
       return {
         Name: GetLocationName('Village'),
         Population: RandIntBetween(101, 2000),
@@ -141,7 +153,7 @@ const LocationTypes = [
     LocationType: 'Hamlet',
     Classification: 'Landmark',
     Icon: 'Hamlet',
-    GenerateData: () => {
+    GenerateStats: () => {
       return {
         Name: GetLocationName('Village'),
         Population: RandIntBetween(11, 100),
@@ -160,7 +172,7 @@ const LocationTypes = [
     LocationType: 'Homestead',
     Classification: 'Landmark',
     Icon: 'Hamlet',
-    GenerateData: () => {
+    GenerateStats: () => {
       return {
         Name: GetLocationName('Village'),
         Population: RandIntBetween(1, 10),
@@ -176,10 +188,11 @@ const LocationTypes = [
     LocationType: 'Farm',
     Classification: 'Landmark',
     Icon: 'Farm',
-    GenerateData: () => {
+    GenerateStats: () => {
       return {
         Name: GetLocationName('Farm'),
-        Population: RandIntBetween(1, 10)
+        Population: RandIntBetween(1, 10),
+        Businesses: GenerateBusinesses({})
       }
     }
   },
@@ -187,10 +200,11 @@ const LocationTypes = [
     LocationType: 'Fortress',
     Classification: 'Landmark',
     Icon: 'Fortress',
-    GenerateData: () => {
+    GenerateStats: () => {
       return {
         Name: GetLocationName('Fortress'),
-        Population: RandIntBetween(120, 1000)
+        Population: RandIntBetween(120, 1000),
+        Businesses: GenerateBusinesses({})
       }
     }
   },
@@ -198,10 +212,11 @@ const LocationTypes = [
     LocationType: 'Citadel',
     Classification: 'Landmark',
     Icon: 'Citadel',
-    GenerateData: () => {
+    GenerateStats: () => {
       return {
         Name: GetLocationName('Fortress'),
-        Population: RandIntBetween(120, 1000)
+        Population: RandIntBetween(120, 1000),
+        Businesses: GenerateBusinesses({})
       }
     }
   },
@@ -209,10 +224,11 @@ const LocationTypes = [
     LocationType: 'Ruins',
     Classification: 'Landmark',
     Icon: 'Ruins',
-    GenerateData: () => {
+    GenerateStats: () => {
       return {
         Name: GetLocationName('Ruins'),
-        Population: RandIntBetween(10, 100)
+        Population: RandIntBetween(10, 100),
+        Businesses: GenerateBusinesses({})
       }
     }
   },
@@ -220,10 +236,11 @@ const LocationTypes = [
     LocationType: 'Tower',
     Classification: 'Landmark',
     Icon: 'Tower',
-    GenerateData: () => {
+    GenerateStats: () => {
       return {
         Name: GetLocationName('Tower'),
-        Population: RandIntBetween(1, 10)
+        Population: RandIntBetween(1, 10),
+        Businesses: GenerateBusinesses({})
       }
     }
   },
@@ -231,7 +248,7 @@ const LocationTypes = [
     LocationType: 'Mine',
     Classification: 'Landmark',
     Icon: 'Mine',
-    GenerateData: () => {
+    GenerateStats: () => {
       return {
         Name: GetLocationName('Mine'),
         Population: RandIntBetween(6, 200),
@@ -243,15 +260,10 @@ const LocationTypes = [
   }
 ]
 
-const GetRandomCityType = () => {
-  const cityLocationTypes = LocationTypes.filter((entry) => { return entry.Classification === 'City' })
-  return cityLocationTypes[Math.floor(Random() * cityLocationTypes.length)]
-}
-
-const GetRandomLandmarkType = () => {
-  const landmarkLocationTypes = LocationTypes.filter((entry) => { return entry.Classification === 'Landmark' })
-  return landmarkLocationTypes[Math.floor(Random() * landmarkLocationTypes.length)]
+const GetRandomMapObjectOfType = (type) => {
+  const locationTypes = LocationTypes.filter((entry) => { return entry.Classification === type })
+  return locationTypes[Math.floor(Random() * locationTypes.length)]
 }
 
 //  Module Exports
-module.exports = { GetRandomCityType, GetRandomLandmarkType }
+module.exports = { GetRandomMapObjectOfType }

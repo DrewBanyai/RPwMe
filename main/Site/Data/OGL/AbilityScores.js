@@ -56,7 +56,10 @@ const ABILITY_SCORES = {
     for (const score in abilityScores) { data[score] = this.GetModifier(abilityScores[score]) }
     return data
   },
-  AdjustScores (characterScores, adjustment) { for (const score in characterScores) characterScores[score] += adjustment[score] }
+  AdjustScores (characterScores, adjustment) {
+    //  Note: characterScores is the entire character score block, and adjustment is also a full block of just the adjustment values
+    for (const score in characterScores) characterScores[score] += adjustment[score]
+  }
 }
 
 //  Module Exports
