@@ -19,7 +19,7 @@ const { ClearUsedLocationNames, GetLocationPosition, GetLocationName } = require
 const { GetRandomMapObjectOfType } = require('../Data/LocationTypes')
 const { Container } = require('../Components/ArcadiaJS')
 const { WORLD_MAP_TEMPLATES } = require('../Data/WorldMapTemplates')
-const { CampaignController } = require('../Controllers/CampaignController')
+const { CampaignController, MapEntry } = require('../Controllers/CampaignController')
 const { InteractiveMap } = require('../Components/InteractiveMap')
 const { GenerateObjectLocation } = require('../Data/CityTemplates')
 
@@ -54,9 +54,8 @@ const WorldController = {
   generateMapEntry (mapLevel, locationData) {
     if (!locationData) return
 
-    const mapEntry = CampaignController.GetEmptyMapEntry()
-    mapEntry.MapImage = locationData.MapImageFile
-    mapEntry.MapLevel = mapLevel
+    const mapEntry = new MapEntry()
+    mapEntry.setValues(locationData.MapImageFile, mapLevel, {}, {})
 
     //  Generate all map location objects that populate the map within this entry
     let objectArray = []
@@ -65,8 +64,11 @@ const WorldController = {
 
     //  For each map object, generate it's own map entry and set it into the current map entry as a location
     objectArray.forEach(obj => {
-      if (obj.Location) obj.mapEntry = WorldController.generateMapEntry(mapLevel + 1, obj.Location)
-      mapEntry.Locations.Locations[obj.ObjectID] = obj
+      if (obj.Location) {
+        obj.MapEntry = WorldController.generateMapEntry(mapLevel + 1, obj.Location)
+        CampaignController.AddCampaignLocation(obj.Location.ObjectID, obj.Location)
+      }
+      mapEntry.MapLinks.Locations[obj.ObjectID] = obj
     })
 
     // Shift all partitions into the map entry
@@ -74,7 +76,7 @@ const WorldController = {
     partitionArray.forEach(p => {
       p.MapEntry = WorldController.generateMapEntry(mapLevel + 1, p.LocationData)
       delete p.LocationData
-      mapEntry.Locations.Partitions[p.ObjectID] = p
+      mapEntry.MapLinks.Partitions[p.ObjectID] = p
     })
 
     return mapEntry
@@ -90,7 +92,6 @@ const WorldController = {
       const position = GetLocationPosition(locationData, objectType, usedPositions)
       const objectTypeData = GetRandomMapObjectOfType(objectType)
       const objectStats = objectTypeData.GenerateStats()
-      const objecIconPos = { x: position.X, y: position.Y }
       const objectLocation = GenerateObjectLocation(objectStats)
 
       const newLocation = {
@@ -98,8 +99,7 @@ const WorldController = {
         Type: objectTypeData.LocationType,
         Name: objectStats.Name,
         Icon: objectTypeData.Icon,
-        Position: objecIconPos,
-        Properties: position.Properties,
+        Position: position,
         Population: objectStats.Population,
         Businesses: objectStats.Businesses,
         Location: objectLocation
@@ -112,7 +112,7 @@ const WorldController = {
 
   generatePartitionArray (locationData) {
     const objectArray = []
-    locationData.PartitionsArray.forEach(p => {
+    locationData.PartitionTemplates.forEach(p => {
       const newPart = {
         ObjectID: CampaignController.GenerateNewObjectID(),
         Type: p.LocationData.LocationType,

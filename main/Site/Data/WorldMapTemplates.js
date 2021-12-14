@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-const { InteractiveMapLocation, InteractiveMapPosition, InteractiveMapPartition } = require('./Maps/InteractiveMapData')
+const { InteractiveMapLocation, InteractiveMapPosition, InteractiveMapPartitionTemplate } = require('./Maps/InteractiveMapData')
 
 const WORLD_MAP_TEMPLATES = {
   '001': new InteractiveMapLocation(
@@ -23,9 +23,8 @@ const WORLD_MAP_TEMPLATES = {
     { City: { Min: 0, Max: 0 }, Landmark: { Min: 0, Max: 0 } },
     [],
     [
-      new InteractiveMapPartition( //  South West Islands
+      new InteractiveMapPartitionTemplate( //  South West Islands
         { x: 596, y: 968 },
-        'Region',
         [
           { x: 124, y: 806 },
           { x: 308, y: 1273 },
@@ -42,9 +41,8 @@ const WORLD_MAP_TEMPLATES = {
           { City: { Min: 0, Max: 0 }, Landmark: { Min: 0, Max: 0 } },
           [],
           [
-            new InteractiveMapPartition( //  North side of South West Islands mainland
+            new InteractiveMapPartitionTemplate( //  North side of South West Islands mainland
               { x: 1159, y: 772 },
-              'SubRegion',
               [
                 { x: 511, y: 161 },
                 { x: 372, y: 290 },
@@ -80,9 +78,8 @@ const WORLD_MAP_TEMPLATES = {
                 []
               )
             ),
-            new InteractiveMapPartition( //  South side of South West Islands mainland
+            new InteractiveMapPartitionTemplate( //  South side of South West Islands mainland
               { x: 1159, y: 772 },
-              'SubRegion',
               [
                 { x: 430, y: 493 },
                 { x: 340, y: 529 },
@@ -111,9 +108,8 @@ const WORLD_MAP_TEMPLATES = {
                 []
               )
             ),
-            new InteractiveMapPartition( //  Eastern island cluster in South West Islands
+            new InteractiveMapPartitionTemplate( //  Eastern island cluster in South West Islands
               { x: 1159, y: 772 },
-              'SubRegion',
               [
                 { x: 806, y: 682 },
                 { x: 814, y: 565 },
@@ -144,9 +140,8 @@ const WORLD_MAP_TEMPLATES = {
           ]
         )
       ),
-      new InteractiveMapPartition( //  North East Islands
+      new InteractiveMapPartitionTemplate( //  North East Islands
         { x: 1159, y: 772 },
-        'Region',
         [
           { x: 721, y: 461 },
           { x: 833, y: 775 },
@@ -165,9 +160,8 @@ const WORLD_MAP_TEMPLATES = {
           { City: { Min: 0, Max: 0 }, Landmark: { Min: 0, Max: 0 } },
           [],
           [
-            new InteractiveMapPartition( //  North side of East Islands mainland
+            new InteractiveMapPartitionTemplate( //  North side of East Islands mainland
               { x: 1159, y: 772 },
-              'Region',
               [
                 { x: 344, y: 547 },
                 { x: 758, y: 510 },
@@ -201,9 +195,8 @@ const WORLD_MAP_TEMPLATES = {
                 []
               )
             ),
-            new InteractiveMapPartition( //  South side of East Islands mainland
+            new InteractiveMapPartitionTemplate( //  South side of East Islands mainland
               { x: 1159, y: 772 },
-              'SubRegion',
               [
                 { x: 344, y: 547 },
                 { x: 758, y: 510 },
@@ -232,9 +225,8 @@ const WORLD_MAP_TEMPLATES = {
                 []
               )
             ),
-            new InteractiveMapPartition( //  East tip of East Islands mainland
+            new InteractiveMapPartitionTemplate( //  East tip of East Islands mainland
               { x: 1159, y: 772 },
-              'SubRegion',
               [
                 { x: 758, y: 510 },
                 { x: 760, y: 688 },
@@ -261,9 +253,8 @@ const WORLD_MAP_TEMPLATES = {
                 []
               )
             ),
-            new InteractiveMapPartition( //  North island of East Islands group
+            new InteractiveMapPartitionTemplate( //  North island of East Islands group
               { x: 1159, y: 772 },
-              'SubRegion',
               [
                 { x: 809, y: 342 },
                 { x: 728, y: 277 },

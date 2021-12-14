@@ -14,6 +14,7 @@
     limitations under the License.
 */
 
+const { MapEntry } = require('../Data/Maps/MapEntry')
 const { EventDispatch } = require('./EventDispatch')
 const { PlayerCharacter } = require('../Data/PlayerCharacter')
 
@@ -47,7 +48,7 @@ const CampaignController = {
       Status: '',
       Players: { 0: null, 1: null, 2: null },
       GameMaster: '',
-      MapID: null
+      WorldMapID: null
     }
     CampaignController.ResetMapData()
 
@@ -56,34 +57,23 @@ const CampaignController = {
     CampaignController.SetCampaignStatus('Generating Campaign Data')
   },
 
-  ResetMapData () { CAMPAIGN_DATA.MapData = CampaignController.GetEmptyMapEntry() },
-
-  GetEmptyMapEntry () {
-    return {
-      MapImage: null,
-      MapLevel: 0,
-      Locations: {
-        Locations: {},
-        Partitions: {}
-      }
-    }
-  },
+  ResetMapData () { CAMPAIGN_DATA.MapData = new MapEntry() },
 
   GenerateNewObjectID () { return CampaignObjectCount++ },
   ResetObjectIDs () { CampaignObjectCount = 0 },
 
   PrintCampaignData () { console.log('Campaign Data:', CAMPAIGN_DATA) },
 
-  AddCampaignLocation (id, locationType, locationData) {
+  AddCampaignLocation (id, locationData) {
     if (!CAMPAIGN_DATA) { console.error('CAMPAIGN_DATA is null or invalid!'); return }
     if (!CAMPAIGN_DATA.hasOwnProperty('MapData')) { console.error('CAMPAIGN_DATA has no MapData entry!'); return }
-    if (!CAMPAIGN_DATA.MapData.hasOwnProperty('Locations')) { console.error('CAMPAIGN_DATA has no Locations entry!'); return }
-    if (!CAMPAIGN_DATA.MapData.Locations.hasOwnProperty('Locations')) { console.error('CAMPAIGN_DATA has no Locations->Locations entry!'); return }
+    if (!CAMPAIGN_DATA.MapData.hasOwnProperty('MapLinks')) { console.error('CAMPAIGN_DATA has no Locations entry!'); return }
+    if (!CAMPAIGN_DATA.MapData.MapLinks.hasOwnProperty('Locations')) { console.error('CAMPAIGN_DATA has no MapLinks->Locations entry!'); return }
 
-    CAMPAIGN_DATA.MapData.Locations.Locations[id] = locationData
+    CAMPAIGN_DATA.MapData.MapLinks.Locations[id] = locationData
   },
-  SetCampaignMapID (mapID) { CAMPAIGN_DATA.MapID = mapID },
-  GetCampaignMapID () { return CAMPAIGN_DATA.MapID },
+  SetCampaignMapID (mapID) { CAMPAIGN_DATA.WorldMapID = mapID },
+  GetCampaignMapID () { return CAMPAIGN_DATA.WorldMapID },
   GetCampaignMapData () { return CAMPAIGN_DATA.MapData },
   AddCampaignPlayer (playerUsername) {
     if (!CAMPAIGN_DATA) { console.error('CAMPAIGN_DATA is null or invalid!'); return false }

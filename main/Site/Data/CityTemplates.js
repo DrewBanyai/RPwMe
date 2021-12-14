@@ -98,7 +98,7 @@ const GenerateObjectLocation = (objectStats) => {
     cityLocationTemplate.LocationType,
     cityLocationTemplate.SubObjectCounts,
     cityLocationTemplate.PositionsArray,
-    cityLocationTemplate.PartitionsArray
+    cityLocationTemplate.PartitionTemplates
   )
 }
 

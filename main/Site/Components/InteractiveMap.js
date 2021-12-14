@@ -61,7 +61,7 @@ const InteractiveMap = {
 
     mapLevel.elements = { mapImage: null, partitions: {}, shapeContainer: null, objectContainer: null, partitionSelected: null }
 
-    mapLevel.elements.partitions = mapData.Locations.Partitions
+    mapLevel.elements.partitions = mapData.MapLinks.Partitions
 
     //  The MapContainer div will actually display the map (but is unable to determine image dimensions alone, so load an <img>)
     mapLevel.elements.mapImage = Container.create({ id: 'MapContainer', style: STYLE.MAP_CONTAINER })
@@ -85,8 +85,8 @@ const InteractiveMap = {
 
       mapLevel.properties.actualSize = { x: mapImageInvisible.clientWidth, y: mapImageInvisible.clientHeight }
 
-      InteractiveMap.LoadPartitionShapes(mapLevel, mapData.Locations.Partitions)
-      InteractiveMap.LoadMapObjects(mapLevel, mapData.Locations.Locations)
+      InteractiveMap.LoadPartitionShapes(mapLevel, mapData.MapLinks.Partitions)
+      InteractiveMap.LoadMapObjects(mapLevel, mapData.MapLinks.Locations)
     }
     InteractiveMap.LoadMapImage(mapLevel, mapData.MapImage, imageLoadCallback)
 
@@ -192,8 +192,8 @@ const InteractiveMap = {
     locationKeys.forEach(key => {
       const locationData = locations[key]
       const objPosition = {
-        x: parseInt(locationData.Position.x * mapScale.x) + 'px',
-        y: parseInt(locationData.Position.y * mapScale.y) + 'px'
+        x: parseInt(locationData.Position.X * mapScale.x) + 'px',
+        y: parseInt(locationData.Position.Y * mapScale.y) + 'px'
       }
 
       const mapObject = MapObject.create({
@@ -203,7 +203,7 @@ const InteractiveMap = {
         icon: locationData.Icon,
         objSize: STYLE.MAP_ICON_SIZE,
         objPosition: objPosition,
-        mapLevelData: locationData.mapEntry
+        mapLevelData: locationData.MapEntry
       })
       mapLevel.elements.objectContainer.appendChild(mapObject)
     })

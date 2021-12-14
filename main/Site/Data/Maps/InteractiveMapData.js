@@ -9,10 +9,8 @@ class InteractiveMapLocation {
     this.PositionsArray = []
     for (const index in positionsArray) this.PositionsArray.push(positionsArray[index])
 
-    this.PartitionsArray = []
-    for (const index in partitionsArray) this.PartitionsArray.push(partitionsArray[index])
-
-    this.LocationIcons = []
+    this.PartitionTemplates = []
+    for (const index in partitionsArray) this.PartitionTemplates.push(partitionsArray[index])
   }
 }
 
@@ -29,10 +27,9 @@ class InteractiveMapPosition {
   }
 }
 
-class InteractiveMapPartition {
-  constructor (namePosition, nameType, pointsArray, locationData) {
+class InteractiveMapPartitionTemplate {
+  constructor (namePosition, pointsArray, locationData) {
     this.NamePosition = { X: namePosition.x, Y: namePosition.y }
-    this.NameType = nameType
 
     this.PointsArray = []
     for (const index in pointsArray) this.PointsArray.push(pointsArray[index])
@@ -42,4 +39,4 @@ class InteractiveMapPartition {
 }
 
 //  Module Exports
-module.exports = { InteractiveMapLocation, InteractiveMapPosition, InteractiveMapPartition }
+module.exports = { InteractiveMapLocation, InteractiveMapPosition, InteractiveMapPartitionTemplate }
