@@ -70,7 +70,7 @@ const CampaignController = {
     if (!CAMPAIGN_DATA.MapData.hasOwnProperty('MapLinks')) { console.error('CAMPAIGN_DATA has no Locations entry!'); return }
     if (!CAMPAIGN_DATA.MapData.MapLinks.hasOwnProperty('Locations')) { console.error('CAMPAIGN_DATA has no MapLinks->Locations entry!'); return }
 
-    CAMPAIGN_DATA.MapData.MapLinks.Locations[id] = locationData
+    CAMPAIGN_DATA.MapData.MapLinks.Locations.push(locationData)
   },
   SetCampaignMapID (mapID) { CAMPAIGN_DATA.WorldMapID = mapID },
   GetCampaignMapID () { return CAMPAIGN_DATA.WorldMapID },

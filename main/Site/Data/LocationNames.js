@@ -228,6 +228,52 @@ const LOCATION_NAMES = {
     'Leyline Spring',
     'Arcane Lodestone',
     'Bone Structure'
+  ],
+  Blacksmith: [
+    'Melvins Metalworks',
+    'Grabthars Hammer',
+    'Steel and Fire',
+    'Weapon Weaver'
+  ],
+  TownSquare: [
+    'Central Park',
+    'The Square',
+    'Stone Center'
+  ],
+  Dock: [
+    'Eastwinds Port',
+    'The Foaming Mouth',
+    'Travelers Trade Dock'
+  ],
+  Castle: [
+    'Dunwich Castle',
+    'Highrock Castle',
+    'Stonewall Castle'
+  ],
+  Bridge: [
+    'Breckens Pass',
+    'Old Mill Bridge',
+    'Soldiers Arch'
+  ],
+  Temple: [
+    'The Stone Hallow',
+    'The Howling Hall',
+    'Patrons Parlor'
+  ],
+  Shrine: [
+    'Ark of Blessing',
+    'Patron Stone',
+    'The Beggars Boon'
+  ],
+  Cemetary: [
+    'Remembrance Hill',
+    'The Silent Stones',
+    'Memory Lane'
+  ],
+  Statue: [
+    'Stone Soldier',
+    'Holy Visage',
+    'Divine Discovery'
   ]
 }
 

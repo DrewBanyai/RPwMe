@@ -16,8 +16,8 @@
 
 class MapLinks {
   constructor () {
-    this.Locations = {}
-    this.Partitions = {}
+    this.Locations = []
+    this.Partitions = []
   }
 
   setValues (locations, partitions) {

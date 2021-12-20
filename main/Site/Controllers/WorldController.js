@@ -19,9 +19,10 @@ const { ClearUsedLocationNames, GetLocationPosition, GetLocationName } = require
 const { GetRandomMapObjectOfType } = require('../Data/LocationTypes')
 const { Container } = require('../Components/ArcadiaJS')
 const { WORLD_MAP_TEMPLATES } = require('../Data/WorldMapTemplates')
-const { CampaignController, MapEntry } = require('../Controllers/CampaignController')
+const { CampaignController } = require('../Controllers/CampaignController')
+const { MapEntry } = require('../Data/Maps/MapEntry')
 const { InteractiveMap } = require('../Components/InteractiveMap')
-const { GenerateObjectLocation } = require('../Data/CityTemplates')
+const { GetObjectLocationOfType } = require('../Data/LocationTemplates')
 
 const WorldController = {
   create (worldSeed) {
@@ -55,12 +56,16 @@ const WorldController = {
     if (!locationData) return
 
     const mapEntry = new MapEntry()
-    mapEntry.setValues(locationData.MapImageFile, mapLevel, {}, {})
+    mapEntry.setValues(locationData.MapImageFile, mapLevel, [], [])
 
     //  Generate all map location objects that populate the map within this entry
     let objectArray = []
-    objectArray = objectArray.concat(WorldController.generateObjectArray(locationData, 'City'))
-    objectArray = objectArray.concat(WorldController.generateObjectArray(locationData, 'Landmark'))
+    let usedPositions = []
+    usedPositions = [] //  We just do this so that it doesn't think usedPosiitons must be const
+    for (const objType in locationData.SubObjectCounts) {
+      const objCount = RandIntBetween(locationData.SubObjectCounts[objType].Min, locationData.SubObjectCounts[objType].Max)
+      objectArray = objectArray.concat(WorldController.generateObjectsOfType(locationData, objType, objCount, usedPositions))
+    }
 
     //  For each map object, generate it's own map entry and set it into the current map entry as a location
     objectArray.forEach(obj => {
@@ -68,7 +73,7 @@ const WorldController = {
         obj.MapEntry = WorldController.generateMapEntry(mapLevel + 1, obj.Location)
         CampaignController.AddCampaignLocation(obj.Location.ObjectID, obj.Location)
       }
-      mapEntry.MapLinks.Locations[obj.ObjectID] = obj
+      mapEntry.MapLinks.Locations.push(obj)
     })
 
     // Shift all partitions into the map entry
@@ -76,23 +81,31 @@ const WorldController = {
     partitionArray.forEach(p => {
       p.MapEntry = WorldController.generateMapEntry(mapLevel + 1, p.LocationData)
       delete p.LocationData
-      mapEntry.MapLinks.Partitions[p.ObjectID] = p
+      mapEntry.MapLinks.Partitions.push(p)
     })
 
     return mapEntry
   },
 
-  generateObjectArray (locationData, objectType) {
-    //  Create the number of landmarks randomly by generating them on the fly
+  generateObjectsOfType (locationData, objType, objCount, usedPositions) {
+    //  If the location has no sub object count for the given type, return an empty array
+    if (!locationData.SubObjectCounts[objType]) return []
+    if (objCount <= 0) return []
+
+    //  Create the number of map objects randomly by generating them on the fly
     const objectArray = []
-    const objectCount = RandIntBetween(locationData.SubObjectCounts[objectType].Min, locationData.SubObjectCounts[objectType].Max)
-    const usedPositions = []
-    for (let i = 0; i < objectCount; ++i) {
-      //  Select a landmark type and create the new landmark, then push it into the landmark array
-      const position = GetLocationPosition(locationData, objectType, usedPositions)
-      const objectTypeData = GetRandomMapObjectOfType(objectType)
-      const objectStats = objectTypeData.GenerateStats()
-      const objectLocation = GenerateObjectLocation(objectStats)
+    for (let i = 0; i < objCount; ++i) {
+      //  Select a position and then attempt to create an object of the given type, then push it into the map object array
+      const objectTypeData = GetRandomMapObjectOfType(objType)
+      if (!objectTypeData) { console.warn('No Map Object of Type ' + objType); continue }
+
+      const objectLocation = GetObjectLocationOfType(objType)
+      if (objectLocation === null) console.warn('Could not generate an object location of type ' + objType)
+      const objectStats = objectTypeData.GenerateLocationData(objectLocation)
+
+      //  Generate the position last, since we don't want to use up a position if the location data doesn't come back
+      const position = GetLocationPosition(locationData, objType, usedPositions)
+      if (position === null) console.log('GetLocationPosition failed on type ' + objType)
 
       const newLocation = {
         ObjectID: CampaignController.GenerateNewObjectID(),

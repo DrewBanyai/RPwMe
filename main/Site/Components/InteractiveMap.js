@@ -111,7 +111,8 @@ const InteractiveMap = {
   },
 
   SelectMapPartition (container, mapLevel, partitionObj) {
-    InteractiveMap.LoadMapEntry(container, mapLevel.elements.partitions[partitionObj.Index].MapEntry)
+    const partitionSelected = mapLevel.elements.partitions.find(p => p.ObjectID === partitionObj.Index)
+    InteractiveMap.LoadMapEntry(container, partitionSelected.MapEntry)
   },
 
   LoadMapImage (levelContainer, mapImageFile, loadCallback) {
@@ -140,9 +141,7 @@ const InteractiveMap = {
 
     mapLevel.elements.shapeContainer.innerHTML = ''
 
-    for (const key in partitions) {
-      const part = partitions[key]
-
+    partitions.forEach(part => {
       //  Create a container for the lines we're about to create to represent the partition
       const partitionLines = Container.create({
         id: 'PartitionLines',
@@ -153,7 +152,7 @@ const InteractiveMap = {
           color: STYLE.MAP_PARTITION_LINE_COLOR_UNSELECTED
         }
       })
-      partitionLines.Index = key
+      partitionLines.Index = part.ObjectID
       partitionLines.Points = []
       for (let i = 0; i < part.Points.length; ++i) partitionLines.Points.push({ x: part.Points[i].x * mapScale.x, y: part.Points[i].y * mapScale.y })
       partitionLines.NamePosition = part.NamePosition
@@ -178,7 +177,7 @@ const InteractiveMap = {
         color: STYLE.MAP_PARTITION_LINE_COLOR_UNSELECTED
       })
       partitionLines.appendChild(line)
-    }
+    })
   },
 
   LoadMapObjects (mapLevel, locations) {
@@ -188,9 +187,7 @@ const InteractiveMap = {
 
     mapLevel.elements.objectContainer.innerHTML = ''
 
-    const locationKeys = Object.keys(locations)
-    locationKeys.forEach(key => {
-      const locationData = locations[key]
+    locations.forEach(locationData => {
       const objPosition = {
         x: parseInt(locationData.Position.X * mapScale.x) + 'px',
         y: parseInt(locationData.Position.Y * mapScale.y) + 'px'

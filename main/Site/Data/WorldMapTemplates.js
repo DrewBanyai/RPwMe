@@ -20,7 +20,7 @@ const WORLD_MAP_TEMPLATES = {
   '001': new InteractiveMapLocation(
     'Images/Locations/Level_1/01.png',
     'World',
-    { City: { Min: 0, Max: 0 }, Landmark: { Min: 0, Max: 0 } },
+    {},
     [],
     [
       new InteractiveMapPartitionTemplate( //  South West Islands
@@ -38,7 +38,7 @@ const WORLD_MAP_TEMPLATES = {
         new InteractiveMapLocation(
           'Images/Locations/Level_2/01_A.png',
           'Region',
-          { City: { Min: 0, Max: 0 }, Landmark: { Min: 0, Max: 0 } },
+          {},
           [],
           [
             new InteractiveMapPartitionTemplate( //  North side of South West Islands mainland
@@ -56,24 +56,35 @@ const WORLD_MAP_TEMPLATES = {
               new InteractiveMapLocation(
                 'Images/Locations/Level_3/01_A_01.png',
                 'SubRegion',
-                { City: { Min: 1, Max: 3 }, Landmark: { Min: 3, Max: 8 } },
+                {
+                  Metropolis: { Min: 1, Max: 1 },
+                  City: { Min: 1, Max: 1 },
+                  Town: { Min: 1, Max: 1 },
+                  Hamlet: { Min: 1, Max: 2 },
+                  Farm: { Min: 0, Max: 1 },
+                  Fortress: { Min: 1, Max: 1 },
+                  Citadel: { Min: 0, Max: 1 },
+                  Ruins: { Min: 1, Max: 1 },
+                  Tower: { Min: 0, Max: 1 },
+                  Mine: { Min: 0, Max: 1 }
+                },
                 [
-                  new InteractiveMapPosition(449, 354, ['City'], ['Temperate', 'Fertile', 'Near Mountains', 'Near Ocean']),
-                  new InteractiveMapPosition(380, 483, ['City'], ['Temperate', 'Fertile', 'Near Mountains', 'Near Ocean']),
-                  new InteractiveMapPosition(581, 449, ['City'], ['Temperate', 'Fertile', 'Near Mountains', 'Near Ocean']),
-                  new InteractiveMapPosition(735, 431, ['City'], ['Temperate', 'Fertile', 'Near Mountains', 'Near Ocean']),
+                  new InteractiveMapPosition(449, 354, ['Metropolis', 'City', 'Town', 'Village'], ['Temperate', 'Fertile', 'Near Mountains', 'Near Ocean']),
+                  new InteractiveMapPosition(380, 483, ['Metropolis', 'City', 'Town', 'Village'], ['Temperate', 'Fertile', 'Near Mountains', 'Near Ocean']),
+                  new InteractiveMapPosition(581, 449, ['Metropolis', 'City', 'Town', 'Village'], ['Temperate', 'Fertile', 'Near Mountains', 'Near Ocean']),
+                  new InteractiveMapPosition(735, 431, ['Metropolis', 'City', 'Town', 'Village'], ['Temperate', 'Fertile', 'Near Mountains', 'Near Ocean']),
 
-                  new InteractiveMapPosition(118, 387, ['Landmark'], ['Infertile', 'Desolate']),
-                  new InteractiveMapPosition(167, 388, ['Landmark'], ['Infertile', 'Desolate', 'Near Mountains']),
-                  new InteractiveMapPosition(291, 259, ['Landmark'], ['Fertile', 'Near Mountains', 'Near Ocean']),
-                  new InteractiveMapPosition(397, 140, ['Landmark'], ['Infertile', 'Desolate', 'Swampy', 'Near Ocean', 'Isolated']),
-                  new InteractiveMapPosition(582, 241, ['Landmark'], ['Fertile', 'Island', 'Near Ocean', 'Isolated']),
-                  new InteractiveMapPosition(407, 408, ['Landmark'], ['Fertile', 'Island', 'Near Ocean', 'Isolated']),
-                  new InteractiveMapPosition(636, 348, ['Landmark'], ['Fertile', 'Island', 'Near Ocean']),
-                  new InteractiveMapPosition(723, 372, ['Landmark'], ['Fertile', 'Island', 'Near Ocean', 'Near Forest']),
-                  new InteractiveMapPosition(370, 546, ['Landmark'], ['Frozen', 'Near Mountains', 'Near Ocean']),
-                  new InteractiveMapPosition(493, 490, ['Landmark'], ['Frozen', 'Near Mountains', 'Near Ocean']),
-                  new InteractiveMapPosition(659, 429, ['Landmark'], ['Fertile', 'Near Mountains'])
+                  new InteractiveMapPosition(118, 387, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Infertile', 'Desolate']),
+                  new InteractiveMapPosition(167, 388, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Infertile', 'Desolate', 'Near Mountains']),
+                  new InteractiveMapPosition(291, 259, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Fertile', 'Near Mountains', 'Near Ocean']),
+                  new InteractiveMapPosition(397, 140, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Infertile', 'Desolate', 'Swampy', 'Near Ocean', 'Isolated']),
+                  new InteractiveMapPosition(582, 241, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Fertile', 'Island', 'Near Ocean', 'Isolated']),
+                  new InteractiveMapPosition(407, 408, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Fertile', 'Island', 'Near Ocean', 'Isolated']),
+                  new InteractiveMapPosition(636, 348, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Fertile', 'Island', 'Near Ocean']),
+                  new InteractiveMapPosition(723, 372, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Fertile', 'Island', 'Near Ocean', 'Near Forest']),
+                  new InteractiveMapPosition(370, 546, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Frozen', 'Near Mountains', 'Near Ocean']),
+                  new InteractiveMapPosition(493, 490, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Frozen', 'Near Mountains', 'Near Ocean']),
+                  new InteractiveMapPosition(659, 429, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Fertile', 'Near Mountains'])
                 ],
                 []
               )
@@ -92,18 +103,29 @@ const WORLD_MAP_TEMPLATES = {
               new InteractiveMapLocation(
                 'Images/Locations/Level_3/01_A_02.png',
                 'SubRegion',
-                { City: { Min: 0, Max: 1 }, Landmark: { Min: 3, Max: 7 } },
+                {
+                  Metropolis: { Min: 0, Max: 0 },
+                  City: { Min: 0, Max: 1 },
+                  Town: { Min: 0, Max: 0 },
+                  Hamlet: { Min: 0, Max: 0 },
+                  Farm: { Min: 0, Max: 1 },
+                  Fortress: { Min: 0, Max: 1 },
+                  Citadel: { Min: 1, Max: 1 },
+                  Ruins: { Min: 1, Max: 2 },
+                  Tower: { Min: 0, Max: 1 },
+                  Mine: { Min: 1, Max: 1 }
+                },
                 [
-                  new InteractiveMapPosition(214, 140, ['City'], ['Temperate', 'Fertile', 'Near Mountains', 'Near Ocean']),
-                  new InteractiveMapPosition(443, 76, ['Landmark'], ['Infertile', 'Desolate']),
-                  new InteractiveMapPosition(521, 176, ['Landmark'], ['Infertile', 'Desolate', 'Near Mountains']),
-                  new InteractiveMapPosition(383, 228, ['Landmark'], ['Fertile', 'Near Mountains', 'Near Ocean']),
-                  new InteractiveMapPosition(238, 272, ['Landmark'], ['Infertile', 'Desolate', 'Swampy', 'Near Ocean', 'Isolated']),
-                  new InteractiveMapPosition(311, 335, ['Landmark'], ['Fertile', 'Island', 'Near Ocean', 'Isolated']),
-                  new InteractiveMapPosition(485, 336, ['Landmark'], ['Fertile', 'Island', 'Near Ocean', 'Isolated']),
-                  new InteractiveMapPosition(146, 322, ['Landmark'], ['Fertile', 'Island', 'Near Ocean']),
-                  new InteractiveMapPosition(730, 190, ['Landmark'], ['Fertile', 'Island', 'Near Ocean', 'Near Forest']),
-                  new InteractiveMapPosition(693, 317, ['Landmark'], ['Frozen', 'Near Mountains', 'Near Ocean'])
+                  new InteractiveMapPosition(214, 140, ['Metropolis', 'City', 'Town', 'Village'], ['Temperate', 'Fertile', 'Near Mountains', 'Near Ocean']),
+                  new InteractiveMapPosition(443, 76, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Infertile', 'Desolate']),
+                  new InteractiveMapPosition(521, 176, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Infertile', 'Desolate', 'Near Mountains']),
+                  new InteractiveMapPosition(383, 228, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Fertile', 'Near Mountains', 'Near Ocean']),
+                  new InteractiveMapPosition(238, 272, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Infertile', 'Desolate', 'Swampy', 'Near Ocean', 'Isolated']),
+                  new InteractiveMapPosition(311, 335, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Fertile', 'Island', 'Near Ocean', 'Isolated']),
+                  new InteractiveMapPosition(485, 336, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Fertile', 'Island', 'Near Ocean', 'Isolated']),
+                  new InteractiveMapPosition(146, 322, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Fertile', 'Island', 'Near Ocean']),
+                  new InteractiveMapPosition(730, 190, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Fertile', 'Island', 'Near Ocean', 'Near Forest']),
+                  new InteractiveMapPosition(693, 317, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Frozen', 'Near Mountains', 'Near Ocean'])
                 ],
                 []
               )
@@ -123,16 +145,27 @@ const WORLD_MAP_TEMPLATES = {
               new InteractiveMapLocation(
                 'Images/Locations/Level_3/01_A_03.png',
                 'SubRegion',
-                { City: { Min: 0, Max: 1 }, Landmark: { Min: 3, Max: 6 } },
+                {
+                  Metropolis: { Min: 0, Max: 0 },
+                  City: { Min: 0, Max: 0 },
+                  Town: { Min: 0, Max: 1 },
+                  Hamlet: { Min: 0, Max: 1 },
+                  Farm: { Min: 1, Max: 1 },
+                  Fortress: { Min: 0, Max: 1 },
+                  Citadel: { Min: 0, Max: 0 },
+                  Ruins: { Min: 0, Max: 1 },
+                  Tower: { Min: 1, Max: 1 },
+                  Mine: { Min: 1, Max: 1 }
+                },
                 [
-                  new InteractiveMapPosition(340, 82, ['City'], ['Temperate', 'Fertile', 'Near Mountains', 'Near Ocean']),
-                  new InteractiveMapPosition(274, 197, ['City'], ['Temperate', 'Fertile', 'Near Mountains', 'Near Ocean']),
-                  new InteractiveMapPosition(326, 124, ['Landmark'], ['Infertile', 'Desolate']),
-                  new InteractiveMapPosition(441, 167, ['Landmark'], ['Infertile', 'Desolate', 'Near Mountains']),
-                  new InteractiveMapPosition(392, 247, ['Landmark'], ['Fertile', 'Near Mountains', 'Near Ocean']),
-                  new InteractiveMapPosition(489, 250, ['Landmark'], ['Infertile', 'Desolate', 'Swampy', 'Near Ocean', 'Isolated']),
-                  new InteractiveMapPosition(287, 342, ['Landmark'], ['Fertile', 'Island', 'Near Ocean', 'Isolated']),
-                  new InteractiveMapPosition(426, 476, ['Landmark'], ['Fertile', 'Island', 'Near Ocean', 'Isolated'])
+                  new InteractiveMapPosition(340, 82, ['Metropolis', 'City', 'Town', 'Village'], ['Temperate', 'Fertile', 'Near Mountains', 'Near Ocean']),
+                  new InteractiveMapPosition(274, 197, ['Metropolis', 'City', 'Town', 'Village'], ['Temperate', 'Fertile', 'Near Mountains', 'Near Ocean']),
+                  new InteractiveMapPosition(326, 124, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Infertile', 'Desolate']),
+                  new InteractiveMapPosition(441, 167, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Infertile', 'Desolate', 'Near Mountains']),
+                  new InteractiveMapPosition(392, 247, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Fertile', 'Near Mountains', 'Near Ocean']),
+                  new InteractiveMapPosition(489, 250, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Infertile', 'Desolate', 'Swampy', 'Near Ocean', 'Isolated']),
+                  new InteractiveMapPosition(287, 342, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Fertile', 'Island', 'Near Ocean', 'Isolated']),
+                  new InteractiveMapPosition(426, 476, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Fertile', 'Island', 'Near Ocean', 'Isolated'])
                 ],
                 []
               )
@@ -177,20 +210,31 @@ const WORLD_MAP_TEMPLATES = {
               new InteractiveMapLocation(
                 'Images/Locations/Level_3/01_B_01.png',
                 'SubRegion',
-                { City: { Min: 2, Max: 5 }, Landmark: { Min: 3, Max: 7 } },
+                {
+                  Metropolis: { Min: 0, Max: 1 },
+                  City: { Min: 1, Max: 2 },
+                  Town: { Min: 1, Max: 2 },
+                  Hamlet: { Min: 1, Max: 1 },
+                  Farm: { Min: 1, Max: 1 },
+                  Fortress: { Min: 0, Max: 2 },
+                  Citadel: { Min: 0, Max: 0 },
+                  Ruins: { Min: 0, Max: 1 },
+                  Tower: { Min: 1, Max: 1 },
+                  Mine: { Min: 0, Max: 1 }
+                },
                 [
-                  new InteractiveMapPosition(112, 109, ['City'], ['Temperate', 'Infertile', 'Near Mountains', 'Near Ocean']),
-                  new InteractiveMapPosition(165, 251, ['City'], ['Temperate', 'Infertile', 'Near Mountains', 'Near Ocean']),
-                  new InteractiveMapPosition(517, 269, ['City'], ['Temperate', 'Infertile', 'Near Mountains', 'Near Ocean']),
-                  new InteractiveMapPosition(654, 282, ['City'], ['Temperate', 'Infertile', 'Near Mountains', 'Near Ocean', 'Near Forest']),
-                  new InteractiveMapPosition(257, 446, ['City'], ['Temperate', 'Fertile', 'Near Ocean', 'Near Forest']),
-                  new InteractiveMapPosition(126, 157, ['Landmark'], ['Infertile', 'Desolate']),
-                  new InteractiveMapPosition(209, 115, ['Landmark'], ['Infertile', 'Desolate', 'Near Mountains']),
-                  new InteractiveMapPosition(308, 205, ['Landmark'], ['Fertile', 'Near Mountains', 'Near Ocean']),
-                  new InteractiveMapPosition(321, 326, ['Landmark'], ['Infertile', 'Desolate', 'Swampy', 'Near Ocean', 'Isolated']),
-                  new InteractiveMapPosition(454, 348, ['Landmark'], ['Fertile', 'Island', 'Near Ocean', 'Isolated']),
-                  new InteractiveMapPosition(637, 426, ['Landmark'], ['Fertile', 'Island', 'Near Ocean', 'Isolated']),
-                  new InteractiveMapPosition(520, 502, ['Landmark'], ['Fertile', 'Island', 'Near Ocean'])
+                  new InteractiveMapPosition(112, 109, ['Metropolis', 'City', 'Town', 'Village'], ['Temperate', 'Infertile', 'Near Mountains', 'Near Ocean']),
+                  new InteractiveMapPosition(165, 251, ['Metropolis', 'City', 'Town', 'Village'], ['Temperate', 'Infertile', 'Near Mountains', 'Near Ocean']),
+                  new InteractiveMapPosition(517, 269, ['Metropolis', 'City', 'Town', 'Village'], ['Temperate', 'Infertile', 'Near Mountains', 'Near Ocean']),
+                  new InteractiveMapPosition(654, 282, ['Metropolis', 'City', 'Town', 'Village'], ['Temperate', 'Infertile', 'Near Mountains', 'Near Ocean', 'Near Forest']),
+                  new InteractiveMapPosition(257, 446, ['Metropolis', 'City', 'Town', 'Village'], ['Temperate', 'Fertile', 'Near Ocean', 'Near Forest']),
+                  new InteractiveMapPosition(126, 157, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Infertile', 'Desolate']),
+                  new InteractiveMapPosition(209, 115, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Infertile', 'Desolate', 'Near Mountains']),
+                  new InteractiveMapPosition(308, 205, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Fertile', 'Near Mountains', 'Near Ocean']),
+                  new InteractiveMapPosition(321, 326, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Infertile', 'Desolate', 'Swampy', 'Near Ocean', 'Isolated']),
+                  new InteractiveMapPosition(454, 348, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Fertile', 'Island', 'Near Ocean', 'Isolated']),
+                  new InteractiveMapPosition(637, 426, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Fertile', 'Island', 'Near Ocean', 'Isolated']),
+                  new InteractiveMapPosition(520, 502, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Fertile', 'Island', 'Near Ocean'])
                 ],
                 []
               )
@@ -211,16 +255,27 @@ const WORLD_MAP_TEMPLATES = {
               new InteractiveMapLocation(
                 'Images/Locations/Level_3/01_B_02.png',
                 'SubRegion',
-                { City: { Min: 1, Max: 3 }, Landmark: { Min: 2, Max: 5 } },
+                {
+                  Metropolis: { Min: 0, Max: 1 },
+                  City: { Min: 0, Max: 1 },
+                  Town: { Min: 1, Max: 2 },
+                  Hamlet: { Min: 0, Max: 0 },
+                  Farm: { Min: 0, Max: 0 },
+                  Fortress: { Min: 0, Max: 1 },
+                  Citadel: { Min: 1, Max: 1 },
+                  Ruins: { Min: 1, Max: 1 },
+                  Tower: { Min: 0, Max: 1 },
+                  Mine: { Min: 0, Max: 1 }
+                },
                 [
-                  new InteractiveMapPosition(473, 28, ['City'], ['Temperate', 'Fertile', 'Near Ocean']),
-                  new InteractiveMapPosition(324, 256, ['City'], ['Temperate', 'Fertile', 'Near Ocean']),
-                  new InteractiveMapPosition(513, 265, ['City'], ['Temperate', 'Fertile', 'Near Ocean', 'Isolated', 'Island']),
-                  new InteractiveMapPosition(463, 83, ['Landmark'], ['Infertile', 'Desolate']),
-                  new InteractiveMapPosition(334, 60, ['Landmark'], ['Infertile', 'Desolate', 'Near Mountains']),
-                  new InteractiveMapPosition(272, 203, ['Landmark'], ['Fertile', 'Near Mountains', 'Near Ocean']),
-                  new InteractiveMapPosition(507, 178, ['Landmark'], ['Fertile', 'Near Ocean', 'Isolated']),
-                  new InteractiveMapPosition(455, 420, ['Landmark'], ['Fertile', 'Near Forest', 'Isolated'])
+                  new InteractiveMapPosition(473, 28, ['Metropolis', 'City', 'Town', 'Village'], ['Temperate', 'Fertile', 'Near Ocean']),
+                  new InteractiveMapPosition(324, 256, ['Metropolis', 'City', 'Town', 'Village'], ['Temperate', 'Fertile', 'Near Ocean']),
+                  new InteractiveMapPosition(513, 265, ['Metropolis', 'City', 'Town', 'Village'], ['Temperate', 'Fertile', 'Near Ocean', 'Isolated', 'Island']),
+                  new InteractiveMapPosition(463, 83, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Infertile', 'Desolate']),
+                  new InteractiveMapPosition(334, 60, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Infertile', 'Desolate', 'Near Mountains']),
+                  new InteractiveMapPosition(272, 203, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Fertile', 'Near Mountains', 'Near Ocean']),
+                  new InteractiveMapPosition(507, 178, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Fertile', 'Near Ocean', 'Isolated']),
+                  new InteractiveMapPosition(455, 420, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Fertile', 'Near Forest', 'Isolated'])
                 ],
                 []
               )
@@ -239,16 +294,27 @@ const WORLD_MAP_TEMPLATES = {
               new InteractiveMapLocation(
                 'Images/Locations/Level_3/01_B_03.png',
                 'SubRegion',
-                { City: { Min: 1, Max: 3 }, Landmark: { Min: 2, Max: 5 } },
+                {
+                  Metropolis: { Min: 1, Max: 1 },
+                  City: { Min: 0, Max: 0 },
+                  Town: { Min: 0, Max: 2 },
+                  Hamlet: { Min: 0, Max: 0 },
+                  Farm: { Min: 1, Max: 1 },
+                  Fortress: { Min: 0, Max: 1 },
+                  Citadel: { Min: 0, Max: 0 },
+                  Ruins: { Min: 0, Max: 1 },
+                  Tower: { Min: 0, Max: 1 },
+                  Mine: { Min: 1, Max: 1 }
+                },
                 [
-                  new InteractiveMapPosition(236, 459, ['City'], ['Temperate', 'Fertile', 'Near Ocean']),
-                  new InteractiveMapPosition(517, 462, ['City'], ['Temperate', 'Fertile', 'Near Ocean']),
-                  new InteractiveMapPosition(392, 151, ['City'], ['Temperate', 'Fertile', 'Near Ocean', 'Isolated', 'Island']),
-                  new InteractiveMapPosition(299, 195, ['Landmark'], ['Infertile', 'Desolate']),
-                  new InteractiveMapPosition(193, 384, ['Landmark'], ['Infertile', 'Desolate', 'Near Mountains']),
-                  new InteractiveMapPosition(387, 501, ['Landmark'], ['Fertile', 'Near Mountains', 'Near Ocean']),
-                  new InteractiveMapPosition(391, 301, ['Landmark'], ['Infertile', 'Desolate', 'Swampy', 'Near Ocean', 'Isolated']),
-                  new InteractiveMapPosition(565, 240, ['Landmark'], ['Fertile', 'Island', 'Near Ocean', 'Isolated'])
+                  new InteractiveMapPosition(236, 459, ['Metropolis', 'City', 'Town', 'Village'], ['Temperate', 'Fertile', 'Near Ocean']),
+                  new InteractiveMapPosition(517, 462, ['Metropolis', 'City', 'Town', 'Village'], ['Temperate', 'Fertile', 'Near Ocean']),
+                  new InteractiveMapPosition(392, 151, ['Metropolis', 'City', 'Town', 'Village'], ['Temperate', 'Fertile', 'Near Ocean', 'Isolated', 'Island']),
+                  new InteractiveMapPosition(299, 195, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Infertile', 'Desolate']),
+                  new InteractiveMapPosition(193, 384, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Infertile', 'Desolate', 'Near Mountains']),
+                  new InteractiveMapPosition(387, 501, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Fertile', 'Near Mountains', 'Near Ocean']),
+                  new InteractiveMapPosition(391, 301, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Infertile', 'Desolate', 'Swampy', 'Near Ocean', 'Isolated']),
+                  new InteractiveMapPosition(565, 240, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Fertile', 'Island', 'Near Ocean', 'Isolated'])
                 ],
                 []
               )
@@ -269,12 +335,23 @@ const WORLD_MAP_TEMPLATES = {
               new InteractiveMapLocation(
                 'Images/Locations/Level_3/01_B_04.png',
                 'SubRegion',
-                { City: { Min: 0, Max: 0 }, Landmark: { Min: 1, Max: 4 } },
+                {
+                  Metropolis: { Min: 0, Max: 0 },
+                  City: { Min: 0, Max: 0 },
+                  Town: { Min: 0, Max: 0 },
+                  Hamlet: { Min: 0, Max: 0 },
+                  Farm: { Min: 0, Max: 1 },
+                  Fortress: { Min: 0, Max: 1 },
+                  Citadel: { Min: 0, Max: 0 },
+                  Ruins: { Min: 1, Max: 1 },
+                  Tower: { Min: 0, Max: 0 },
+                  Mine: { Min: 0, Max: 1 }
+                },
                 [
-                  new InteractiveMapPosition(175, 206, ['Landmark'], ['Infertile', 'Frozen', 'Near Mountains', 'Near Ocean']),
-                  new InteractiveMapPosition(347, 220, ['Landmark'], ['Infertile', 'Frozen', 'Near Mountains', 'Near Ocean']),
-                  new InteractiveMapPosition(547, 148, ['Landmark'], ['Infertile', 'Cold', 'Near Ocean']),
-                  new InteractiveMapPosition(679, 421, ['Landmark'], ['Infertile', 'Frozen', 'Near Ocean', 'Isolated'])
+                  new InteractiveMapPosition(175, 206, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Infertile', 'Frozen', 'Near Mountains', 'Near Ocean']),
+                  new InteractiveMapPosition(347, 220, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Infertile', 'Frozen', 'Near Mountains', 'Near Ocean']),
+                  new InteractiveMapPosition(547, 148, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Infertile', 'Cold', 'Near Ocean']),
+                  new InteractiveMapPosition(679, 421, ['Hamlet', 'Homestead', 'Farm', 'Fortress', 'Citadel', 'Ruins', 'Tower', 'Mine'], ['Infertile', 'Frozen', 'Near Ocean', 'Isolated'])
                 ],
                 []
               )

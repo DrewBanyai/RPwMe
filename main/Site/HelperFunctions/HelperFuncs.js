@@ -20,22 +20,35 @@ const { Random, RandIntBetween } = require('../HelperFunctions/Random')
 
 let usedLocationNames = []
 const ClearUsedLocationNames = () => { usedLocationNames = [] }
-const GetLocationName = (locationType, unused = true) => {
-  if (!LOCATION_NAMES.hasOwnProperty(locationType)) { console.warn('Attempting to find location name for unknown type ' + locationType); return 'NO NAME' }
-  if (usedLocationNames.length >= LOCATION_NAMES[locationType].length) { unused = false }
+const GetLocationName = (locationType, onlyUnused = true) => {
+  //  If there is no LOCATION_NAMES entry for the given location type, send out a warning and return no name
+  if (!LOCATION_NAMES[locationType]) { console.warn('Attempting to find location name for unknown type ' + locationType); return 'NO NAME' }
+
+  if (usedLocationNames.length >= LOCATION_NAMES[locationType].length) { onlyUnused = false }
   let locationName = LOCATION_NAMES[locationType][Math.floor(Random() * LOCATION_NAMES[locationType].length)]
-  if (unused) { while (usedLocationNames.includes(locationName)) { locationName = LOCATION_NAMES[locationType][Math.floor(Random() * LOCATION_NAMES[locationType].length)] } }
+  if (onlyUnused) { while (usedLocationNames.includes(locationName)) { locationName = LOCATION_NAMES[locationType][Math.floor(Random() * LOCATION_NAMES[locationType].length)] } }
   usedLocationNames.push(locationName)
   return locationName
 }
 
-const GetLocationPosition = (locationData, locationType, usedPositions, unused = true) => {
-  const positionList = locationData.PositionsArray.filter(pos => pos.TypesAllowed.includes(locationType))
-  if (unused && (usedPositions.length >= positionList.length)) { console.warn('Ran out of unused locations of type ' + locationType); unused = false }
-  let positionIndex = Math.floor(Random() * positionList.length)
-  if (unused) { while (usedPositions.includes(positionIndex)) { positionIndex = Math.floor(Random() * positionList.length) } }
-  usedPositions.push(positionIndex)
-  return positionList[positionIndex]
+const GetLocationPosition = (locationData, locationType, usedPositions, onlyUnused = true) => {
+  //  Get the array of positions which allow a location of this type
+  let positionList = locationData.PositionsArray.filter(pos => pos.TypesAllowed.includes(locationType))
+
+  //  Determine if any of the filtered positions are unused
+  let anyUnused = false
+  positionList.forEach(p => { anyUnused |= !usedPositions.includes(p) })
+
+  //  If there are no unused positions, send out a warning and switch to allow unused
+  if (onlyUnused && !anyUnused) { console.warn('Ran out of unused locations of type ' + locationType); onlyUnused = false }
+
+  //  If we're still allowing only unused positions at this point, filter the list to only unused positions
+  if (onlyUnused) positionList = positionList.filter(p => !usedPositions.includes(p))
+
+  //  Grab a random position from the remaining list, add it to the used list if necessary, and return the position
+  const position = positionList[Math.floor(Random() * positionList.length)]
+  if (!usedPositions.includes(position)) usedPositions.push(position)
+  return position
 }
 
 const GenerateBusinesses = (businessTypes) => {
