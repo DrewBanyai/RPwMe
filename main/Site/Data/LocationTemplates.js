@@ -30,7 +30,7 @@ const LOCATION_TEMPLATES = [
       Cemetary: { Min: 0, Max: 1 },
       Bridge: { Min: 2, Max: 2 },
       Temple: { Min: 1, Max: 1 },
-      Statue: { Min: 0, Max: 1 }
+      Monument: { Min: 0, Max: 1 }
     },
     [
       new InteractiveMapPosition(950, 606, ['Blacksmith'], ['Stone', 'Two-Story', 'Square', 'Edge Of Town']),
@@ -71,7 +71,7 @@ const LOCATION_TEMPLATES = [
       new InteractiveMapPosition(1640, 1010, ['Building'], ['One-Story', 'Stone', 'Ruins']),
       new InteractiveMapPosition(1508, 1324, ['Dock'], ['Wood']),
       new InteractiveMapPosition(730, 369, ['Building'], ['One-Story', 'Wood', 'Off-Street']),
-      new InteractiveMapPosition(1030, 247, ['Statue'], ['Ruins', 'Above Cliffs'])
+      new InteractiveMapPosition(1030, 247, ['Monument'], ['Ruins', 'Above Cliffs'])
     ],
     []
   ),
@@ -87,7 +87,7 @@ const LOCATION_TEMPLATES = [
       Cemetary: { Min: 0, Max: 1 },
       Bridge: { Min: 2, Max: 2 },
       Temple: { Min: 1, Max: 1 },
-      Statue: { Min: 0, Max: 1 }
+      Monument: { Min: 0, Max: 1 }
     },
     [
       new InteractiveMapPosition(950, 606, ['Blacksmith'], ['Stone', 'Two-Story', 'Square', 'Edge Of Town']),
@@ -128,7 +128,7 @@ const LOCATION_TEMPLATES = [
       new InteractiveMapPosition(1640, 1010, ['Building'], ['One-Story', 'Stone', 'Ruins']),
       new InteractiveMapPosition(1508, 1324, ['Dock'], ['Wood']),
       new InteractiveMapPosition(730, 369, ['Building'], ['One-Story', 'Wood', 'Off-Street']),
-      new InteractiveMapPosition(1030, 247, ['Statue'], ['Ruins', 'Above Cliffs'])
+      new InteractiveMapPosition(1030, 247, ['Monument'], ['Ruins', 'Above Cliffs'])
     ],
     []
   ),
@@ -144,7 +144,7 @@ const LOCATION_TEMPLATES = [
       Cemetary: { Min: 0, Max: 0 },
       Bridge: { Min: 0, Max: 0 },
       Temple: { Min: 1, Max: 1 },
-      Statue: { Min: 0, Max: 0 }
+      Monument: { Min: 0, Max: 0 }
     },
     [
       new InteractiveMapPosition(922, 518, ['Blacksmith'], ['Wood', 'One-Story', 'Square', 'Edge Of Town']),
@@ -165,7 +165,7 @@ const LOCATION_TEMPLATES = [
       Cemetary: { Min: 0, Max: 0 },
       Bridge: { Min: 0, Max: 0 },
       Temple: { Min: 1, Max: 1 },
-      Statue: { Min: 0, Max: 0 }
+      Monument: { Min: 0, Max: 0 }
     },
     [
       new InteractiveMapPosition(922, 518, ['Blacksmith'], ['Wood', 'One-Story', 'Square', 'Edge Of Town']),
@@ -265,8 +265,8 @@ const LOCATION_TEMPLATES = [
     []
   ),
   new InteractiveMapLocation(
-    'Images/Locations/Level_5/Statue_01.png',
-    'Statue',
+    'Images/Locations/Level_5/Monument_01.png',
+    'Monument',
     {},
     []
   )

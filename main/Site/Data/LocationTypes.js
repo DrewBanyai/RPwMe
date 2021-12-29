@@ -332,11 +332,11 @@ const LocationTypes = [
   },
   {
     LocationType: 'Building',
-    Classification: 'Statue',
+    Classification: 'Monument',
     Icon: 'Mine',
     GenerateLocationData: () => {
       return {
-        Name: GetLocationName('Statue'),
+        Name: GetLocationName('Monument'),
         Population: RandIntBetween(0, 0),
         Businesses: GenerateBusinesses({})
       }
